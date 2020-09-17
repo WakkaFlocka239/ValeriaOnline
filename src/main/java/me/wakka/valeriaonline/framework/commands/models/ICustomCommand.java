@@ -7,6 +7,7 @@ import me.wakka.valeriaonline.Utils.StringUtils;
 import me.wakka.valeriaonline.Utils.Tasks;
 import me.wakka.valeriaonline.Utils.Utils;
 import me.wakka.valeriaonline.ValeriaOnline;
+import me.wakka.valeriaonline.features.cooldown.Cooldowns;
 import me.wakka.valeriaonline.framework.commands.Commands;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Aliases;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Arg;
@@ -23,7 +24,6 @@ import me.wakka.valeriaonline.framework.exceptions.MissingArgumentException;
 import me.wakka.valeriaonline.framework.exceptions.NoPermissionException;
 import me.wakka.valeriaonline.framework.exceptions.PlayerNotFoundException;
 import me.wakka.valeriaonline.framework.exceptions.PlayerNotOnlineException;
-import me.wakka.valeriaonline.features.cooldown.Cooldowns;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.objenesis.ObjenesisStd;
@@ -71,12 +71,14 @@ public abstract class ICustomCommand {
 	}
 
 	public List<String> tabComplete(TabEvent event) {
-		try {
-			getCommand(event);
-			PathParser pathParser = new PathParser(event);
-			return pathParser.tabComplete(event);
-		} catch (Exception ex) {
-//			event.handleException(ex);
+		if (event != null) {
+			try {
+				getCommand(event);
+				PathParser pathParser = new PathParser(event);
+				return pathParser.tabComplete(event);
+			} catch (Exception ignored) {
+
+			}
 		}
 		return new ArrayList<>();
 	}

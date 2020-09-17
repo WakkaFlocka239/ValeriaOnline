@@ -1,0 +1,26 @@
+TODO:
+- altar restrictions & particles
+	config
+- auto restart checks --> "/restart"
+	config
+- add plugin to server & document custom commands in discord channel
+- teleport items (?)
+- MultiLine API - playername + prefix + (powerlevel/held item level)
+--> Spams errors in console, bug is reported
+
+
+
+// on command: /auctionelf
+// 		click "sell" --> run xyz command
+
+// on command: /xyz
+//			add to list
+//			wait x amount of seconds:
+//				remove from list
+//
+// on command: /ah sell <price> [amount]
+//			if on list:
+//				fallback --> "/auctionhouse sell args" as op
+//			else
+//				"error"
+//

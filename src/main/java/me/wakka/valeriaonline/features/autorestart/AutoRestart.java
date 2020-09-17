@@ -23,16 +23,16 @@ import static me.wakka.valeriaonline.Utils.StringUtils.colorize;
 public class AutoRestart {
 	List<Double> warnTimes = Arrays.asList(10.0, 5.0, 1.0); // in minutes till restart
 	String warningMessage = "Server will restart in... <minutes> minutes";
-	String restartMessage = "Server is restart!";
+	String restartMessage = "Server is restarting!";
 	String PREFIX = "[AutoRestart] ";
-	double restartInterval = 1; // in hours
+	double restartInterval = 8; // in hours
 	//
 	static List<Timer> warningTimers = new ArrayList<>();
 	static Timer rebootTimer;
 	boolean delayRestart = false;
 //	long startTimestamp;
 
-	public AutoRestart(){
+	public AutoRestart() {
 		// TODO: Load config settings
 		scheduleRestart();
 	}

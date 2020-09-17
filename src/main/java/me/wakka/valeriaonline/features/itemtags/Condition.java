@@ -1,5 +1,6 @@
 package me.wakka.valeriaonline.features.itemtags;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import me.wakka.valeriaonline.Utils.ColorType;
 import me.wakka.valeriaonline.Utils.StringUtils;
@@ -8,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 
+@AllArgsConstructor
 public enum Condition {
 	BROKEN(ColorType.RED.getChatColor(), 76, 100),
 	RAGGED(ColorType.LIGHT_RED.getChatColor(), 51, 75),
@@ -20,12 +22,6 @@ public enum Condition {
 	private final int min;
 	@Getter
 	private final int max;
-
-	Condition(ChatColor chatColor, int min, int max){
-		this.chatColor = chatColor;
-		this.min = min;
-		this.max = max;
-	}
 
 	public static Condition of(ItemStack tool) {
 		if(!ItemTags.isArmor(tool) && !ItemTags.isTool(tool))
