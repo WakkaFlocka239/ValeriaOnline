@@ -1,0 +1,15 @@
+name: ValeriaOnline
+author: WakkaFlocka
+main: me.wakka.valeriaonline.ValeriaOnline
+version: ${project.version}
+api-version: "1.16"
+softdepend:
+  - Citizens
+  - Essentials
+  - LiteBans
+  - mcMMO
+  - NBTAPI
+  - WorldGuard
+  - WorldEdit
+  - Vault
+  - WorldGuardRegionAPI
