@@ -119,8 +119,10 @@ public class ItemTags {
 		// Special cases
 		if(ingot.equalsIgnoreCase("golden"))
 			ingot = "gold";
-		else if(ingot.equalsIgnoreCase("turtle"))
+		else if (ingot.equalsIgnoreCase("turtle"))
 			ingot = "turtle_shell";
+		else if (ingot.equalsIgnoreCase("wooden"))
+			ingot = "wood";
 		//
 
 		return StringUtils.camelCase(ingot).replace(" ", "_");

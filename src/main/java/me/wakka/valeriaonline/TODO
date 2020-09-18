@@ -1,4 +1,6 @@
 TODO:
+- itemtags:
+    - Apply tags to all mob drops
 - altar restrictions & particles
 	config
 - auto restart checks --> "/restart"
