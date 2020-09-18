@@ -31,7 +31,15 @@ public class Trade implements ConfigurationSerializable {
 		this.ingredient1 = (ItemStack) map.getOrDefault("ingredient1", null);
 		this.ingredient2 = (ItemStack) map.getOrDefault("ingredient2", null);
 		this.result = (ItemStack) map.getOrDefault("result", null);
-		this.types =  (ArrayList<Type>) map.getOrDefault("types", new ArrayList<Type>() {{ addAll(Arrays.asList(Type.values())); }});
+		List<Object> list =  (ArrayList<Object>) map.getOrDefault("types", new ArrayList<Type>() {{ addAll(Arrays.asList(Type.values())); }});
+		List<Type> types = new ArrayList<>();
+		for (Object object : list) {
+			if (object instanceof String)
+				types.add(Type.valueOf((String) object));
+			else
+				types.add((Type) object);
+		}
+		this.types = types;
 	}
 
 	@Override
@@ -41,7 +49,10 @@ public class Trade implements ConfigurationSerializable {
 			put("ingredient1", ingredient1);
 			put("ingredient2", ingredient2);
 			put("result", result);
-			put("types", types);
+			List<String> list = new ArrayList<>();
+			for (Type type : types)
+				list.add(type.name());
+			put("types", list);
 		}};
 	}
 
