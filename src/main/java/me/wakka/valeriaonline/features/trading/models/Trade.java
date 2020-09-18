@@ -20,7 +20,7 @@ public class Trade implements ConfigurationSerializable {
 	ItemStack ingredient1;
 	ItemStack ingredient2;
 	ItemStack result;
-	List<Type> types = new ArrayList<>();
+	List<Type> types = Arrays.asList(Type.values());
 
 	public Trade(int id) {
 		this.id = id;
