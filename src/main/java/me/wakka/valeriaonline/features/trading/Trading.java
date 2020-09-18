@@ -1,5 +1,6 @@
 package me.wakka.valeriaonline.features.trading;
 
+import lombok.Getter;
 import lombok.SneakyThrows;
 import me.wakka.valeriaonline.Utils.ConfigUtils;
 import me.wakka.valeriaonline.features.trading.models.Profession;
@@ -10,14 +11,20 @@ import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.configuration.serialization.SerializableAs;
 import org.reflections.Reflections;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 public class Trading {
-	
+	private static File configFile;
+	@Getter
+	private static YamlConfiguration config;
+
 	public Trading() {
 		registerSerializables();
+		configFile = ConfigUtils.getFile("trading.yml");
+		config = ConfigUtils.getConfig(configFile);
 	}
 
 	//Config Save Structure:
@@ -26,17 +33,15 @@ public class Trading {
 	// 	a simple loop over config sections will do
 	// 	to get the trades.
 
-	public static YamlConfiguration getConfig() {
-		return ConfigUtils.getConfig("trading.yml");
-	}
-
 	public static List<Trade> getTrades(Profession profession, int level) {
 		List<Trade> trades = new ArrayList<>();
 		if (getConfig().getConfigurationSection(profession.name().toLowerCase() + "." + level) == null)
 			return trades;
+
 		Set<String> sections = getConfig().getConfigurationSection(profession.name().toLowerCase() + "." + level).getKeys(false);
 		if (sections.isEmpty())
 			return trades;
+
 		for (String section : sections) {
 			Trade trade = (Trade) getConfig().get(profession.name().toLowerCase() + "." + level + "." + section);
 			trade.setId(Integer.parseInt(section));
@@ -47,7 +52,7 @@ public class Trading {
 
 	@SneakyThrows
 	public static void save() {
-		getConfig().save(ConfigUtils.getFile("trading.yml"));
+		config.save(configFile);
 	}
 
 	public static int getNextID(Profession profession, int level) {
