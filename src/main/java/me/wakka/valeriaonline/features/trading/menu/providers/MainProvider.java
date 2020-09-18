@@ -1,14 +1,13 @@
 package me.wakka.valeriaonline.features.trading.menu.providers;
 
-import com.sun.xml.internal.ws.policy.sourcemodel.ModelNode;
 import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import me.wakka.valeriaonline.Utils.ItemBuilder;
 import me.wakka.valeriaonline.Utils.MenuUtils;
 import me.wakka.valeriaonline.Utils.StringUtils;
-import me.wakka.valeriaonline.features.trading.models.Profession;
 import me.wakka.valeriaonline.features.trading.menu.TradeEditorMenus;
+import me.wakka.valeriaonline.features.trading.models.Profession;
 import me.wakka.valeriaonline.features.trading.models.Type;
 import org.bukkit.entity.Player;
 

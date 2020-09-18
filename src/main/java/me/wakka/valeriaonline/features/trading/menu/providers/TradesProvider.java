@@ -54,7 +54,7 @@ public class TradesProvider extends MenuUtils implements InventoryProvider {
 		Pagination page = contents.pagination();
 
 		//Filter Button
-		contents.set(0, 8, ClickableItem.from(
+		contents.set(0, 6, ClickableItem.from(
 				new ItemBuilder(Material.HOPPER).name("&eFilter:").lore("&3" + StringUtils.camelCase(filter.name())).build(),
 				e -> TradeEditorMenus.getTrades(profession, level, Utils.EnumUtils.nextWithLoop(Type.class, filter.ordinal())).open(player, page.getPage())
 		));
