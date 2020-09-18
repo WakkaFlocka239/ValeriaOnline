@@ -16,6 +16,7 @@ import me.wakka.valeriaonline.features.trading.models.Trade;
 import me.wakka.valeriaonline.features.trading.models.Type;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 
 import java.util.List;
 
@@ -33,6 +34,11 @@ public class TradesProvider extends MenuUtils implements InventoryProvider {
 			else
 				TradeEditorMenus.openLevel(player, profession);
 		});
+
+		contents.set(0, 8, ClickableItem.empty(new ItemBuilder(Material.BOOK).name("&eInfo")
+				.lore("&3Shift-Right Click a")
+				.lore("&3trade to delete it.")
+				.build()));
 
 		List<Trade> trades = Trading.getTrades(profession, level);
 
@@ -80,8 +86,20 @@ public class TradesProvider extends MenuUtils implements InventoryProvider {
 			}
 
 			int j = i;
-			contents.set(row, column, ClickableItem.from(item.build(), e ->
-					TradeEditorMenus.openTradeEditor(player, profession, level, trades.get(j))));
+			contents.set(row, column, ClickableItem.from(item.build(), e -> {
+				if (((InventoryClickEvent) e.getEvent()).isShiftClick() && ((InventoryClickEvent) e.getEvent()).isRightClick()) {
+					ConfirmationMenu.builder()
+							.onConfirm(itemClickData -> {
+								Trading.getConfig().set(profession.name().toLowerCase() + "." + level + "." + trades.get(j).getId(), null);
+								Trading.save();
+								Tasks.wait(1, () ->TradeEditorMenus.openTrades(player, profession, level));
+							})
+							.onCancel(itemClickData -> TradeEditorMenus.openTrades(player, profession, level))
+							.open(player);
+				}
+				else
+					TradeEditorMenus.openTradeEditor(player, profession, level, trades.get(j));
+			}));
 
 			if (column == 7) {
 				row++;
