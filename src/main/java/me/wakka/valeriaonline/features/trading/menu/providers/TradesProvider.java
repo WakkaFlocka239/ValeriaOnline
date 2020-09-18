@@ -91,6 +91,7 @@ public class TradesProvider extends MenuUtils implements InventoryProvider {
 				item.lore("&3All");
 			else {
 				for (Type type : trades.get(i).getTypes()) {
+					if (type == Type.ALL) continue;
 					item.lore("&3- " + StringUtils.camelCase(type.name()));
 				}
 			}
@@ -116,9 +117,9 @@ public class TradesProvider extends MenuUtils implements InventoryProvider {
 
 		Utils.broadcast("menu items: " + menuItems.size());
 
-		page.addToIterator(contents.newIterator(SlotIterator.Type.HORIZONTAL, 1, 0));
 		page.setItemsPerPage(36);
 		page.setItems(menuItems.toArray(new ClickableItem[0]));
+		page.addToIterator(contents.newIterator(SlotIterator.Type.HORIZONTAL, 1, 0));
 
 		Utils.broadcast("menu items as array: " + menuItems.toArray(new ClickableItem[0]).length);
 
