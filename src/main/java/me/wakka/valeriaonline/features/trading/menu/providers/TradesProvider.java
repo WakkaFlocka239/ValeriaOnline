@@ -63,7 +63,7 @@ public class TradesProvider extends MenuUtils implements InventoryProvider {
 
 		for (int i = 0; i < trades.size(); i++) {
 //			if (filter != Type.ALL)
-//				if (trades.get(i).getTypes().contains(filter))
+//				if (!trades.get(i).getTypes().contains(filter))
 //					continue;
 			ItemBuilder item = new ItemBuilder(Material.CHEST).name("&eTrade " + (i + 1)).amount(i + 1);
 			if (trades.get(i).getIngredient1() != null)

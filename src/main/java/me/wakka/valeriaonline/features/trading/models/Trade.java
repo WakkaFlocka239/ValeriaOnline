@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Data
 @SerializableAs("Trade")
@@ -31,7 +32,7 @@ public class Trade implements ConfigurationSerializable {
 		this.ingredient1 = (ItemStack) map.getOrDefault("ingredient1", null);
 		this.ingredient2 = (ItemStack) map.getOrDefault("ingredient2", null);
 		this.result = (ItemStack) map.getOrDefault("result", null);
-		List<Object> list =  (ArrayList<Object>) map.getOrDefault("types", new ArrayList<Type>() {{ addAll(Arrays.asList(Type.values())); }});
+		List<Object> list =  (ArrayList<Object>) map.getOrDefault("types", new ArrayList<Type>() {{ addAll(Arrays.stream(Type.values()).filter(type -> type != Type.ALL).collect(Collectors.toList())); }});
 		List<Type> types = new ArrayList<>();
 		for (Object object : list) {
 			if (object instanceof String)
