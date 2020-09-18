@@ -59,7 +59,12 @@ public class TradeEditProvider extends MenuUtils implements InventoryProvider {
 			}
 			else {
 				if (Utils.isNullOrAir(e.getPlayer().getItemOnCursor())) {
-					trade.setIngredient1(null);
+					if (trade.getIngredient2() == null)
+						trade.setIngredient1(null);
+					else {
+						trade.setIngredient1(trade.getIngredient2());
+						trade.setIngredient2(null);
+					}
 					Trading.getConfig().set(profession.name().toLowerCase() + "." + level + "." + trade.getId(), trade);
 					Trading.save();
 					Tasks.wait(1, () -> {
@@ -72,6 +77,7 @@ public class TradeEditProvider extends MenuUtils implements InventoryProvider {
 					Trading.getConfig().set(profession.name().toLowerCase() + "." + level + "." + trade.getId(), trade);
 					Trading.save();
 					Tasks.wait(1, () -> {
+						e.getPlayer().setItemOnCursor(new ItemStack(Material.AIR));
 						TradeEditorMenus.openTradeEditor(player, profession, level, trade, filter);
 						e.getPlayer().setItemOnCursor(e.getItem());
 					});
@@ -109,6 +115,7 @@ public class TradeEditProvider extends MenuUtils implements InventoryProvider {
 					Trading.getConfig().set(profession.name().toLowerCase() + "." + level + "." + trade.getId(), trade);
 					Trading.save();
 					Tasks.wait(1, () -> {
+						e.getPlayer().setItemOnCursor(new ItemStack(Material.AIR));
 						TradeEditorMenus.openTradeEditor(player, profession, level, trade, filter);
 						e.getPlayer().setItemOnCursor(e.getItem());
 					});
@@ -140,6 +147,7 @@ public class TradeEditProvider extends MenuUtils implements InventoryProvider {
 					Trading.getConfig().set(profession.name().toLowerCase() + "." + level + "." + trade.getId(), trade);
 					Trading.save();
 					Tasks.wait(1, () -> {
+						e.getPlayer().setItemOnCursor(new ItemStack(Material.AIR));
 						TradeEditorMenus.openTradeEditor(player, profession, level, trade, filter);
 						e.getPlayer().setItemOnCursor(e.getItem());
 					});
