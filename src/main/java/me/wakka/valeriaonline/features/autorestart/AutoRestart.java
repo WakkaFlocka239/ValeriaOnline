@@ -25,7 +25,7 @@ public class AutoRestart {
 	String warningMessage = "Server will restart in... <minutes> minutes";
 	String restartMessage = "Server is restart!";
 	String PREFIX = "[AutoRestart] ";
-	double restartInterval = 1; // in hours
+	double restartInterval = 8; // in hours
 	//
 	static List<Timer> warningTimers = new ArrayList<>();
 	static Timer rebootTimer;

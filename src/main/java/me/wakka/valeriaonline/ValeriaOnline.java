@@ -6,6 +6,7 @@ import me.wakka.valeriaonline.features.altars.Altars;
 import me.wakka.valeriaonline.features.autorestart.AutoRestart;
 import me.wakka.valeriaonline.features.itemtags.ItemTags;
 import me.wakka.valeriaonline.features.listeners.Listeners;
+import me.wakka.valeriaonline.features.trading.Trading;
 import me.wakka.valeriaonline.framework.commands.Commands;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
@@ -71,6 +72,7 @@ public class ValeriaOnline extends JavaPlugin {
 		new ItemTags();
 		new Altars();
 		new AutoRestart();
+		new Trading();
 	}
 
 

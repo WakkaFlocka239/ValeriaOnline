@@ -10,7 +10,9 @@ import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -30,6 +32,14 @@ public class Utils {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			send(player, restartMessage);
 		}
+	}
+
+	public static ItemStack addGlowing(ItemStack itemStack) {
+		itemStack.addUnsafeEnchantment(Enchantment.ARROW_INFINITE, 1);
+		ItemMeta meta = itemStack.getItemMeta();
+		meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+		itemStack.setItemMeta(meta);
+		return itemStack;
 	}
 
 	public static void send(Player player, String message){
