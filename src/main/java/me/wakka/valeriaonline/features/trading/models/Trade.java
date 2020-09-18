@@ -20,7 +20,7 @@ public class Trade implements ConfigurationSerializable {
 	ItemStack ingredient1;
 	ItemStack ingredient2;
 	ItemStack result;
-	List<Type> types = Arrays.asList(Type.values());
+	List<Type> types = new ArrayList<Type>() {{ addAll(Arrays.asList(Type.values())); }};
 
 	public Trade(int id) {
 		this.id = id;
@@ -31,7 +31,7 @@ public class Trade implements ConfigurationSerializable {
 		this.ingredient1 = (ItemStack) map.getOrDefault("ingredient1", null);
 		this.ingredient2 = (ItemStack) map.getOrDefault("ingredient2", null);
 		this.result = (ItemStack) map.getOrDefault("result", null);
-		this.types =  new ArrayList<Type>() {{ map.getOrDefault("types", Arrays.asList(Type.values())); }};
+		this.types =  (ArrayList<Type>) map.getOrDefault("types", new ArrayList<Type>() {{ addAll(Arrays.asList(Type.values())); }});
 	}
 
 	@Override
