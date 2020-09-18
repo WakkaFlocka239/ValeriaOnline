@@ -32,7 +32,7 @@ public class TradeEditProvider extends MenuUtils implements InventoryProvider {
 
 		// Types Item
 		ItemBuilder typesBuilder = new ItemBuilder(Material.MAGMA_CREAM).name("&eTypes:");
-		if (trade.getTypes().size() == 7)
+		if (trade.getTypes().size() >= 7)
 			typesBuilder.lore("&eAll");
 		else
 			for (Type type : trade.getTypes())

@@ -86,7 +86,7 @@ public class TradesProvider extends MenuUtils implements InventoryProvider {
 					.lore("&3" + trades.get(i).getStock())
 					.lore(" ")
 					.lore("&eTypes:");
-			if (trades.get(i).getTypes().size() == 7)
+			if (trades.get(i).getTypes().size() >= 7)
 				item.lore("&3All");
 			else {
 				for (Type type : trades.get(i).getTypes()) {
@@ -113,7 +113,7 @@ public class TradesProvider extends MenuUtils implements InventoryProvider {
 
 		page.addToIterator(contents.newIterator(SlotIterator.Type.HORIZONTAL, 1, 0));
 		page.setItemsPerPage(36);
-		page.setItems(menuItems.toArray(new ClickableItem[0]));
+		page.setItems(menuItems.toArray(new ClickableItem[menuItems.size()]));
 
 		if (!page.isFirst())
 			contents.set(5, 0, ClickableItem.from(new ItemBuilder(Material.ARROW).name("<-- Back").build(),
