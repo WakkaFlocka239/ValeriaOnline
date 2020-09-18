@@ -21,7 +21,7 @@ public class Trade implements ConfigurationSerializable {
 	ItemStack ingredient1;
 	ItemStack ingredient2;
 	ItemStack result;
-	List<Type> types = new ArrayList<Type>() {{ addAll(Arrays.asList(Type.values())); }};
+	List<Type> types = new ArrayList<Type>() {{ addAll(Arrays.stream(Type.values()).filter(type -> type != Type.ALL).collect(Collectors.toList())); }};
 
 	public Trade(int id) {
 		this.id = id;
