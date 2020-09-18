@@ -13,6 +13,7 @@ import me.wakka.valeriaonline.features.trading.menu.TradeEditorMenus;
 import me.wakka.valeriaonline.features.trading.models.Profession;
 import me.wakka.valeriaonline.features.trading.models.Trade;
 import me.wakka.valeriaonline.features.trading.models.Type;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -62,9 +63,9 @@ public class TradesProvider extends MenuUtils implements InventoryProvider {
 		List<ClickableItem> menuItems = new ArrayList<>();
 
 		for (int i = 0; i < trades.size(); i++) {
-//			if (filter != Type.ALL)
-//				if (!trades.get(i).getTypes().contains(filter))
-//					continue;
+			if (filter != Type.ALL)
+				if (!trades.get(i).getTypes().contains(filter))
+					continue;
 			ItemBuilder item = new ItemBuilder(Material.CHEST).name("&eTrade " + (i + 1)).amount(i + 1);
 			if (trades.get(i).getIngredient1() != null)
 					item.lore("&3● " + (Strings.isNullOrEmpty(trades.get(i).getIngredient1().getItemMeta().getDisplayName()) ?
@@ -94,6 +95,8 @@ public class TradesProvider extends MenuUtils implements InventoryProvider {
 				}
 			}
 
+			Utils.broadcast(item.build().toString());
+
 			int j = i;
 			menuItems.add(ClickableItem.from(item.build(), e -> {
 				if (((InventoryClickEvent) e.getEvent()).isShiftClick() && ((InventoryClickEvent) e.getEvent()).isRightClick()) {
@@ -111,9 +114,13 @@ public class TradesProvider extends MenuUtils implements InventoryProvider {
 			}));
 		}
 
+		Utils.broadcast("menu items: " + menuItems.size());
+
 		page.addToIterator(contents.newIterator(SlotIterator.Type.HORIZONTAL, 1, 0));
 		page.setItemsPerPage(36);
-		page.setItems(menuItems.toArray(new ClickableItem[menuItems.size()]));
+		page.setItems(menuItems.toArray(new ClickableItem[0]));
+
+		Utils.broadcast("menu items as array: " + menuItems.toArray(new ClickableItem[0]).length);
 
 		if (!page.isFirst())
 			contents.set(5, 0, ClickableItem.from(new ItemBuilder(Material.ARROW).name("<-- Back").build(),
