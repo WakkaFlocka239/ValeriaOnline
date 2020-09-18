@@ -17,7 +17,7 @@ public class TradeEditorMenus {
 
 	public static void openMain(Player player) {
 		SmartInventory.builder()
-				.title("Trade Editor - Select Profession")
+				.title("Edit Profession")
 				.size(4, 9)
 				.provider(new MainProvider())
 				.build()

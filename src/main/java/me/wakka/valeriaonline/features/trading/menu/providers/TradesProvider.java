@@ -7,13 +7,16 @@ import fr.minuskube.inv.content.InventoryProvider;
 import fr.minuskube.inv.content.Pagination;
 import fr.minuskube.inv.content.SlotIterator;
 import lombok.AllArgsConstructor;
-import me.wakka.valeriaonline.Utils.*;
+import me.wakka.valeriaonline.Utils.ItemBuilder;
+import me.wakka.valeriaonline.Utils.MenuUtils;
+import me.wakka.valeriaonline.Utils.StringUtils;
+import me.wakka.valeriaonline.Utils.Tasks;
+import me.wakka.valeriaonline.Utils.Utils;
 import me.wakka.valeriaonline.features.trading.Trading;
 import me.wakka.valeriaonline.features.trading.menu.TradeEditorMenus;
 import me.wakka.valeriaonline.features.trading.models.Profession;
 import me.wakka.valeriaonline.features.trading.models.Trade;
 import me.wakka.valeriaonline.features.trading.models.Type;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -68,18 +71,18 @@ public class TradesProvider extends MenuUtils implements InventoryProvider {
 					continue;
 			ItemBuilder item = new ItemBuilder(Material.CHEST).name("&eTrade " + (i + 1)).amount(i + 1);
 			if (trades.get(i).getIngredient1() != null)
-					item.lore("&3● " + (Strings.isNullOrEmpty(trades.get(i).getIngredient1().getItemMeta().getDisplayName()) ?
-							StringUtils.camelCase(trades.get(i).getIngredient1().getType().name()) : trades.get(i).getIngredient1().getItemMeta().getDisplayName()) +
-							" x " + trades.get(i).getIngredient1().getAmount());
+				item.lore("&3● " + (Strings.isNullOrEmpty(trades.get(i).getIngredient1().getItemMeta().getDisplayName()) ?
+						StringUtils.camelCase(trades.get(i).getIngredient1().getType().name())
+						: trades.get(i).getIngredient1().getItemMeta().getDisplayName()) + " x " + trades.get(i).getIngredient1().getAmount());
 			if (trades.get(i).getIngredient2() != null)
 				item.lore("&3● " + (Strings.isNullOrEmpty(trades.get(i).getIngredient2().getItemMeta().getDisplayName()) ?
-						StringUtils.camelCase(trades.get(i).getIngredient2().getType().name()) : trades.get(i).getIngredient2().getItemMeta().getDisplayName()) +
-						" x " + trades.get(i).getIngredient2().getAmount());
+						StringUtils.camelCase(trades.get(i).getIngredient2().getType().name())
+						: trades.get(i).getIngredient2().getItemMeta().getDisplayName()) + " x " + trades.get(i).getIngredient2().getAmount());
 			if (trades.get(i).getResult() != null) {
 				item.lore(" ")
-					.lore("&3○ " + (Strings.isNullOrEmpty(trades.get(i).getResult().getItemMeta().getDisplayName()) ?
-						StringUtils.camelCase(trades.get(i).getResult().getType().name()) : trades.get(i).getResult().getItemMeta().getDisplayName()) +
-							" x " + trades.get(i).getResult().getAmount());
+						.lore("&3○ " + (Strings.isNullOrEmpty(trades.get(i).getResult().getItemMeta().getDisplayName()) ?
+								StringUtils.camelCase(trades.get(i).getResult().getType().name())
+								: trades.get(i).getResult().getItemMeta().getDisplayName()) + " x " + trades.get(i).getResult().getAmount());
 			}
 
 			item.lore("")

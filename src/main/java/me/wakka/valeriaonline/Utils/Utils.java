@@ -18,17 +18,22 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.MetadataValue;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import static me.wakka.valeriaonline.Utils.StringUtils.camelCase;
 
 // TODO - split up
 public class Utils {
 
-	public static void broadcast(String restartMessage) {
+	public static void broadcast(String msg) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
-			send(player, restartMessage);
+			send(player, msg);
 		}
 	}
 
