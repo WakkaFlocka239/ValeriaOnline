@@ -1,6 +1,8 @@
 package me.wakka.valeriaonline;
 
+import lombok.Getter;
 import me.wakka.valeriaonline.Utils.ConfigUtils;
+import me.wakka.valeriaonline.Utils.SignMenuFactory;
 import me.wakka.valeriaonline.Utils.Utils;
 import me.wakka.valeriaonline.features.altars.Altars;
 import me.wakka.valeriaonline.features.autorestart.AutoRestart;
@@ -16,6 +18,8 @@ import static me.wakka.valeriaonline.Utils.StringUtils.stripColor;
 
 public class ValeriaOnline extends JavaPlugin {
 	private Commands commands;
+	@Getter
+	private static SignMenuFactory signMenuFactory;
 	private static ValeriaOnline instance;
 
 	public ValeriaOnline(){
@@ -81,6 +85,8 @@ public class ValeriaOnline extends JavaPlugin {
 		new Altars();
 		new AutoRestart();
 		new Trading();
+
+		signMenuFactory = new SignMenuFactory(this);
 	}
 
 

@@ -26,7 +26,12 @@ public class TradesProvider extends MenuUtils implements InventoryProvider {
 
 	@Override
 	public void init(Player player, InventoryContents contents) {
-		addBackItem(contents, e -> TradeEditorMenus.openLevel(player, profession));
+		addBackItem(contents, e -> {
+			if (profession == Profession.WANDERING_TRADER)
+				TradeEditorMenus.openMain(player);
+			else
+				TradeEditorMenus.openLevel(player, profession);
+		});
 
 		List<Trade> trades = Trading.getTrades(profession, level);
 

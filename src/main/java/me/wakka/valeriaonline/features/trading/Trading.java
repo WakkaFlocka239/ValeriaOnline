@@ -32,6 +32,8 @@ public class Trading {
 
 	public static List<Trade> getTrades(Profession profession, int level) {
 		List<Trade> trades = new ArrayList<>();
+		if (getConfig().getConfigurationSection(profession.name().toLowerCase() + "." + level) == null)
+			return trades;
 		Set<String> sections = getConfig().getConfigurationSection(profession.name().toLowerCase() + "." + level).getKeys(false);
 		if (sections.isEmpty())
 			return trades;
@@ -49,6 +51,8 @@ public class Trading {
 
 	public static int getNextID(Profession profession, int level) {
 		int id = 0;
+		if (getConfig().getConfigurationSection(profession.name().toLowerCase() + "." + level) == null)
+			return id;
 		for (String string : getConfig().getConfigurationSection(profession.name().toLowerCase() + "." + level).getKeys(false)) {
 			if (id <= Integer.parseInt(string))
 				id = Integer.parseInt(string) + 1;

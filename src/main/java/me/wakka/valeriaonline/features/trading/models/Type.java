@@ -12,7 +12,7 @@ public enum Type {
 	PLAINS(Material.OAK_SAPLING),
 	TAIGA(Material.SPRUCE_SAPLING),
 	SAVANNA(Material.ACACIA_SAPLING),
-	SWAP(Material.LILY_PAD),
+	SWAMP(Material.LILY_PAD),
 	SNOW(Material.SNOWBALL);
 
 	@Getter
