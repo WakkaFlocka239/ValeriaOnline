@@ -113,6 +113,7 @@ public class TradeEditProvider extends MenuUtils implements InventoryProvider {
 
 		contents.set(2, 6, ClickableItem.from((trade.getResult() == null ? result : trade.getResult()), e -> {
 			if (e.getItem().equals(result)) {
+				if (Utils.isNullOrAir(e.getPlayer().getItemOnCursor())) return;
 				trade.setResult(e.getPlayer().getItemOnCursor());
 				Trading.getConfig().set(profession.name().toLowerCase() + "." + level + "." + trade.getId(), trade);
 				Trading.save();
