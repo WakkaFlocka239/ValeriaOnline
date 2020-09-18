@@ -6,7 +6,7 @@ import fr.minuskube.inv.content.InventoryProvider;
 import lombok.AllArgsConstructor;
 import me.wakka.valeriaonline.Utils.ItemBuilder;
 import me.wakka.valeriaonline.Utils.MenuUtils;
-import me.wakka.valeriaonline.features.trading.Professions;
+import me.wakka.valeriaonline.features.trading.models.Profession;
 import me.wakka.valeriaonline.features.trading.menu.TradeEditorMenus;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -14,10 +14,11 @@ import org.bukkit.entity.Player;
 @AllArgsConstructor
 public class LevelProvider extends MenuUtils implements InventoryProvider {
 
-	Professions profession;
+	Profession profession;
 
 	@Override
 	public void init(Player player, InventoryContents contents) {
+		addBackItem(contents, e -> TradeEditorMenus.openMain(player));
 
 		for (int i = 1; i <= 5; i++) {
 			int j = i;

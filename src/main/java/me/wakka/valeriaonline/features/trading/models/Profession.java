@@ -1,11 +1,11 @@
-package me.wakka.valeriaonline.features.trading;
+package me.wakka.valeriaonline.features.trading.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.bukkit.Material;
 
 @AllArgsConstructor
-public enum Professions {
+public enum Profession {
 
 		FARMER(Material.COMPOSTER),
 		LEATHER_WORKER(Material.CAULDRON),

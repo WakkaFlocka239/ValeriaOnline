@@ -1,7 +1,6 @@
-package me.wakka.valeriaonline.features.trading;
+package me.wakka.valeriaonline.features.trading.models;
 
 import lombok.Data;
-import me.wakka.valeriaonline.features.trading.models.Trade;
 
 import java.util.List;
 import java.util.Map;
@@ -9,6 +8,7 @@ import java.util.Map;
 @Data
 public class TradingBuilder {
 
-	public Professions profession;
+	public Profession profession;
 	public Map<Integer, List<Trade>> trades;
+
 }
