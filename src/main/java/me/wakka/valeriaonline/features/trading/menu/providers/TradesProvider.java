@@ -96,8 +96,6 @@ public class TradesProvider extends MenuUtils implements InventoryProvider {
 				}
 			}
 
-			Utils.broadcast(item.build().toString());
-
 			int j = i;
 			menuItems.add(ClickableItem.from(item.build(), e -> {
 				if (((InventoryClickEvent) e.getEvent()).isShiftClick() && ((InventoryClickEvent) e.getEvent()).isRightClick()) {
@@ -115,13 +113,9 @@ public class TradesProvider extends MenuUtils implements InventoryProvider {
 			}));
 		}
 
-		Utils.broadcast("menu items: " + menuItems.size());
-
 		page.setItemsPerPage(36);
 		page.setItems(menuItems.toArray(new ClickableItem[0]));
 		page.addToIterator(contents.newIterator(SlotIterator.Type.HORIZONTAL, 1, 0));
-
-		Utils.broadcast("menu items as array: " + menuItems.toArray(new ClickableItem[0]).length);
 
 		if (!page.isFirst())
 			contents.set(5, 0, ClickableItem.from(new ItemBuilder(Material.ARROW).name("<-- Back").build(),
