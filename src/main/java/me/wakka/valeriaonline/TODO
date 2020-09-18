@@ -1,6 +1,7 @@
 TODO:
 - itemtags:
     - Apply tags to all mob drops
+    - Set display name to same color of rarity tag
 - altar restrictions & particles
 	config
 - auto restart checks --> "/restart"
