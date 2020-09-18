@@ -15,8 +15,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import javax.accessibility.AccessibleContext;
-
 @AllArgsConstructor
 public class TradeEditProvider extends MenuUtils implements InventoryProvider {
 
@@ -47,6 +45,7 @@ public class TradeEditProvider extends MenuUtils implements InventoryProvider {
 
 		contents.set(2, 2, ClickableItem.from((trade.getIngredient1() == null ? ingredient1 : trade.getIngredient1()), e -> {
 			if (e.getItem().equals(ingredient1)) {
+				if (Utils.isNullOrAir(e.getPlayer().getItemOnCursor())) return;
 				trade.setIngredient1(e.getPlayer().getItemOnCursor());
 				Trading.getConfig().set(profession.name().toLowerCase() + "." + level + "." + trade.getId(), trade);
 				Trading.save();
@@ -58,22 +57,30 @@ public class TradeEditProvider extends MenuUtils implements InventoryProvider {
 					trade.setIngredient1(null);
 					Trading.getConfig().set(profession.name().toLowerCase() + "." + level + "." + trade.getId(), trade);
 					Trading.save();
-					e.getPlayer().setItemOnCursor(e.getItem());
-					Tasks.wait(1, () -> TradeEditorMenus.openTradeEditor(player, profession, level, trade));
+					Tasks.wait(1, () -> {
+						TradeEditorMenus.openTradeEditor(player, profession, level, trade);
+						e.getPlayer().setItemOnCursor(e.getItem());
+					});
 				}
 				else {
 					trade.setIngredient1(e.getPlayer().getItemOnCursor());
 					Trading.getConfig().set(profession.name().toLowerCase() + "." + level + "." + trade.getId(), trade);
 					Trading.save();
-					e.getPlayer().setItemOnCursor(e.getItem());
-					Tasks.wait(1, () -> TradeEditorMenus.openTradeEditor(player, profession, level, trade));
+					Tasks.wait(1, () -> {
+						TradeEditorMenus.openTradeEditor(player, profession, level, trade);
+						e.getPlayer().setItemOnCursor(e.getItem());
+					});
 				}
 			}
 		}));
 
 		contents.set(2, 3, ClickableItem.from((trade.getIngredient2() == null ? ingredient2 : trade.getIngredient2()), e -> {
 			if (e.getItem().equals(ingredient2)) {
-				trade.setIngredient2(e.getPlayer().getItemOnCursor());
+				if (Utils.isNullOrAir(e.getPlayer().getItemOnCursor())) return;
+				if (trade.getIngredient1() == null)
+					trade.setIngredient1(e.getPlayer().getItemOnCursor());
+				else
+					trade.setIngredient2(e.getPlayer().getItemOnCursor());
 				Trading.getConfig().set(profession.name().toLowerCase() + "." + level + "." + trade.getId(), trade);
 				Trading.save();
 				e.getPlayer().setItemOnCursor(null);
@@ -84,15 +91,22 @@ public class TradeEditProvider extends MenuUtils implements InventoryProvider {
 					trade.setIngredient2(null);
 					Trading.getConfig().set(profession.name().toLowerCase() + "." + level + "." + trade.getId(), trade);
 					Trading.save();
-					e.getPlayer().setItemOnCursor(e.getItem());
-					Tasks.wait(1, () -> TradeEditorMenus.openTradeEditor(player, profession, level, trade));
+					Tasks.wait(1, () -> {
+						TradeEditorMenus.openTradeEditor(player, profession, level, trade);
+						e.getPlayer().setItemOnCursor(e.getItem());
+					});
 				}
 				else {
-					trade.setIngredient2(e.getPlayer().getItemOnCursor());
+					if (trade.getIngredient1() == null)
+						trade.setIngredient1(e.getPlayer().getItemOnCursor());
+					else
+						trade.setIngredient2(e.getPlayer().getItemOnCursor());
 					Trading.getConfig().set(profession.name().toLowerCase() + "." + level + "." + trade.getId(), trade);
 					Trading.save();
-					e.getPlayer().setItemOnCursor(e.getItem());
-					Tasks.wait(1, () -> TradeEditorMenus.openTradeEditor(player, profession, level, trade));
+					Tasks.wait(1, () -> {
+						TradeEditorMenus.openTradeEditor(player, profession, level, trade);
+						e.getPlayer().setItemOnCursor(e.getItem());
+					});
 				}
 			}
 		}));
@@ -110,15 +124,19 @@ public class TradeEditProvider extends MenuUtils implements InventoryProvider {
 					trade.setResult(null);
 					Trading.getConfig().set(profession.name().toLowerCase() + "." + level + "." + trade.getId(), trade);
 					Trading.save();
-					e.getPlayer().setItemOnCursor(e.getItem());
-					Tasks.wait(1, () -> TradeEditorMenus.openTradeEditor(player, profession, level, trade));
+					Tasks.wait(1, () -> {
+						TradeEditorMenus.openTradeEditor(player, profession, level, trade);
+						e.getPlayer().setItemOnCursor(e.getItem());
+					});
 				}
 				else {
 					trade.setResult(e.getPlayer().getItemOnCursor());
 					Trading.getConfig().set(profession.name().toLowerCase() + "." + level + "." + trade.getId(), trade);
 					Trading.save();
-					e.getPlayer().setItemOnCursor(e.getItem());
-					Tasks.wait(1, () -> TradeEditorMenus.openTradeEditor(player, profession, level, trade));
+					Tasks.wait(1, () -> {
+						TradeEditorMenus.openTradeEditor(player, profession, level, trade);
+						e.getPlayer().setItemOnCursor(e.getItem());
+					});
 				}
 			}
 		}));

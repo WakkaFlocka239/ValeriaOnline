@@ -1,5 +1,6 @@
 package me.wakka.valeriaonline.features.trading.menu.providers;
 
+import com.google.common.base.Strings;
 import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
@@ -38,7 +39,7 @@ public class TradesProvider extends MenuUtils implements InventoryProvider {
 		//Remove New Trade Button if more than 28 trades
 		if (trades.size() < 28) {
 			//New Trade Button
-			contents.set(0, 4, ClickableItem.from(new ItemBuilder(Material.GREEN_CONCRETE).name("&aNew Trade").build(), e -> {
+			contents.set(0, 4, ClickableItem.from(new ItemBuilder(Material.LIME_CONCRETE).name("&aNew Trade").build(), e -> {
 				Trade trade = new Trade(Trading.getNextID(profession, level));
 				Trading.getConfig().set(profession.name().toLowerCase() + "." + level + "." + trade.getId(), trade);
 				Trading.save();
@@ -50,11 +51,14 @@ public class TradesProvider extends MenuUtils implements InventoryProvider {
 		int column = 1;
 		for (int i = 0; i < trades.size(); i++) {
 			ItemBuilder item = new ItemBuilder(Material.CHEST).name("&eTrade " + (i + 1)).amount(i + 1)
-					.lore("&3● " + trades.get(i).getIngredient1().getItemMeta().getDisplayName());
+					.lore("&3● " + (Strings.isNullOrEmpty(trades.get(i).getIngredient1().getItemMeta().getDisplayName()) ?
+							StringUtils.camelCase(trades.get(i).getIngredient1().getType().name()) : trades.get(i).getIngredient1().getItemMeta().getDisplayName()));
 			if (trades.get(i).getIngredient2() != null)
-				item.lore("&3● " + trades.get(i).getIngredient2().getItemMeta().getDisplayName());
+				item.lore("&3● " + (Strings.isNullOrEmpty(trades.get(i).getIngredient2().getItemMeta().getDisplayName()) ?
+						StringUtils.camelCase(trades.get(i).getIngredient2().getType().name()) : trades.get(i).getIngredient2().getItemMeta().getDisplayName()));
 			item.lore(" ")
-					.lore("&3○ " + trades.get(i).getResult().getItemMeta().getDisplayName())
+					.lore("&3○ " + (Strings.isNullOrEmpty(trades.get(i).getResult().getItemMeta().getDisplayName()) ?
+							StringUtils.camelCase(trades.get(i).getResult().getType().name()) : trades.get(i).getResult().getItemMeta().getDisplayName()))
 					.lore(" ")
 					.lore("&eTypes:");
 			if (trades.get(i).getTypes().size() == 7)

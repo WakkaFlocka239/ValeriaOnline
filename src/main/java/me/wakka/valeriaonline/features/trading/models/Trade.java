@@ -15,7 +15,6 @@ public class Trade implements ConfigurationSerializable {
 
 	int id;
 	int stock;
-	@NonNull
 	ItemStack ingredient1;
 	ItemStack ingredient2;
 	ItemStack result;

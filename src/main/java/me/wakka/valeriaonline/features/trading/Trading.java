@@ -40,6 +40,7 @@ public class Trading {
 		for (String section : sections) {
 			Trade trade = (Trade) getConfig().get(profession.name().toLowerCase() + "." + level + "." + section);
 			trade.setId(Integer.parseInt(section));
+			trades.add(trade);
 		}
 		return trades;
 	}
