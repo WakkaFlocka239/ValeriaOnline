@@ -55,10 +55,18 @@ public class ValeriaOnline extends JavaPlugin {
 	// @formatter:off
 	@Override
 	public void onDisable() {
-		try { Utils.runCommandAsConsole("save-all");				} catch (Throwable ex) { ex.printStackTrace(); }
-		try { AutoRestart.shutdown();											} catch (Throwable ex) { ex.printStackTrace(); }
+		try { Utils.runCommandAsConsole("save-all");	} catch (Throwable ex) { ex.printStackTrace(); }
+		try { AutoRestart.shutdown();								} catch (Throwable ex) { ex.printStackTrace(); }
+		try { broadcastReload(); 									} catch (Throwable ex) { ex.printStackTrace(); }
 	}
 	// @formatter:on
+
+	public void broadcastReload() {
+		String message = "&c&l! &c&l! &eReloading ValeriaOnline &c&l! &c&l!";
+		Bukkit.getOnlinePlayers().stream()
+				.filter(player -> player.hasPermission("group.admin"))
+				.forEach(player -> Utils.send(player, Commands.VO_PREFIX + message));
+	}
 
 	public static void registerListener(Listener listener) {
 		if (getInstance().isEnabled()) {
@@ -67,7 +75,7 @@ public class ValeriaOnline extends JavaPlugin {
 			log("Could not register listener " + listener.toString() + "!");
 	}
 
-	private void enableFeatures(){
+	private void enableFeatures() {
 		new Listeners();
 		new ItemTags();
 		new Altars();

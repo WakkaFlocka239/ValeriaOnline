@@ -30,7 +30,7 @@ import static org.reflections.ReflectionUtils.withAnnotation;
 
 @SuppressWarnings("unused")
 public class Commands {
-	public static final String PREFIX = ConfigUtils.getSettings().getString("prefix");
+	public static final String VO_PREFIX = ConfigUtils.getSettings().getString("prefix");
 
 	private final Plugin plugin;
 	private final String path;
