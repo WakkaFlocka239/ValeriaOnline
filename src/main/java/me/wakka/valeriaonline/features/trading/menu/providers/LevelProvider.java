@@ -8,6 +8,7 @@ import me.wakka.valeriaonline.Utils.ItemBuilder;
 import me.wakka.valeriaonline.Utils.MenuUtils;
 import me.wakka.valeriaonline.features.trading.models.Profession;
 import me.wakka.valeriaonline.features.trading.menu.TradeEditorMenus;
+import me.wakka.valeriaonline.features.trading.models.Type;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -23,7 +24,7 @@ public class LevelProvider extends MenuUtils implements InventoryProvider {
 		for (int i = 1; i <= 5; i++) {
 			int j = i;
 			contents.set(1, i + 1, ClickableItem.from(new ItemBuilder(Material.EXPERIENCE_BOTTLE).name("&eLevel " + i).amount(i).build(),
-					e -> TradeEditorMenus.openTrades(player, profession, j)));
+					e -> TradeEditorMenus.openTrades(player, profession, j, Type.ALL)));
 		}
 	}
 

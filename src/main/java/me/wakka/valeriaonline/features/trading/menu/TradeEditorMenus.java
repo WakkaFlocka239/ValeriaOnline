@@ -39,7 +39,7 @@ public class TradeEditorMenus {
 		return SmartInventory.builder()
 				.title("Edit " + professionName + " Lvl " + level)
 				.size(getTradeSize(profession, level), 9)
-				.provider(new TradesProvider(profession, level))
+				.provider(new TradesProvider(profession, level, filter))
 				.build();
 	}
 
