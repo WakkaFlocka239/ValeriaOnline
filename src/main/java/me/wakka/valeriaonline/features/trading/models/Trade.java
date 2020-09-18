@@ -1,13 +1,15 @@
 package me.wakka.valeriaonline.features.trading.models;
 
 import lombok.Data;
-import lombok.NonNull;
-import me.wakka.valeriaonline.features.trading.Trading;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 @Data
 @SerializableAs("Trade")
