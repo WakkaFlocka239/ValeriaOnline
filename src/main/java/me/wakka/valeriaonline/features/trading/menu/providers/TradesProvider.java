@@ -53,16 +53,23 @@ public class TradesProvider extends MenuUtils implements InventoryProvider {
 			ItemBuilder item = new ItemBuilder(Material.CHEST).name("&eTrade " + (i + 1)).amount(i + 1);
 			if (trades.get(i).getIngredient1() != null)
 					item.lore("&3● " + (Strings.isNullOrEmpty(trades.get(i).getIngredient1().getItemMeta().getDisplayName()) ?
-							StringUtils.camelCase(trades.get(i).getIngredient1().getType().name()) : trades.get(i).getIngredient1().getItemMeta().getDisplayName()));
+							StringUtils.camelCase(trades.get(i).getIngredient1().getType().name()) : trades.get(i).getIngredient1().getItemMeta().getDisplayName()) +
+							" x " + trades.get(i).getIngredient1().getAmount());
 			if (trades.get(i).getIngredient2() != null)
 				item.lore("&3● " + (Strings.isNullOrEmpty(trades.get(i).getIngredient2().getItemMeta().getDisplayName()) ?
-						StringUtils.camelCase(trades.get(i).getIngredient2().getType().name()) : trades.get(i).getIngredient2().getItemMeta().getDisplayName()));
+						StringUtils.camelCase(trades.get(i).getIngredient2().getType().name()) : trades.get(i).getIngredient2().getItemMeta().getDisplayName()) +
+						" x " + trades.get(i).getIngredient2().getAmount());
 			if (trades.get(i).getResult() != null) {
 				item.lore(" ")
 					.lore("&3○ " + (Strings.isNullOrEmpty(trades.get(i).getResult().getItemMeta().getDisplayName()) ?
-						StringUtils.camelCase(trades.get(i).getResult().getType().name()) : trades.get(i).getResult().getItemMeta().getDisplayName()));
+						StringUtils.camelCase(trades.get(i).getResult().getType().name()) : trades.get(i).getResult().getItemMeta().getDisplayName()) +
+							" x " + trades.get(i).getResult().getAmount());
 			}
-			item.lore(" ")
+
+			item.lore("")
+					.lore("&eStock:")
+					.lore("&3" + trades.get(i).getStock())
+					.lore(" ")
 					.lore("&eTypes:");
 			if (trades.get(i).getTypes().size() == 7)
 				item.lore("&3All");
