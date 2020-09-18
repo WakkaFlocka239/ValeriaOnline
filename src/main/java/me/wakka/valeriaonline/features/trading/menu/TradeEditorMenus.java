@@ -54,20 +54,20 @@ public class TradeEditorMenus {
 		return Math.min(Math.max(rows, 3), 6);
 	}
 
-	public static void openTradeEditor(Player player, Profession profession, int level, Trade trade) {
+	public static void openTradeEditor(Player player, Profession profession, int level, Trade trade, Type filter) {
 		SmartInventory.builder()
 				.title("Edit Trade")
 				.size(4, 9)
-				.provider(new TradeEditProvider(profession, level, trade))
+				.provider(new TradeEditProvider(profession, level, trade, filter))
 				.build()
 				.open(player);
 	}
 
-	public static void openTypeProvider(Player player, Profession profession, int level, Trade trade) {
+	public static void openTypeProvider(Player player, Profession profession, int level, Trade trade, Type filter) {
 		SmartInventory.builder()
 				.title("Select Villager Types")
 				.size(4, 9)
-				.provider(new TypeProvider(profession, level, trade))
+				.provider(new TypeProvider(profession, level, trade, filter))
 				.build()
 				.open(player);
 	}

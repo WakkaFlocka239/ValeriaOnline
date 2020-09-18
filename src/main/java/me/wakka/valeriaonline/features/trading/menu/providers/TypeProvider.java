@@ -21,10 +21,11 @@ public class TypeProvider extends MenuUtils implements InventoryProvider {
 	Profession profession;
 	int level;
 	Trade trade;
+	Type filter;
 
 	@Override
 	public void init(Player player, InventoryContents contents) {
-		addBackItem(contents, e -> TradeEditorMenus.openTradeEditor(player, profession, level, trade));
+		addBackItem(contents, e -> TradeEditorMenus.openTradeEditor(player, profession, level, trade, filter));
 
 		int i = 1;
 		for (Type type : Type.values()) {
@@ -40,7 +41,7 @@ public class TypeProvider extends MenuUtils implements InventoryProvider {
 					trade.getTypes().add(type);
 				Trading.getConfig().set(profession.name().toLowerCase() + "." + level + "." + trade.getId(), trade);
 				Trading.save();
-				Tasks.wait(1, () -> TradeEditorMenus.openTypeProvider(player, profession, level, trade));
+				Tasks.wait(1, () -> TradeEditorMenus.openTypeProvider(player, profession, level, trade, filter));
 			}));
 		}
 

@@ -49,7 +49,7 @@ public class TradesProvider extends MenuUtils implements InventoryProvider {
 			Trade trade = new Trade(Trading.getNextID(profession, level));
 			Trading.getConfig().set(profession.name().toLowerCase() + "." + level + "." + trade.getId(), trade);
 			Trading.save();
-			Tasks.wait(1, () -> TradeEditorMenus.openTradeEditor(player, profession, level, trade));
+			Tasks.wait(1, () -> TradeEditorMenus.openTradeEditor(player, profession, level, trade, filter));
 		}));
 
 		Pagination page = contents.pagination();
@@ -109,7 +109,7 @@ public class TradesProvider extends MenuUtils implements InventoryProvider {
 							.open(player);
 				}
 				else
-					TradeEditorMenus.openTradeEditor(player, profession, level, trades.get(j));
+					TradeEditorMenus.openTradeEditor(player, profession, level, trades.get(j), filter);
 			}));
 		}
 
