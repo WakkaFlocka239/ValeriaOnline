@@ -10,6 +10,7 @@ import me.wakka.valeriaonline.features.trading.menu.providers.TradesProvider;
 import me.wakka.valeriaonline.features.trading.menu.providers.TypeProvider;
 import me.wakka.valeriaonline.features.trading.models.Profession;
 import me.wakka.valeriaonline.features.trading.models.Trade;
+import me.wakka.valeriaonline.features.trading.models.Type;
 import org.bukkit.entity.Player;
 
 public class TradeEditorMenus {
@@ -33,14 +34,18 @@ public class TradeEditorMenus {
 				.open(player);
 	}
 
-	public static void openTrades(Player player, Profession profession, int level) {
+	public static SmartInventory getTrades(Profession profession, int level, Type filter) {
 		String professionName = StringUtils.camelCase(profession.name());
-		SmartInventory.builder()
+		return SmartInventory.builder()
 				.title("Edit " + professionName + " Lvl " + level)
 				.size(getTradeSize(profession, level), 9)
 				.provider(new TradesProvider(profession, level))
-				.build()
-				.open(player);
+				.build();
+	}
+
+
+	public static void openTrades(Player player, Profession profession, int level, Type filter) {
+				getTrades(profession, level, filter).open(player);
 	}
 
 	public static int getTradeSize(Profession profession, int level) {

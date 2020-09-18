@@ -28,7 +28,7 @@ public class TradeEditProvider extends MenuUtils implements InventoryProvider {
 
 	@Override
 	public void init(Player player, InventoryContents contents) {
-		addBackItem(contents, e -> TradeEditorMenus.openTrades(player, profession, level));
+		addBackItem(contents, e -> TradeEditorMenus.openTrades(player, profession, level, Type.ALL));
 
 		// Types Item
 		ItemBuilder typesBuilder = new ItemBuilder(Material.MAGMA_CREAM).name("&eTypes:");

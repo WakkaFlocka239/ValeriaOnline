@@ -13,6 +13,8 @@ import me.wakka.valeriaonline.features.trading.models.Type;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import static me.wakka.valeriaonline.features.trading.models.Type.ALL;
+
 @AllArgsConstructor
 public class TypeProvider extends MenuUtils implements InventoryProvider {
 
@@ -26,6 +28,7 @@ public class TypeProvider extends MenuUtils implements InventoryProvider {
 
 		int i = 1;
 		for (Type type : Type.values()) {
+			if (type == ALL) continue;
 			ItemStack item = new ItemBuilder(type.getMaterial()).name("&e" + StringUtils.camelCase(type.name())).build().clone();
 			boolean selected = trade.getTypes().contains(type);
 			if (selected)

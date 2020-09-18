@@ -9,6 +9,7 @@ import org.bukkit.Material;
 @NoArgsConstructor
 public enum Type {
 
+	ALL(Material.AIR),
 	DESERT(Material.DEAD_BUSH),
 	JUNGLE(Material.JUNGLE_SAPLING),
 	PLAINS(Material.OAK_SAPLING),

@@ -4,11 +4,10 @@ import com.google.common.base.Strings;
 import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
+import fr.minuskube.inv.content.Pagination;
+import fr.minuskube.inv.content.SlotIterator;
 import lombok.AllArgsConstructor;
-import me.wakka.valeriaonline.Utils.ItemBuilder;
-import me.wakka.valeriaonline.Utils.MenuUtils;
-import me.wakka.valeriaonline.Utils.StringUtils;
-import me.wakka.valeriaonline.Utils.Tasks;
+import me.wakka.valeriaonline.Utils.*;
 import me.wakka.valeriaonline.features.trading.Trading;
 import me.wakka.valeriaonline.features.trading.menu.TradeEditorMenus;
 import me.wakka.valeriaonline.features.trading.models.Profession;
@@ -18,6 +17,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -25,6 +25,7 @@ public class TradesProvider extends MenuUtils implements InventoryProvider {
 
 	Profession profession;
 	int level;
+	Type filter;
 
 	@Override
 	public void init(Player player, InventoryContents contents) {
@@ -42,20 +43,26 @@ public class TradesProvider extends MenuUtils implements InventoryProvider {
 
 		List<Trade> trades = Trading.getTrades(profession, level);
 
-		//Remove New Trade Button if more than 28 trades
-		if (trades.size() < 28) {
-			//New Trade Button
-			contents.set(0, 4, ClickableItem.from(new ItemBuilder(Material.LIME_CONCRETE).name("&aNew Trade").build(), e -> {
-				Trade trade = new Trade(Trading.getNextID(profession, level));
-				Trading.getConfig().set(profession.name().toLowerCase() + "." + level + "." + trade.getId(), trade);
-				Trading.save();
-				Tasks.wait(1, () -> TradeEditorMenus.openTradeEditor(player, profession, level, trade));
-			}));
-		}
+		//New Trade Button
+		contents.set(0, 4, ClickableItem.from(new ItemBuilder(Material.LIME_CONCRETE).name("&aNew Trade").build(), e -> {
+			Trade trade = new Trade(Trading.getNextID(profession, level));
+			Trading.getConfig().set(profession.name().toLowerCase() + "." + level + "." + trade.getId(), trade);
+			Trading.save();
+			Tasks.wait(1, () -> TradeEditorMenus.openTradeEditor(player, profession, level, trade));
+		}));
 
-		int row = 1;
-		int column = 1;
+		Pagination page = contents.pagination();
+
+		//Filter Button
+		contents.set(0, 8, ClickableItem.from(
+				new ItemBuilder(Material.HOPPER).name("&eFilter:").lore("&3" + StringUtils.camelCase(filter.name())).build(),
+				e -> TradeEditorMenus.getTrades(profession, level, Utils.EnumUtils.nextWithLoop(Type.class, filter.ordinal())).open(player, page.getPage())
+		));
+
+		List<ClickableItem> menuItems = new ArrayList<>();
+
 		for (int i = 0; i < trades.size(); i++) {
+			if (filter != Type.ALL && !trades.get(i).getTypes().contains(filter)) continue;
 			ItemBuilder item = new ItemBuilder(Material.CHEST).name("&eTrade " + (i + 1)).amount(i + 1);
 			if (trades.get(i).getIngredient1() != null)
 					item.lore("&3● " + (Strings.isNullOrEmpty(trades.get(i).getIngredient1().getItemMeta().getDisplayName()) ?
@@ -86,29 +93,33 @@ public class TradesProvider extends MenuUtils implements InventoryProvider {
 			}
 
 			int j = i;
-			contents.set(row, column, ClickableItem.from(item.build(), e -> {
+			menuItems.add(ClickableItem.from(item.build(), e -> {
 				if (((InventoryClickEvent) e.getEvent()).isShiftClick() && ((InventoryClickEvent) e.getEvent()).isRightClick()) {
 					ConfirmationMenu.builder()
 							.onConfirm(itemClickData -> {
 								Trading.getConfig().set(profession.name().toLowerCase() + "." + level + "." + trades.get(j).getId(), null);
 								Trading.save();
-								Tasks.wait(1, () ->TradeEditorMenus.openTrades(player, profession, level));
+								Tasks.wait(1, () ->TradeEditorMenus.openTrades(player, profession, level, filter));
 							})
-							.onCancel(itemClickData -> TradeEditorMenus.openTrades(player, profession, level))
+							.onCancel(itemClickData -> TradeEditorMenus.openTrades(player, profession, level, filter))
 							.open(player);
 				}
 				else
 					TradeEditorMenus.openTradeEditor(player, profession, level, trades.get(j));
 			}));
-
-			if (column == 7) {
-				row++;
-				column = 1;
-			}
-			else
-				column++;
-
 		}
+
+		page.addToIterator(contents.newIterator(SlotIterator.Type.HORIZONTAL, 1, 0));
+		page.setItemsPerPage(36);
+		page.setItems(menuItems.toArray(new ClickableItem[0]));
+
+		if (!page.isFirst())
+			contents.set(5, 0, ClickableItem.from(new ItemBuilder(Material.ARROW).name("<-- Back").build(),
+					e -> TradeEditorMenus.getTrades(profession, level, filter).open(player, page.previous().getPage())));
+		if (!page.isLast())
+			contents.set(5, 8, ClickableItem.from(new ItemBuilder(Material.ARROW).name("Next -->").build(),
+					e -> TradeEditorMenus.getTrades(profession, level, filter).open(player, page.next().getPage())));
+
 	}
 
 	@Override

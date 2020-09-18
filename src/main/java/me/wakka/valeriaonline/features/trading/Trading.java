@@ -33,6 +33,7 @@ public class Trading {
 	// 	a simple loop over config sections will do
 	// 	to get the trades.
 
+	// Get All Trades Per Profession and Level
 	public static List<Trade> getTrades(Profession profession, int level) {
 		List<Trade> trades = new ArrayList<>();
 		if (getConfig().getConfigurationSection(profession.name().toLowerCase() + "." + level) == null)
