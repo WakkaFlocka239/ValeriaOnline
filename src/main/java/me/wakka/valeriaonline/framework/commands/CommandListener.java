@@ -4,9 +4,9 @@ import com.destroystokyo.paper.event.server.AsyncTabCompleteEvent;
 import com.google.common.base.Strings;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
-import me.wakka.valeriaonline.Utils.Utils;
 import me.wakka.valeriaonline.framework.commands.models.CustomCommand;
 import me.wakka.valeriaonline.framework.commands.models.events.TabEvent;
+import me.wakka.valeriaonline.utils.Utils;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
-import static me.wakka.valeriaonline.Utils.StringUtils.trimFirst;
+import static me.wakka.valeriaonline.utils.StringUtils.trimFirst;
 
 @NoArgsConstructor
 public class CommandListener implements Listener {
@@ -42,7 +42,7 @@ public class CommandListener implements Listener {
 		if ((!event.isCommand() && !buffer.startsWith("/")) || buffer.indexOf(' ') == -1)
 			return;
 
-		if (!event.getSender().getName().equals("Pugabyte"))
+		if (!event.getSender().getName().equals("WakkaFlocka"))
 			return;
 
 		List<String> args = new ArrayList<>(Arrays.asList(buffer.split(" ")));

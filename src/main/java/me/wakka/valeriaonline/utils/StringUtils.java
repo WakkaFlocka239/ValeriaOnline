@@ -1,4 +1,4 @@
-package me.wakka.valeriaonline.Utils;
+package me.wakka.valeriaonline.utils;
 
 import lombok.Getter;
 import org.bukkit.ChatColor;
@@ -24,7 +24,7 @@ public class StringUtils {
 	public static final String colorChar = "§";
 
 	public static String getPrefix(String prefix) {
-		return colorize("&8&l[&e" + prefix + "&8&l]&3 ");
+		return colorize("&f&l[&b" + prefix + "&f&l]&7 ");
 	}
 
 	public static String colorize(String input) {
@@ -484,8 +484,8 @@ public class StringUtils {
 	private static final DecimalFormat nf = new DecimalFormat("#.00");
 
 	public static String getLocationString(Location loc) {
-		return "&3World: &e" + loc.getWorld().getName() + " &3x: &e" + nf.format(loc.getX()) + " &3y: &e" +
-				nf.format(loc.getY()) + " &3z: &e" +  nf.format(loc.getZ());
+		return "&7World: &d" + loc.getWorld().getName() + " &7x: &d" + nf.format(loc.getX()) + " &7y: &d" +
+				nf.format(loc.getY()) + " &7z: &d" + nf.format(loc.getZ());
 	}
 
 	public static String getShortLocationString(Location loc) {

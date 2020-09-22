@@ -1,8 +1,8 @@
 package me.wakka.valeriaonline.features.itemtags;
 
 import lombok.SneakyThrows;
-import me.wakka.valeriaonline.Utils.ConfigUtils;
-import me.wakka.valeriaonline.Utils.StringUtils;
+import me.wakka.valeriaonline.utils.ConfigUtils;
+import me.wakka.valeriaonline.utils.StringUtils;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -18,16 +18,17 @@ import java.util.Map;
 
 public class ItemTags {
 	private static final Map<Enchantment, List<Level>> enchantsConfigMap = new HashMap<>();
+	private static final Map<Enchantment, Integer> customEnchantsConfigMap = new HashMap<>();
 	private static final Map<String, Integer> armorConfigMap = new HashMap<>();
 	private static final Map<String, Integer> toolConfigMap = new HashMap<>();
 	private final YamlConfiguration config;
 	private final File configFile;
 
-	public ItemTags(){
+	public ItemTags() {
 		configFile = ConfigUtils.getFile("itemtags.yml");
 		config = ConfigUtils.getConfig(configFile);
 
-		if(!config.isConfigurationSection("ItemTags"))
+		if (!config.isConfigurationSection("ItemTags"))
 			createConfig();
 
 		loadConfigMaps();
@@ -37,21 +38,30 @@ public class ItemTags {
 
 	public static int getEnchantVal(Enchantment enchant, int lvl) {
 		List<Level> levels = enchantsConfigMap.get(enchant);
+		if (levels == null || levels.size() == 0)
+			return 0;
 
-		if(lvl > enchant.getMaxLevel())
+		if (lvl > enchant.getMaxLevel())
 			return levels.get(levels.size() - 1).getValue();
 
 		for (Level level : levels) {
-			if(level.getName().equalsIgnoreCase(lvl + ""))
+			if (level.getName().equalsIgnoreCase(lvl + ""))
 				return level.getValue();
 		}
 
 		return 0;
 	}
 
+	public static int getCustomEnchantVal(Enchantment enchant) {
+		if (!customEnchantsConfigMap.containsKey(enchant))
+			return 0;
+
+		return customEnchantsConfigMap.get(enchant);
+	}
+
 	public static Integer getArmorMaterialVal(Material material) {
 		String type = parseMaterial(material.name());
-		if(!armorConfigMap.containsKey(type))
+		if (!armorConfigMap.containsKey(type))
 			return null;
 
 		return armorConfigMap.get(type);
@@ -94,11 +104,21 @@ public class ItemTags {
 		}
 
 		ConfigurationSection toolMaterials = config.getConfigurationSection("ItemTags.Material.Tool");
-		if(toolMaterials != null) {
+		if (toolMaterials != null) {
 			for (String key : toolMaterials.getKeys(false)) {
 				String material = parseMaterial(key);
 				int value = toolMaterials.getInt(key);
 				toolConfigMap.put(material, value);
+			}
+		}
+
+		ConfigurationSection customEnchants = config.getConfigurationSection("ItemTags.CustomEnchants");
+		if (customEnchants != null) {
+			for (String key : customEnchants.getKeys(false)) {
+				Enchantment enchant = parseEnchantment(key);
+				int value = customEnchants.getInt(key);
+
+				customEnchantsConfigMap.put(enchant, value);
 			}
 		}
 	}
@@ -179,6 +199,12 @@ public class ItemTags {
 		section.set("Iron", 0);
 		section.set("Diamond", 0);
 		section.set("Netherite", 0);
+
+		section = config.createSection("ItemTags.CustomEncahnts");
+		section.set("Paralyze", 0);
+		section.set("Double_Strike", 0);
+		section.set("Divine_Touch", 0);
+		section.set("Ender_Bow", 0);
 
 		config.save(configFile);
 	}

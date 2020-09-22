@@ -1,19 +1,19 @@
 package me.wakka.valeriaonline.features.commands;
 
 import de.tr7zw.nbtapi.NBTItem;
-import me.wakka.valeriaonline.Utils.StringUtils;
-import me.wakka.valeriaonline.Utils.Utils;
 import me.wakka.valeriaonline.framework.commands.models.CustomCommand;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Aliases;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Description;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Path;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Permission;
 import me.wakka.valeriaonline.framework.commands.models.events.CommandEvent;
+import me.wakka.valeriaonline.utils.StringUtils;
+import me.wakka.valeriaonline.utils.Utils;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import static me.wakka.valeriaonline.Utils.StringUtils.colorize;
-import static me.wakka.valeriaonline.Utils.Utils.isNullOrAir;
+import static me.wakka.valeriaonline.utils.StringUtils.colorize;
+import static me.wakka.valeriaonline.utils.Utils.isNullOrAir;
 
 
 @Aliases({"nbt"})
@@ -45,8 +45,13 @@ public class ItemInfoCommand extends CustomCommand {
 			final String nbtString = getNBTString(tool);
 
 			if (nbtString != null && !"{}".equals(nbtString)) {
-					send("NBT: " + colorize(nbtString));
-					send(json("&e&l[Click to Copy NBT]").suggest(nbtString));
+				int length = nbtString.length();
+				send("NBT: " + colorize(nbtString));
+				if (length > 256) {
+					send("&cNBT is too big to copy");
+				} else {
+					send(json("&d&l[Click to Copy NBT]").suggest(nbtString));
+				}
 			}
 		}
 	}

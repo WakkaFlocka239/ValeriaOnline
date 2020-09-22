@@ -28,7 +28,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
-import static me.wakka.valeriaonline.Utils.StringUtils.left;
+import static me.wakka.valeriaonline.utils.StringUtils.left;
 
 @Data
 class PathParser {

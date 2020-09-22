@@ -1,4 +1,4 @@
-package me.wakka.valeriaonline.Utils;
+package me.wakka.valeriaonline.utils;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;

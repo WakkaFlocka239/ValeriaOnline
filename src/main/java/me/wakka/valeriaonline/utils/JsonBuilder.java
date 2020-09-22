@@ -1,4 +1,4 @@
-package me.wakka.valeriaonline.Utils;
+package me.wakka.valeriaonline.utils;
 
 import me.wakka.valeriaonline.ValeriaOnline;
 import net.md_5.bungee.api.ChatColor;
@@ -14,9 +14,9 @@ import org.bukkit.entity.Player;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static me.wakka.valeriaonline.Utils.StringUtils.colorize;
-import static me.wakka.valeriaonline.Utils.StringUtils.getLastColor;
-import static me.wakka.valeriaonline.Utils.StringUtils.loreize;
+import static me.wakka.valeriaonline.utils.StringUtils.colorize;
+import static me.wakka.valeriaonline.utils.StringUtils.getLastColor;
+import static me.wakka.valeriaonline.utils.StringUtils.loreize;
 
 public class JsonBuilder {
 	private final ComponentBuilder result = new ComponentBuilder("");

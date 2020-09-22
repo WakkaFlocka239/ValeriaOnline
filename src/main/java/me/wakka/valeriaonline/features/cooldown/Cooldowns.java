@@ -1,8 +1,8 @@
 package me.wakka.valeriaonline.features.cooldown;
 
-import me.wakka.valeriaonline.Utils.Time;
-import me.wakka.valeriaonline.Utils.TimespanFormatter;
 import me.wakka.valeriaonline.ValeriaOnline;
+import me.wakka.valeriaonline.utils.Time;
+import me.wakka.valeriaonline.utils.TimespanFormatter;
 import org.bukkit.OfflinePlayer;
 
 import java.time.LocalDateTime;

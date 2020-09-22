@@ -1,8 +1,8 @@
 package me.wakka.valeriaonline.features.itemtags;
 
 import lombok.Getter;
-import me.wakka.valeriaonline.Utils.ColorType;
-import me.wakka.valeriaonline.Utils.StringUtils;
+import me.wakka.valeriaonline.utils.ColorType;
+import me.wakka.valeriaonline.utils.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
@@ -57,11 +57,12 @@ public enum Rarity {
 		if(currentRarity == null || currentRarity.isCraftable()) {
 			Integer val_material = getMaterialVal(tool);
 			int val_enchants = getEnchantsVal(tool);
+			int val_customEnchants = getCustomEnchantsVal(tool);
 
-			if(val_material == null)
+			if (val_material == null)
 				return null;
 
-			int sum = val_material + val_enchants;
+			int sum = val_material + val_enchants + val_customEnchants;
 
 			if (sum <= COMMON.getMin())
 				return COMMON;
@@ -113,8 +114,25 @@ public enum Rarity {
 		return result;
 	}
 
-	private static Rarity getRarityFromLore(List<String> lore){
-		if(lore == null || lore.size() == 0)
+	private static int getCustomEnchantsVal(ItemStack itemStack) {
+		int result = 0;
+
+		ItemMeta meta = itemStack.getItemMeta();
+		if (meta.hasEnchants()) {
+			Map<Enchantment, Integer> enchantMap = meta.getEnchants();
+			Set<Enchantment> enchants = enchantMap.keySet();
+			for (Enchantment enchant : enchants) {
+				int val = ItemTags.getCustomEnchantVal(enchant);
+
+				result += val;
+			}
+		}
+
+		return result;
+	}
+
+	private static Rarity getRarityFromLore(List<String> lore) {
+		if (lore == null || lore.size() == 0)
 			return null;
 
 		for (Rarity rarity : Rarity.values()) {

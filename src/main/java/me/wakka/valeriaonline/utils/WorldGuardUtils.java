@@ -1,4 +1,4 @@
-package me.wakka.valeriaonline.Utils;
+package me.wakka.valeriaonline.utils;
 
 import com.sk89q.worldedit.bukkit.BukkitWorld;
 import com.sk89q.worldedit.math.BlockVector3;
@@ -63,7 +63,7 @@ public class WorldGuardUtils {
 	public ProtectedRegion getProtectedRegion(String name) {
 		ProtectedRegion region = manager.getRegion(name.toLowerCase());
 		if (region == null)
-			throw new InvalidInputException("Region &e" + name + " &cnot found");
+			throw new InvalidInputException("Region &7" + name + " &cnot found");
 		return region;
 	}
 

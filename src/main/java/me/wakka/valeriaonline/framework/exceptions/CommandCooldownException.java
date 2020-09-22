@@ -11,7 +11,7 @@ public class CommandCooldownException extends CustomException{
 	}
 
 	public CommandCooldownException(UUID uuid, String type) {
-		super("You can run this command again in &e" + Cooldowns.getDiff(uuid, type));
+		super("You can run this command again in &7" + Cooldowns.getDiff(uuid, type));
 	}
 
 }

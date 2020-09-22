@@ -3,12 +3,13 @@ package me.wakka.valeriaonline.features.commands;
 import de.tr7zw.nbtapi.NBTItem;
 import fr.minuskube.inv.SmartInvsPlugin;
 import lombok.NoArgsConstructor;
-import me.wakka.valeriaonline.Utils.Utils;
 import me.wakka.valeriaonline.framework.commands.models.CustomCommand;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Description;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Path;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Permission;
 import me.wakka.valeriaonline.framework.commands.models.events.CommandEvent;
+import me.wakka.valeriaonline.utils.StringUtils;
+import me.wakka.valeriaonline.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 
@@ -46,8 +47,8 @@ public class ValeriaOnlineCommand extends CustomCommand implements Listener {
 	}
 
 	@Path("getNBT")
-	void NBT(){
+	void NBT() {
 		NBTItem nbtI = new NBTItem(Utils.getToolRequired(player()));
-		send(nbtI.toString());
+		send(StringUtils.stripColor(nbtI.toString()));
 	}
 }

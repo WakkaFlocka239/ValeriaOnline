@@ -1,12 +1,12 @@
 package me.wakka.valeriaonline.features.commands;
 
-import me.wakka.valeriaonline.Utils.ItemBuilder;
-import me.wakka.valeriaonline.Utils.Utils;
 import me.wakka.valeriaonline.framework.commands.models.CustomCommand;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Description;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Path;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Permission;
 import me.wakka.valeriaonline.framework.commands.models.events.CommandEvent;
+import me.wakka.valeriaonline.utils.ItemBuilder;
+import me.wakka.valeriaonline.utils.Utils;
 import org.bukkit.inventory.ItemStack;
 
 @Permission("group.creator")

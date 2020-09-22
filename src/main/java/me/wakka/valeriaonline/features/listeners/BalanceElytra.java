@@ -1,6 +1,6 @@
 package me.wakka.valeriaonline.features.listeners;
 
-import me.wakka.valeriaonline.Utils.Tasks;
+import me.wakka.valeriaonline.utils.Tasks;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;

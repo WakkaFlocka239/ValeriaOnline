@@ -1,15 +1,15 @@
 package me.wakka.valeriaonline.framework.commands;
 
 import lombok.Getter;
-import me.wakka.valeriaonline.Utils.ConfigUtils;
-import me.wakka.valeriaonline.Utils.StringUtils;
-import me.wakka.valeriaonline.Utils.Time;
 import me.wakka.valeriaonline.ValeriaOnline;
 import me.wakka.valeriaonline.framework.commands.models.CustomCommand;
 import me.wakka.valeriaonline.framework.commands.models.annotations.ConverterFor;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Disabled;
 import me.wakka.valeriaonline.framework.commands.models.annotations.DoubleSlash;
 import me.wakka.valeriaonline.framework.commands.models.annotations.TabCompleterFor;
+import me.wakka.valeriaonline.utils.ConfigUtils;
+import me.wakka.valeriaonline.utils.StringUtils;
+import me.wakka.valeriaonline.utils.Time;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;

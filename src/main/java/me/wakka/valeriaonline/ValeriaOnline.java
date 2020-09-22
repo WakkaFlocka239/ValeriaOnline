@@ -1,20 +1,20 @@
 package me.wakka.valeriaonline;
 
 import lombok.Getter;
-import me.wakka.valeriaonline.Utils.ConfigUtils;
-import me.wakka.valeriaonline.Utils.SignMenuFactory;
-import me.wakka.valeriaonline.Utils.Utils;
 import me.wakka.valeriaonline.features.altars.Altars;
 import me.wakka.valeriaonline.features.autorestart.AutoRestart;
 import me.wakka.valeriaonline.features.itemtags.ItemTags;
 import me.wakka.valeriaonline.features.listeners.Listeners;
 import me.wakka.valeriaonline.features.trading.Trading;
 import me.wakka.valeriaonline.framework.commands.Commands;
+import me.wakka.valeriaonline.utils.ConfigUtils;
+import me.wakka.valeriaonline.utils.SignMenuFactory;
+import me.wakka.valeriaonline.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import static me.wakka.valeriaonline.Utils.StringUtils.stripColor;
+import static me.wakka.valeriaonline.utils.StringUtils.stripColor;
 
 public class ValeriaOnline extends JavaPlugin {
 	private Commands commands;
@@ -66,7 +66,7 @@ public class ValeriaOnline extends JavaPlugin {
 	// @formatter:on
 
 	public void broadcastReload() {
-		String message = "&c&l! &c&l! &eReloading ValeriaOnline &c&l! &c&l!";
+		String message = "&c&l! &c&l! &7Reloading ValeriaOnline &c&l! &c&l!";
 		Bukkit.getOnlinePlayers().stream()
 				.filter(player -> player.hasPermission("group.admin"))
 				.forEach(player -> Utils.send(player, Commands.VO_PREFIX + message));

@@ -1,6 +1,6 @@
 package me.wakka.valeriaonline.features.itemtags;
 
-import me.wakka.valeriaonline.Utils.StringUtils;
+import me.wakka.valeriaonline.utils.StringUtils;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;

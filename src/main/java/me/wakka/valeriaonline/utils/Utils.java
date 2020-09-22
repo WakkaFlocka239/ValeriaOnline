@@ -1,4 +1,4 @@
-package me.wakka.valeriaonline.Utils;
+package me.wakka.valeriaonline.utils;
 
 import com.google.common.base.Strings;
 import de.tr7zw.nbtapi.NBTContainer;
@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import static me.wakka.valeriaonline.Utils.StringUtils.camelCase;
+import static me.wakka.valeriaonline.utils.StringUtils.camelCase;
 
 // TODO - split up
 public class Utils {

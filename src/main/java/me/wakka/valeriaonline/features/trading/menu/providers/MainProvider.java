@@ -3,12 +3,12 @@ package me.wakka.valeriaonline.features.trading.menu.providers;
 import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
-import me.wakka.valeriaonline.Utils.ItemBuilder;
-import me.wakka.valeriaonline.Utils.MenuUtils;
-import me.wakka.valeriaonline.Utils.StringUtils;
 import me.wakka.valeriaonline.features.trading.menu.TradeEditorMenus;
 import me.wakka.valeriaonline.features.trading.models.Profession;
 import me.wakka.valeriaonline.features.trading.models.Type;
+import me.wakka.valeriaonline.utils.ItemBuilder;
+import me.wakka.valeriaonline.utils.MenuUtils;
+import me.wakka.valeriaonline.utils.StringUtils;
 import org.bukkit.entity.Player;
 
 public class MainProvider extends MenuUtils implements InventoryProvider {

@@ -2,9 +2,9 @@ package me.wakka.valeriaonline.features.altars;
 
 import com.mewin.worldguardregionapi.events.RegionLeavingEvent;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
-import me.wakka.valeriaonline.Utils.Utils;
-import me.wakka.valeriaonline.Utils.WorldGuardUtils;
 import me.wakka.valeriaonline.ValeriaOnline;
+import me.wakka.valeriaonline.utils.Utils;
+import me.wakka.valeriaonline.utils.WorldGuardUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;

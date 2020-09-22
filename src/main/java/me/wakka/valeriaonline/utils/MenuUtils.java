@@ -1,4 +1,4 @@
-package me.wakka.valeriaonline.Utils;
+package me.wakka.valeriaonline.utils;
 
 import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.ItemClickData;
@@ -20,8 +20,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.Arrays;
 import java.util.function.Consumer;
 
-import static me.wakka.valeriaonline.Utils.ItemBuilder.loreize;
-import static me.wakka.valeriaonline.Utils.StringUtils.colorize;
+import static me.wakka.valeriaonline.utils.ItemBuilder.loreize;
+import static me.wakka.valeriaonline.utils.StringUtils.colorize;
 
 public abstract class MenuUtils {
 
@@ -67,7 +67,7 @@ public abstract class MenuUtils {
 
 	public static String getLocationLore(Location location) {
 		if (location == null) return null;
-		return "&3X:&e " + (int) location.getX() + "||&3Y:&e " + (int) location.getY() + "||&3Z:&e " + (int) location.getZ();
+		return "&7X:&d " + (int) location.getX() + "||&7Y:&d " + (int) location.getY() + "||&7Z:&d " + (int) location.getZ();
 	}
 
 	protected void addBackItem(InventoryContents contents, Consumer<ItemClickData> consumer) {

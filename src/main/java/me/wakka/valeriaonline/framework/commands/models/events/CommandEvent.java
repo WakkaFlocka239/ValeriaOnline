@@ -17,7 +17,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import static me.wakka.valeriaonline.Utils.StringUtils.colorize;
+import static me.wakka.valeriaonline.utils.StringUtils.colorize;
 
 @Data
 public class CommandEvent extends Event implements Cancellable {

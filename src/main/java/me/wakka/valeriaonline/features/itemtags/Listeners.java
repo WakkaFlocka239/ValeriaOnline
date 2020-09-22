@@ -1,10 +1,10 @@
 package me.wakka.valeriaonline.features.itemtags;
 
 import com.destroystokyo.paper.event.inventory.PrepareGrindstoneEvent;
-import me.wakka.valeriaonline.Utils.Tasks;
-import me.wakka.valeriaonline.Utils.Utils;
 import me.wakka.valeriaonline.ValeriaOnline;
 import me.wakka.valeriaonline.features.listeners.BalanceElytra;
+import me.wakka.valeriaonline.utils.Tasks;
+import me.wakka.valeriaonline.utils.Utils;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemFrame;

@@ -1,4 +1,4 @@
-package me.wakka.valeriaonline.Utils;
+package me.wakka.valeriaonline.utils;
 
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;

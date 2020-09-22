@@ -1,11 +1,11 @@
 package me.wakka.valeriaonline.features.autorestart;
 
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
-import me.wakka.valeriaonline.Utils.Tasks;
-import me.wakka.valeriaonline.Utils.Time;
-import me.wakka.valeriaonline.Utils.Utils;
-import me.wakka.valeriaonline.Utils.WorldGuardUtils;
 import me.wakka.valeriaonline.ValeriaOnline;
+import me.wakka.valeriaonline.utils.Tasks;
+import me.wakka.valeriaonline.utils.Time;
+import me.wakka.valeriaonline.utils.Utils;
+import me.wakka.valeriaonline.utils.WorldGuardUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static me.wakka.valeriaonline.Utils.StringUtils.colorize;
+import static me.wakka.valeriaonline.utils.StringUtils.colorize;
 
 // TODO: instead of just rescheduling the restart, add some preventative measures
 //  	so people cannot do certain things if the server is about to restart

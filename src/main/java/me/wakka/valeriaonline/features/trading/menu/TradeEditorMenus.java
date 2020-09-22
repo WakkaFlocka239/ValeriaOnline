@@ -1,7 +1,6 @@
 package me.wakka.valeriaonline.features.trading.menu;
 
 import fr.minuskube.inv.SmartInventory;
-import me.wakka.valeriaonline.Utils.StringUtils;
 import me.wakka.valeriaonline.features.trading.Trading;
 import me.wakka.valeriaonline.features.trading.menu.providers.LevelProvider;
 import me.wakka.valeriaonline.features.trading.menu.providers.MainProvider;
@@ -11,6 +10,7 @@ import me.wakka.valeriaonline.features.trading.menu.providers.TypeProvider;
 import me.wakka.valeriaonline.features.trading.models.Profession;
 import me.wakka.valeriaonline.features.trading.models.Trade;
 import me.wakka.valeriaonline.features.trading.models.Type;
+import me.wakka.valeriaonline.utils.StringUtils;
 import org.bukkit.entity.Player;
 
 public class TradeEditorMenus {

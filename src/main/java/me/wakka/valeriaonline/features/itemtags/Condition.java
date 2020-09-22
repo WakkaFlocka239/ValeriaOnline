@@ -2,8 +2,8 @@ package me.wakka.valeriaonline.features.itemtags;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import me.wakka.valeriaonline.Utils.ColorType;
-import me.wakka.valeriaonline.Utils.StringUtils;
+import me.wakka.valeriaonline.utils.ColorType;
+import me.wakka.valeriaonline.utils.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;

@@ -2,9 +2,9 @@ package me.wakka.valeriaonline.features.trading;
 
 import lombok.Getter;
 import lombok.SneakyThrows;
-import me.wakka.valeriaonline.Utils.ConfigUtils;
 import me.wakka.valeriaonline.features.trading.models.Profession;
 import me.wakka.valeriaonline.features.trading.models.Trade;
+import me.wakka.valeriaonline.utils.ConfigUtils;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;

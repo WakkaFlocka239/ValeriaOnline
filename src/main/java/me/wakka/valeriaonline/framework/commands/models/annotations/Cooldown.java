@@ -1,6 +1,6 @@
 package me.wakka.valeriaonline.framework.commands.models.annotations;
 
-import me.wakka.valeriaonline.Utils.Time;
+import me.wakka.valeriaonline.utils.Time;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Repeatable;

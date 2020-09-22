@@ -1,16 +1,17 @@
 package me.wakka.valeriaonline.features.listeners;
 
-import me.wakka.valeriaonline.Utils.RandomUtils;
-import me.wakka.valeriaonline.Utils.Tasks;
-import me.wakka.valeriaonline.Utils.Utils;
 import me.wakka.valeriaonline.features.trading.Trading;
 import me.wakka.valeriaonline.features.trading.models.Profession;
 import me.wakka.valeriaonline.features.trading.models.Trade;
+import me.wakka.valeriaonline.utils.RandomUtils;
+import me.wakka.valeriaonline.utils.Tasks;
+import me.wakka.valeriaonline.utils.Utils;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Villager;
 import org.bukkit.entity.WanderingTrader;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityBreedEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.entity.VillagerCareerChangeEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
@@ -32,6 +33,9 @@ public class Villagers implements Listener {
 			return;
 
 		List<Trade> trades = Trading.getTrades(Profession.valueOf(profession.name()), villager.getVillagerLevel());
+		if (trades.size() == 0)
+			return;
+
 		Trade trade = null;
 
 		for (int i = 0; i < 50; i++) {
@@ -100,6 +104,16 @@ public class Villagers implements Listener {
 
 		if (cancelInteraction.contains(event.getRightClicked().getUniqueId()))
 			event.setCancelled(true);
+	}
+
+	@EventHandler
+	public void onVillagerBreed(EntityBreedEvent event) {
+		if (!event.getEntity().getType().equals(EntityType.VILLAGER))
+			return;
+
+		if (RandomUtils.chanceOf(50)) {
+			event.setCancelled(true);
+		}
 	}
 
 	//		Villager villager = (Villager) event.getRightClicked();

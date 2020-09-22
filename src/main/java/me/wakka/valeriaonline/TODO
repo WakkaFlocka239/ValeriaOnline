@@ -1,17 +1,18 @@
 TODO:
+- fix colors in trade editor menu to new format
+- compass item point towards cities / homes, able to change heading
 - itemtags:
     - Apply tags to all mob drops
-    - Set display name to same color of rarity tag
+- Villagers
+    - setup villager trade levels setter
 - altar restrictions & particles
-	config
+	- config
 - auto restart checks --> "/restart"
-	config
+	- config
 - add plugin to server & document custom commands in discord channel
 - teleport items (?)
 - MultiLine API - playername + prefix + (powerlevel/held item level)
---> Spams errors in console, bug is reported
-
-
+    => Spams errors in console, bug is reported
 
 // on command: /auctionelf
 // 		click "sell" --> run xyz command

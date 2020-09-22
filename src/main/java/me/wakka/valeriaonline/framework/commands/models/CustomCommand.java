@@ -6,10 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import me.wakka.valeriaonline.Utils.JsonBuilder;
-import me.wakka.valeriaonline.Utils.StringUtils;
-import me.wakka.valeriaonline.Utils.Tasks;
-import me.wakka.valeriaonline.Utils.Utils;
 import me.wakka.valeriaonline.framework.commands.models.annotations.ConverterFor;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Description;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Fallback;
@@ -24,6 +20,10 @@ import me.wakka.valeriaonline.framework.exceptions.MustBeIngameException;
 import me.wakka.valeriaonline.framework.exceptions.NoPermissionException;
 import me.wakka.valeriaonline.framework.exceptions.PlayerNotFoundException;
 import me.wakka.valeriaonline.framework.exceptions.PlayerNotOnlineException;
+import me.wakka.valeriaonline.utils.JsonBuilder;
+import me.wakka.valeriaonline.utils.StringUtils;
+import me.wakka.valeriaonline.utils.Tasks;
+import me.wakka.valeriaonline.utils.Utils;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -42,7 +42,7 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static me.wakka.valeriaonline.Utils.StringUtils.trimFirst;
+import static me.wakka.valeriaonline.utils.StringUtils.trimFirst;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -518,16 +518,16 @@ public abstract class CustomCommand extends ICustomCommand{
 
 		JsonBuilder buttons = json();
 		if (first)
-			buttons.next("&7 « Previous  &3");
+			buttons.next("&8 « Previous  &d");
 		else
-			buttons.next("&e « Previous  &3").command(command + " " + (page - 1));
+			buttons.next("&7 « Previous  &d").command(command + " " + (page - 1));
 
-		buttons.group().next("&3|&3|").group();
+		buttons.group().next("&7|&7|").group();
 
 		if (last)
-			buttons.next("  &7Next »");
+			buttons.next("  &8Next »");
 		else
-			buttons.next("  &eNext »").command(command + " " + (page + 1));
+			buttons.next("  &7Next »").command(command + " " + (page + 1));
 
 		send(buttons.group());
 	}
@@ -536,7 +536,7 @@ public abstract class CustomCommand extends ICustomCommand{
 	void help() {
 		List<String> aliases = getAllAliases();
 		if (aliases.size() > 1)
-			send(PREFIX + "Aliases: " + String.join("&e, &3", aliases));
+			send(PREFIX + "&dAliases: &7" + String.join("&f, &7", aliases));
 
 		List<JsonBuilder> lines = new ArrayList<>();
 		getPathMethods(event).forEach(method -> {
@@ -548,7 +548,7 @@ public abstract class CustomCommand extends ICustomCommand{
 			if ("help".equals(path.value()) || "?".equals(path.value())) return;
 
 			String usage = "/" + getAliasUsed().toLowerCase() + " " + (isNullOrEmpty(path.value()) ? "" : path.value());
-			String description = (desc == null ? "" : " &7- " + desc.value());
+			String description = (desc == null ? "" : " &8- &7" + desc.value());
 			StringBuilder suggestion = new StringBuilder();
 			for (String word : usage.split(" ")) {
 				if (word.startsWith("[") || word.startsWith("<"))
@@ -565,7 +565,7 @@ public abstract class CustomCommand extends ICustomCommand{
 		if (lines.size() == 0)
 			error("No usage available");
 
-		send(PREFIX + "Usage:");
+		send(PREFIX + "&dUsage: &7");
 		lines.forEach(this::send);
 	}
 

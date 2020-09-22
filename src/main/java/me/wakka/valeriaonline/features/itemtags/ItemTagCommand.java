@@ -1,7 +1,5 @@
 package me.wakka.valeriaonline.features.itemtags;
 
-import me.wakka.valeriaonline.Utils.RandomUtils;
-import me.wakka.valeriaonline.Utils.Utils;
 import me.wakka.valeriaonline.framework.commands.models.CustomCommand;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Aliases;
 import me.wakka.valeriaonline.framework.commands.models.annotations.ConverterFor;
@@ -10,6 +8,8 @@ import me.wakka.valeriaonline.framework.commands.models.annotations.Path;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Permission;
 import me.wakka.valeriaonline.framework.commands.models.annotations.TabCompleterFor;
 import me.wakka.valeriaonline.framework.commands.models.events.CommandEvent;
+import me.wakka.valeriaonline.utils.RandomUtils;
+import me.wakka.valeriaonline.utils.Utils;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
