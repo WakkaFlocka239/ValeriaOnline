@@ -1,6 +1,10 @@
 TODO:
 - fix colors in trade editor menu to new format
 - compass item point towards cities / homes, able to change heading
+- teleporting resquest to players
+- shop warps - GUI Menu
+    - 1 per player
+    - costs money to set
 - itemtags:
     - Apply tags to all mob drops
 - Villagers

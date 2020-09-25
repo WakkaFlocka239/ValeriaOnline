@@ -45,7 +45,25 @@ public class Utils {
 		return itemStack;
 	}
 
-	public static void send(Player player, String message){
+	public static boolean isInt(String text) {
+		try {
+			Integer.parseInt(text);
+			return true;
+		} catch (Exception ex) {
+			return false;
+		}
+	}
+
+	public static boolean isDouble(String text) {
+		try {
+			Double.parseDouble(text);
+			return true;
+		} catch (Exception ex) {
+			return false;
+		}
+	}
+
+	public static void send(Player player, String message) {
 		player.sendMessage(StringUtils.colorize(message));
 	}
 

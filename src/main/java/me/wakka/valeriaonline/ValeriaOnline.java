@@ -7,6 +7,7 @@ import me.wakka.valeriaonline.features.itemtags.ItemTags;
 import me.wakka.valeriaonline.features.listeners.Listeners;
 import me.wakka.valeriaonline.features.trading.Trading;
 import me.wakka.valeriaonline.framework.commands.Commands;
+import me.wakka.valeriaonline.framework.persistence.MySQLPersistence;
 import me.wakka.valeriaonline.utils.ConfigUtils;
 import me.wakka.valeriaonline.utils.SignMenuFactory;
 import me.wakka.valeriaonline.utils.Utils;
@@ -61,7 +62,9 @@ public class ValeriaOnline extends JavaPlugin {
 	public void onDisable() {
 		try { Utils.runCommandAsConsole("save-all");	} catch (Throwable ex) { ex.printStackTrace(); }
 		try { AutoRestart.shutdown();								} catch (Throwable ex) { ex.printStackTrace(); }
+
 		try { broadcastReload(); 									} catch (Throwable ex) { ex.printStackTrace(); }
+		try { MySQLPersistence.shutdown(); 							} catch (Throwable ex) { ex.printStackTrace(); }
 	}
 	// @formatter:on
 

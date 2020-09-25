@@ -121,6 +121,21 @@
             <artifactId>objenesis</artifactId>
             <version>3.0.1</version>
         </dependency>
+        <!-- Norm -->
+        <dependency>
+            <!--            <groupId>com.dieselpoint</groupId>-->
+            <!--            <artifactId>norm</artifactId>-->
+            <!--            <version>0.9.6</version>-->
+            <groupId>com.github.pugabyte</groupId>
+            <artifactId>norm</artifactId>
+            <version>e04065acd8</version>
+        </dependency>
+        <!-- MySQL -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.16</version>
+        </dependency>
         <!-- FaweAPI -->
         <dependency>
             <groupId>com.github.IntellectualSites</groupId>
