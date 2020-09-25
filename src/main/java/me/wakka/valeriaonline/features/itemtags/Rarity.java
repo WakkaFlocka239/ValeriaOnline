@@ -48,13 +48,16 @@ public enum Rarity {
 	}
 
 	public static Rarity of(ItemStack tool) {
-		if(!ItemTags.isArmor(tool) && !ItemTags.isTool(tool))
+		if (!ItemTags.isArmor(tool) && !ItemTags.isTool(tool))
+			return null;
+
+		if (ItemTags.isMythicMobsItem(tool))
 			return null;
 
 		Rarity currentRarity = getRarityFromLore(tool.getLore());
 
 		// Calculate new rarity, if current rarity is craftable
-		if(currentRarity == null || currentRarity.isCraftable()) {
+		if (currentRarity == null || currentRarity.isCraftable()) {
 			Integer val_material = getMaterialVal(tool);
 			int val_enchants = getEnchantsVal(tool);
 			int val_customEnchants = getCustomEnchantsVal(tool);

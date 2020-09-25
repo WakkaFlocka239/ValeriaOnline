@@ -24,18 +24,21 @@ public enum Condition {
 	private final int max;
 
 	public static Condition of(ItemStack tool) {
-		if(!ItemTags.isArmor(tool) && !ItemTags.isTool(tool))
+		if (!ItemTags.isArmor(tool) && !ItemTags.isTool(tool))
+			return null;
+
+		if (ItemTags.isMythicMobsItem(tool))
 			return null;
 
 		ItemMeta meta = tool.getItemMeta();
-		if(meta instanceof Damageable) {
+		if (meta instanceof Damageable) {
 			Damageable damageable = (Damageable) meta;
 			double damage = damageable.getDamage();
 			double maxDurability = tool.getType().getMaxDurability();
 
 			for (Condition condition : values()) {
-				double min = (condition.getMin()/100.0) * maxDurability;
-				double max = (condition.getMax()/100.0) * maxDurability;
+				double min = (condition.getMin() / 100.0) * maxDurability;
+				double max = (condition.getMax() / 100.0) * maxDurability;
 
 				if(damage >= min && damage <= max)
 					return condition;

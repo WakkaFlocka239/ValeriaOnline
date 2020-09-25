@@ -40,9 +40,9 @@ public class TradesProvider extends MenuUtils implements InventoryProvider {
 				TradeEditorMenus.openLevel(player, profession);
 		});
 
-		contents.set(0, 8, ClickableItem.empty(new ItemBuilder(Material.BOOK).name("&eInfo")
-				.lore("&3Shift-Right Click a")
-				.lore("&3trade to delete it.")
+		contents.set(0, 8, ClickableItem.empty(new ItemBuilder(Material.BOOK).name("&dInfo")
+				.lore("&7Shift-Right Click a")
+				.lore("&7trade to delete it.")
 				.build()));
 
 		List<Trade> trades = Trading.getTrades(profession, level);
@@ -59,7 +59,7 @@ public class TradesProvider extends MenuUtils implements InventoryProvider {
 
 		//Filter Button
 		contents.set(0, 6, ClickableItem.from(
-				new ItemBuilder(Material.HOPPER).name("&eFilter:").lore("&3" + StringUtils.camelCase(filter.name())).build(),
+				new ItemBuilder(Material.HOPPER).name("&dFilter:").lore("&7" + StringUtils.camelCase(filter.name())).build(),
 				e -> TradeEditorMenus.getTrades(profession, level, Utils.EnumUtils.nextWithLoop(Type.class, filter.ordinal())).open(player, page.getPage())
 		));
 
@@ -69,33 +69,33 @@ public class TradesProvider extends MenuUtils implements InventoryProvider {
 			if (filter != Type.ALL)
 				if (!trades.get(i).getTypes().contains(filter))
 					continue;
-			ItemBuilder item = new ItemBuilder(Material.CHEST).name("&eTrade " + (i + 1)).amount(i + 1);
+			ItemBuilder item = new ItemBuilder(Material.CHEST).name("&dTrade " + (i + 1)).amount(i + 1);
 			if (trades.get(i).getIngredient1() != null)
-				item.lore("&3● " + (Strings.isNullOrEmpty(trades.get(i).getIngredient1().getItemMeta().getDisplayName()) ?
+				item.lore("&7● " + (Strings.isNullOrEmpty(trades.get(i).getIngredient1().getItemMeta().getDisplayName()) ?
 						StringUtils.camelCase(trades.get(i).getIngredient1().getType().name())
 						: trades.get(i).getIngredient1().getItemMeta().getDisplayName()) + " x " + trades.get(i).getIngredient1().getAmount());
 			if (trades.get(i).getIngredient2() != null)
-				item.lore("&3● " + (Strings.isNullOrEmpty(trades.get(i).getIngredient2().getItemMeta().getDisplayName()) ?
+				item.lore("&7● " + (Strings.isNullOrEmpty(trades.get(i).getIngredient2().getItemMeta().getDisplayName()) ?
 						StringUtils.camelCase(trades.get(i).getIngredient2().getType().name())
 						: trades.get(i).getIngredient2().getItemMeta().getDisplayName()) + " x " + trades.get(i).getIngredient2().getAmount());
 			if (trades.get(i).getResult() != null) {
 				item.lore(" ")
-						.lore("&3○ " + (Strings.isNullOrEmpty(trades.get(i).getResult().getItemMeta().getDisplayName()) ?
+						.lore("&7○ " + (Strings.isNullOrEmpty(trades.get(i).getResult().getItemMeta().getDisplayName()) ?
 								StringUtils.camelCase(trades.get(i).getResult().getType().name())
 								: trades.get(i).getResult().getItemMeta().getDisplayName()) + " x " + trades.get(i).getResult().getAmount());
 			}
 
 			item.lore("")
-					.lore("&eStock:")
-					.lore("&3" + trades.get(i).getStock())
+					.lore("&dStock:")
+					.lore("&7" + trades.get(i).getStock())
 					.lore(" ")
-					.lore("&eTypes:");
+					.lore("&dTypes:");
 			if (trades.get(i).getTypes().size() >= 7)
-				item.lore("&3All");
+				item.lore("&7All");
 			else {
 				for (Type type : trades.get(i).getTypes()) {
 					if (type == Type.ALL) continue;
-					item.lore("&3- " + StringUtils.camelCase(type.name()));
+					item.lore("&7- " + StringUtils.camelCase(type.name()));
 				}
 			}
 

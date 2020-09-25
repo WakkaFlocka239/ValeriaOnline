@@ -5,7 +5,6 @@ import me.wakka.valeriaonline.ValeriaOnline;
 import me.wakka.valeriaonline.features.listeners.BalanceElytra;
 import me.wakka.valeriaonline.utils.Tasks;
 import me.wakka.valeriaonline.utils.Utils;
-import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
@@ -138,16 +137,11 @@ public class Listeners implements Listener {
 	}
 
 	@EventHandler
-	public void onDrownedDeath(EntityDeathEvent event){
-		if(!event.getEntityType().equals(EntityType.DROWNED))
-			return;
-
+	public void onEntityDeath(EntityDeathEvent event) {
 		int ndx = 0;
 		for (ItemStack drop : new ArrayList<>(event.getDrops())) {
-			if(drop.getType().equals(Material.TRIDENT)){
-				ItemStack updated = updateItem(drop);
-				event.getDrops().set(ndx, updated);
-			}
+			ItemStack updated = updateItem(drop);
+			event.getDrops().set(ndx, updated);
 			++ndx;
 		}
 	}

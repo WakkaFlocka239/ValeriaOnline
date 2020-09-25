@@ -31,6 +31,12 @@ import static me.wakka.valeriaonline.utils.StringUtils.camelCase;
 // TODO - split up
 public class Utils {
 
+	public static void wakka(String message) {
+		Player player = Bukkit.getPlayer("WakkaFlocka");
+		if (player != null && player.isOnline())
+			send(player, message);
+	}
+
 	public static void broadcast(String msg) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			send(player, msg);

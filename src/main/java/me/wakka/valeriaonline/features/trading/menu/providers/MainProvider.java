@@ -20,15 +20,15 @@ public class MainProvider extends MenuUtils implements InventoryProvider {
 		int column = 1;
 
 		for (Profession profession : Profession.values()) {
-			contents.set(row, column, ClickableItem.from(new ItemBuilder(profession.getMaterial()).name("&e" + StringUtils.camelCase(profession.name())).build(), e -> {
-				if (profession == Profession.WANDERING_TRADER) TradeEditorMenus.openTrades(player, profession, 1, Type.ALL);
+			contents.set(row, column, ClickableItem.from(new ItemBuilder(profession.getMaterial()).name("&d" + StringUtils.camelCase(profession.name())).build(), e -> {
+				if (profession == Profession.WANDERING_TRADER)
+					TradeEditorMenus.openTrades(player, profession, 1, Type.ALL);
 				else TradeEditorMenus.openLevel(player, profession);
 			}));
 			if (column == 7) {
 				column = 1;
 				row++;
-			}
-			else
+			} else
 				column++;
 		}
 	}

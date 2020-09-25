@@ -34,7 +34,7 @@ public class TypeProvider extends MenuUtils implements InventoryProvider {
 		int i = 1;
 		for (Type type : Type.values()) {
 			if (type == ALL) continue;
-			ItemStack item = new ItemBuilder(type.getMaterial()).name("&e" + StringUtils.camelCase(type.name())).build().clone();
+			ItemStack item = new ItemBuilder(type.getMaterial()).name("&d" + StringUtils.camelCase(type.name())).build().clone();
 			boolean selected = trade.getTypes().contains(type);
 			if (selected)
 				Utils.addGlowing(item);

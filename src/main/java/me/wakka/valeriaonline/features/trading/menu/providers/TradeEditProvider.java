@@ -32,21 +32,21 @@ public class TradeEditProvider extends MenuUtils implements InventoryProvider {
 		addBackItem(contents, e -> TradeEditorMenus.openTrades(player, profession, level, Type.ALL));
 
 		// Types Item
-		ItemBuilder typesBuilder = new ItemBuilder(Material.MAGMA_CREAM).name("&eTypes:");
+		ItemBuilder typesBuilder = new ItemBuilder(Material.MAGMA_CREAM).name("&dTypes:");
 		if (trade.getTypes().size() >= 7)
-			typesBuilder.lore("&3All");
+			typesBuilder.lore("&7All");
 		else
 			for (Type type : trade.getTypes())
-				typesBuilder.lore("&3" + StringUtils.camelCase(type.name()));
+				typesBuilder.lore("&d" + StringUtils.camelCase(type.name()));
 		if (profession != Profession.WANDERING_TRADER)
 			contents.set(0, 4, ClickableItem.from(typesBuilder.build(), e -> TradeEditorMenus.openTypeProvider(player, profession, level, trade, filter)));
 
 		//Ingredient 1
-		ItemStack ingredient1 = new ItemBuilder(Material.ITEM_FRAME).name("&eIngredient 1").build();
+		ItemStack ingredient1 = new ItemBuilder(Material.ITEM_FRAME).name("&dIngredient 1").build();
 		//Ingredient 2
-		ItemStack ingredient2 = new ItemBuilder(Material.ITEM_FRAME).name("&eIngredient 2").build();
+		ItemStack ingredient2 = new ItemBuilder(Material.ITEM_FRAME).name("&dIngredient 2").build();
 		//Result
-		ItemStack result = new ItemBuilder(Material.ITEM_FRAME).name("&eResult").build();
+		ItemStack result = new ItemBuilder(Material.ITEM_FRAME).name("&dResult").build();
 
 		contents.set(2, 2, ClickableItem.from((trade.getIngredient1() == null ? ingredient1 : trade.getIngredient1()), e -> {
 			if (e.getItem().equals(ingredient1)) {
@@ -156,7 +156,7 @@ public class TradeEditProvider extends MenuUtils implements InventoryProvider {
 		}));
 
 		//Stock Item
-		contents.set(2, 7, ClickableItem.from(new ItemBuilder(Material.PAPER).name("&eStock").lore("&3" + trade.getStock()).build(), e -> {
+		contents.set(2, 7, ClickableItem.from(new ItemBuilder(Material.PAPER).name("&dStock").lore("&7" + trade.getStock()).build(), e -> {
 			ValeriaOnline.getSignMenuFactory().lines("", "^ ^ ^ ^ ^ ^", "Enter a", "stock amount")
 					.response(lines -> {
 						if (lines[0].length() > 0) {

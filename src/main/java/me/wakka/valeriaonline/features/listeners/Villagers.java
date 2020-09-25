@@ -13,8 +13,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityBreedEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
-import org.bukkit.event.entity.VillagerCareerChangeEvent;
+import org.bukkit.event.entity.VillagerAcquireTradeEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.MerchantRecipe;
 
 import java.util.ArrayList;
@@ -26,41 +27,19 @@ public class Villagers implements Listener {
 	private static final List<UUID> cancelInteraction = new ArrayList<>();
 
 	@EventHandler
-	public void onProfessionChange(VillagerCareerChangeEvent event) {
-		Villager villager = event.getEntity();
-		Villager.Profession profession = event.getProfession();
-		if (profession.equals(Villager.Profession.NONE))
+	public void onAcquireTrade(VillagerAcquireTradeEvent event) {
+		if (!event.getEntity().getType().equals(EntityType.VILLAGER))
 			return;
 
-		List<Trade> trades = Trading.getTrades(Profession.valueOf(profession.name()), villager.getVillagerLevel());
-		if (trades.size() == 0)
-			return;
-
-		Trade trade = null;
-
-		for (int i = 0; i < 50; i++) {
-			trade = RandomUtils.randomElement(trades);
-			if (!Utils.isNullOrAir(trade.getResult()))
-				break;
-		}
-
-		if (Utils.isNullOrAir(trade.getResult()))
-			return;
+		Villager villager = (Villager) event.getEntity();
 
 		cancelInteraction.add(villager.getUniqueId());
+		MerchantRecipe newRecipe = getRecipe(villager, 0);
 
-		MerchantRecipe recipe = new MerchantRecipe(trade.getResult(), trade.getStock());
-		recipe.setExperienceReward(true); // player
-		recipe.setVillagerExperience(1); // villager
-		recipe.addIngredient(trade.getIngredient1());
-		if (trade.getIngredient2() != null)
-			recipe.addIngredient(trade.getIngredient2());
+		if (newRecipe != null)
+			event.setRecipe(newRecipe);
 
-		Tasks.wait(1, () -> {
-			villager.setRecipes(Collections.singletonList(recipe));
-			cancelInteraction.remove(villager.getUniqueId());
-		});
-
+		cancelInteraction.remove(villager.getUniqueId());
 	}
 
 	@EventHandler
@@ -111,28 +90,69 @@ public class Villagers implements Listener {
 		if (!event.getEntity().getType().equals(EntityType.VILLAGER))
 			return;
 
-		if (RandomUtils.chanceOf(50)) {
+		if (RandomUtils.chanceOf(50))
 			event.setCancelled(true);
-		}
 	}
 
-	//		Villager villager = (Villager) event.getRightClicked();
-//		Villager.Profession profession = villager.getProfession();
-//		int level = villager.getVillagerLevel();
-//		int exp = villager.getVillagerExperience();
-//		Villager.Type type = villager.getVillagerType();
-//
-//		Utils.send(event.getPlayer(), "");
-//		Utils.send(event.getPlayer(), "Profession: " + profession);
-//		Utils.send(event.getPlayer(), "Level: " + level);
-//		Utils.send(event.getPlayer(), "Experience: " + exp);
-//		Utils.send(event.getPlayer(), "Type: " + type);
-//
-//		NBTEntity nbtE = new NBTEntity(villager);
-//		String rep = "none";
-//		try {
-//			rep = nbtE.getCompoundList("Gossips").get(0).getString("Type");
-//		} catch (Exception ignored) { }
-//
-//		Utils.send(event.getPlayer(), "Reputation: " + rep);
+	private MerchantRecipe getRecipe(Villager villager, int tries) {
+		String profession = villager.getProfession().name();
+
+		int level = villager.getVillagerLevel();
+		List<Trade> trades = Trading.getTrades(Profession.valueOf(profession), level);
+
+		int ndx = 0;
+		for (Trade trade : new ArrayList<>(trades)) {
+			if (Utils.isNullOrAir(trade.getResult()))
+				trades.remove(ndx);
+			++ndx;
+		}
+
+		if (trades.size() < 2)
+			return null;
+
+		Trade trade = RandomUtils.randomElement(trades);
+
+		MerchantRecipe recipe = new MerchantRecipe(trade.getResult(), trade.getStock());
+		recipe.setExperienceReward(true);
+		recipe.setVillagerExperience(1);
+		recipe.addIngredient(trade.getIngredient1());
+
+		if (trade.getIngredient2() != null)
+			recipe.addIngredient(trade.getIngredient2());
+
+		if (containsRecipe(recipe, villager.getRecipes())) {
+			if (tries <= trades.size()) {
+				return getRecipe(villager, ++tries);
+			} else {
+				return null;
+			}
+		}
+
+		return recipe;
+	}
+
+	private boolean containsRecipe(MerchantRecipe recipe, List<MerchantRecipe> recipes) {
+		ItemStack result = recipe.getResult();
+		ItemStack ingredient1 = recipe.getIngredients().get(0);
+		ItemStack ingredient2 = null;
+		if (recipe.getIngredients().size() == 2)
+			ingredient2 = recipe.getIngredients().get(1);
+
+		for (MerchantRecipe villagerRecipe : recipes) {
+			ItemStack _result = villagerRecipe.getResult();
+			ItemStack _ingredient1 = villagerRecipe.getIngredients().get(0);
+			ItemStack _ingredient2 = null;
+			if (villagerRecipe.getIngredients().size() == 2)
+				_ingredient2 = villagerRecipe.getIngredients().get(1);
+
+			if (result.equals(_result) && ingredient1.equals(_ingredient1)) {
+				if (ingredient2 == null && _ingredient2 == null)
+					return true;
+				if (ingredient2 != null && ingredient2.equals(_ingredient2))
+					return true;
+			}
+		}
+
+		return false;
+	}
 }

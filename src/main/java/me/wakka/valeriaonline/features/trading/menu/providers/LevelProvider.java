@@ -23,7 +23,7 @@ public class LevelProvider extends MenuUtils implements InventoryProvider {
 
 		for (int i = 1; i <= 5; i++) {
 			int j = i;
-			contents.set(1, i + 1, ClickableItem.from(new ItemBuilder(Material.EXPERIENCE_BOTTLE).name("&eLevel " + i).amount(i).build(),
+			contents.set(1, i + 1, ClickableItem.from(new ItemBuilder(Material.EXPERIENCE_BOTTLE).name("&dLevel " + i).amount(i).build(),
 					e -> TradeEditorMenus.openTrades(player, profession, j, Type.ALL)));
 		}
 	}

@@ -1,5 +1,6 @@
 package me.wakka.valeriaonline.features.itemtags;
 
+import de.tr7zw.nbtapi.NBTItem;
 import lombok.SneakyThrows;
 import me.wakka.valeriaonline.utils.ConfigUtils;
 import me.wakka.valeriaonline.utils.StringUtils;
@@ -225,7 +226,7 @@ public class ItemTags {
 		List<Material> uniqueTools = Arrays.asList(Material.BOW, Material.CROSSBOW,
 				Material.TRIDENT, Material.SHIELD, Material.FISHING_ROD);
 
-		if(uniqueTools.contains(type))
+		if (uniqueTools.contains(type))
 			return true;
 
 		String name = type.name().toLowerCase();
@@ -234,5 +235,25 @@ public class ItemTags {
 				|| name.endsWith("_pickaxe")
 				|| name.endsWith("_axe")
 				|| name.endsWith("_hoe");
+	}
+
+	public static boolean isMythicMobsItem(ItemStack itemStack) {
+		List<String> lore = itemStack.getLore();
+		if (lore != null && lore.size() > 0) {
+			for (String line : lore) {
+				if (StringUtils.stripColor(line).equalsIgnoreCase("-----⫷Unique⫸-----"))
+					return true;
+			}
+		}
+
+		NBTItem nbtItem = new NBTItem(itemStack);
+		String nbtString;
+		if (nbtItem.hasNBTData()) {
+			nbtString = nbtItem.toString();
+			if (nbtString.contains("MYTHIC_TYPE"))
+				return true;
+		}
+
+		return false;
 	}
 }
