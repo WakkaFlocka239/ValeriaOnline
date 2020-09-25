@@ -1,14 +1,17 @@
 package me.wakka.valeriaonline.features.autorestart;
 
-import com.sk89q.worldguard.protection.regions.ProtectedRegion;
+import lombok.Getter;
 import me.wakka.valeriaonline.ValeriaOnline;
+import me.wakka.valeriaonline.utils.StringUtils;
 import me.wakka.valeriaonline.utils.Tasks;
 import me.wakka.valeriaonline.utils.Time;
 import me.wakka.valeriaonline.utils.Utils;
-import me.wakka.valeriaonline.utils.WorldGuardUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -18,22 +21,23 @@ import java.util.TimerTask;
 
 import static me.wakka.valeriaonline.utils.StringUtils.colorize;
 
-// TODO: instead of just rescheduling the restart, add some preventative measures
-//  	so people cannot do certain things if the server is about to restart
 public class AutoRestart {
+	// TODO: Config
 	List<Double> warnTimes = Arrays.asList(10.0, 5.0, 1.0); // in minutes till restart
 	String warningMessage = "Server will restart in... <minutes> minutes";
 	String restartMessage = "Server is restarting!";
 	String PREFIX = "[AutoRestart] ";
-	double restartInterval = 8; // in hours
+	int restartInterval = 6; // hours
+	int restartTime = 6;
+	double cancelTime = 30.0; // minutes
+	ZoneId zone = ZoneId.of("GMT+2");
 	//
 	static List<Timer> warningTimers = new ArrayList<>();
 	static Timer rebootTimer;
-	boolean delayRestart = false;
-//	long startTimestamp;
+	@Getter
+	public static boolean restartSoon = false;
 
 	public AutoRestart() {
-		// TODO: Load config settings
 		scheduleRestart();
 	}
 
@@ -53,11 +57,34 @@ public class AutoRestart {
 		rebootTimer = new Timer();
 	}
 
-	private void scheduleRestart(){
+	private void scheduleRestart() {
 		cancelTasks();
+		String header = "========== Scheduling AutoRestart ==========";
+		String footer = "============================================";
 
+		ValeriaOnline.log(header);
+		double restartIn = getNextRestart(); // hours
+		if (restartIn == -1) {
+			ValeriaOnline.warn("Something went wrong, restart not scheduled!");
+			ValeriaOnline.log(footer);
+			return;
+		}
+
+		ValeriaOnline.log("Timezone: " + zone.getId());
+
+		int cancelSeconds = (int) (((restartIn * 60.0) - cancelTime) * 60);
+		Tasks.wait(Time.SECOND.x(cancelSeconds), () -> restartSoon = true);
+
+		LocalDateTime temp;
+
+		temp = LocalDateTime.now(zone);
+		temp = temp.plusSeconds(cancelSeconds);
+		ValeriaOnline.log("Prevent at: " + StringUtils.longDateTimeFormat(temp) + " (~" + (cancelSeconds / 60) + " minutes)");
+
+		// Schedule Warn Timers
 		for (Double time : warnTimes) {
-			if ((restartInterval * 60.0) - time <= 0.0)
+			double timeUntilWarn = ((restartIn * 60.0) - time); // minutes
+			if (timeUntilWarn <= 0.0)
 				continue;
 
 			final double warnTime = time;
@@ -66,61 +93,31 @@ public class AutoRestart {
 			warnTimer.schedule(new TimerTask() {
 				@Override
 				public void run() {
-					if(isNotDelayed()) {
-						String warnMsg = warningMessage.replaceAll("<minutes>", "" + warnTime);
-						Utils.broadcast(PREFIX + warnMsg);
-						ValeriaOnline.log(warnMsg);
-					}
+					String warnMsg = warningMessage.replaceAll("<minutes>", "" + warnTime);
+					Utils.broadcast(PREFIX + warnMsg);
+					ValeriaOnline.log(warnMsg);
 				}
-			}, (long) ((restartInterval * 60.0 - time) * (60.0 * 1000.0))); // milliseconds
+			}, (long) (timeUntilWarn * (60.0 * 1000.0))); // milliseconds
 
-			double minutes = (restartInterval * 60.0) - time;
-			ValeriaOnline.log("AutoRestart warning scheduled for " + minutes + " minutes from now!");
+			temp = LocalDateTime.now(zone);
+			temp = temp.plusSeconds((long) (timeUntilWarn * 60.0));
+			ValeriaOnline.log("Warning at: " + StringUtils.longDateTimeFormat(temp) + " (~" + (int) timeUntilWarn + " minutes)");
 		}
 
+		// Schedule Restart
 		rebootTimer = new Timer();
 		rebootTimer.schedule(new TimerTask() {
 			@Override
 			public void run() {
-				if(isNotDelayed()) {
-					Tasks.sync(() -> stopServer());
-				}
-
+				Tasks.sync(() -> stopServer());
 			}
-		}, (long)(restartInterval * (60.0 * 60.0 * 1000.0))); // milliseconds
+		}, (long) ((restartIn) * (60.0 * 60.0 * 1000.0))); // milliseconds
 
-		double minutes = restartInterval  * 60.0;
-		ValeriaOnline.log("AutoRestart scheduled for " + minutes + " minutes from now!");
-//		startTimestamp = System.currentTimeMillis();
-	}
+		LocalDateTime now = LocalDateTime.now(zone);
+		now = now.plusSeconds((long) ((restartIn * 60.0) * 60.0));
+		ValeriaOnline.log("Restart at: " + StringUtils.longDateTimeFormat(now) + " (~" + (int) (restartIn * 60.0) + " minutes)");
 
-	private boolean isNotDelayed(){
-		if(delayRestart)
-			return false;
-
-		// some checks
-		for (Player player : Bukkit.getOnlinePlayers()) {
-			WorldGuardUtils WGUtils = new WorldGuardUtils(player);
-			for (ProtectedRegion region : WGUtils.getRegionsAt(player.getLocation())) {
-				if(region.getId().contains("altar_")) {
-					delayRestart = true;
-				}
-			}
-		}
-
-		if(delayRestart){
-			cancelTasks();
-			ValeriaOnline.log("AutoRestart has been cancelled, try again in 5 minutes");
-			Tasks.wait(Time.MINUTE.x(5), () -> {
-				delayRestart = false;
-				if(isNotDelayed()) {
-					scheduleRestart();
-				}
-			});
-		}
-
-		return !delayRestart;
-
+		ValeriaOnline.log(footer);
 	}
 
 	private void stopServer() {
@@ -134,5 +131,29 @@ public class AutoRestart {
 
 		Utils.runCommandAsConsole("save-all");
 		Utils.runCommandAsConsole("restart");
+	}
+
+	private double getNextRestart() {
+		LocalDateTime now = LocalDateTime.now(zone);
+		double latest = (warnTimes.get(0) / 60); // hours
+
+		LocalDateTime then = LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), restartTime, 0);
+		for (int i = 0; i < 24; i++) {
+			int addHours = i * restartInterval;
+			LocalDateTime localDateTime = then.plusHours(addHours);
+			long seconds = ChronoUnit.SECONDS.between(now, localDateTime);
+			double hours = (seconds / 60.0) / 60.0;
+			if (hours >= latest) {
+				then = localDateTime;
+				break;
+			}
+		}
+
+		long seconds = ChronoUnit.SECONDS.between(now, then);
+		double hours = (seconds / 60.0) / 60.0;
+		if (hours < latest)
+			return -1;
+
+		return hours;
 	}
 }
