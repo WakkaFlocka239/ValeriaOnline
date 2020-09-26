@@ -57,30 +57,26 @@ public class ConfigUtils {
 		return YamlConfiguration.loadConfiguration(file);
 	}
 
-//	@SneakyThrows
-//	public static void setConfigValue(String filePath, String path, Object value){
-//		File file = getFile(filePath);
-//		YamlConfiguration config = getConfig(file);
-//		config.set(path, value);
-//		config.save(file);
-//	}
-
-//	@SneakyThrows
-//	public static void setSettingsValue(String path, Object value){
-//		settings.set(path, value);
-//		settings.save(settingsFile);
-//	}
-
 	@SneakyThrows
 	private static void setupDefaultSettings(File settingsFile) {
 		YamlConfiguration settings = getSettings();
 		settings.set("prefix", "&f&l[&bValeriaOnline&f&l] ");
 		settings.set("endPortalRegions", Arrays.asList("", ""));
+
 		settings.set("databases.mysql.host", "localhost");
 		settings.set("databases.mysql.port", 3306);
 		settings.set("databases.mysql.username", "root");
 		settings.set("databases.mysql.password", "password");
 		settings.set("databases.mysql.prefix", "");
+
+		settings.set("autorestart.warnTimes", Arrays.asList(10.0, 5.0, 1.0));
+		settings.set("autorestart.prefix", "[AutoRestart] ");
+		settings.set("autorestart.warnMsg", "Server will restart in... <minutes> minutes");
+		settings.set("autorestart.restartMsg", "Server is restarting!");
+		settings.set("autorestart.interval", 6);
+		settings.set("autorestart.startTime", 6);
+		settings.set("autorestart.cancelTime", 30.0);
+		settings.set("autorestart.timezone", "GMT+2");
 
 		settings.save(settingsFile);
 	}

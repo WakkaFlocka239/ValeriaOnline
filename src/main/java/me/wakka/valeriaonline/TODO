@@ -6,8 +6,6 @@ TODO:
     - costs money to set
 - altar restrictions & particles
 	- config
-- AutoRestart
-	- config
 - add plugin to server & document custom commands in discord channel
 - teleport items (?)
 - MultiLine API - playername + prefix + (powerlevel/held item level)

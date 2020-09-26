@@ -1,7 +1,9 @@
 package me.wakka.valeriaonline.features.autorestart;
 
+import com.google.common.base.Strings;
 import lombok.Getter;
 import me.wakka.valeriaonline.ValeriaOnline;
+import me.wakka.valeriaonline.utils.ConfigUtils;
 import me.wakka.valeriaonline.utils.StringUtils;
 import me.wakka.valeriaonline.utils.Tasks;
 import me.wakka.valeriaonline.utils.Time;
@@ -13,7 +15,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Timer;
@@ -22,16 +23,16 @@ import java.util.TimerTask;
 import static me.wakka.valeriaonline.utils.StringUtils.colorize;
 
 public class AutoRestart {
-	// TODO: Config
-	List<Double> warnTimes = Arrays.asList(10.0, 5.0, 1.0); // in minutes till restart
-	String warningMessage = "Server will restart in... <minutes> minutes";
-	String restartMessage = "Server is restarting!";
-	String PREFIX = "[AutoRestart] ";
-	int restartInterval = 6; // hours
-	int restartTime = 6;
-	double cancelTime = 30.0; // minutes
-	ZoneId zone = ZoneId.of("GMT+2");
+	List<Double> warnTimes = ConfigUtils.getSettings().getDoubleList("autorestart.warnTimes");    // minutes till restart warning times
+	String PREFIX = ConfigUtils.getSettings().getString("autorestart.prefix");
+	String warningMessage = ConfigUtils.getSettings().getString("autorestart.warnMsg");
+	String restartMessage = ConfigUtils.getSettings().getString("autorestart.restartMsg");
+	int restartInterval = ConfigUtils.getSettings().getInt("autorestart.interval");                // hours
+	int restartTime = ConfigUtils.getSettings().getInt("autorestart.time");                        // time to start at, Ex: 6 == 0600
+	double cancelTime = ConfigUtils.getSettings().getDouble("autorestart.cancelTime");            // minutes
+	String timezone = ConfigUtils.getSettings().getString("autorestart.timezone");
 	//
+	ZoneId zone = Strings.isNullOrEmpty(timezone) ? ZoneId.systemDefault() : ZoneId.of(timezone);
 	static List<Timer> warningTimers = new ArrayList<>();
 	static Timer rebootTimer;
 	@Getter
