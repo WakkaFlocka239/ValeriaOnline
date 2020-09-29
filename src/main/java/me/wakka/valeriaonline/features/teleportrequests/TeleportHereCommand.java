@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 @Aliases({"tpahere"})
 public class TeleportHereCommand extends CustomCommand {
 	public static final String PREFIX = TeleportCommand.PREFIX;
-	private static final int cost = TeleportCommand.cost;
+	private static final double cost = TeleportCommand.COST;
 
 	public TeleportHereCommand(CommandEvent event) {
 		super(event);

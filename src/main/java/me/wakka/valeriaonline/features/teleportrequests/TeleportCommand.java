@@ -1,12 +1,14 @@
 package me.wakka.valeriaonline.features.teleportrequests;
 
 import lombok.NoArgsConstructor;
+import me.wakka.valeriaonline.ValeriaOnline;
 import me.wakka.valeriaonline.framework.commands.models.CustomCommand;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Aliases;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Path;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Redirects;
 import me.wakka.valeriaonline.framework.commands.models.events.CommandEvent;
 import me.wakka.valeriaonline.framework.exceptions.PlayerNotOnlineException;
+import me.wakka.valeriaonline.utils.ConfigUtils;
 import me.wakka.valeriaonline.utils.MenuUtils;
 import me.wakka.valeriaonline.utils.StringUtils;
 import org.bukkit.OfflinePlayer;
@@ -20,7 +22,7 @@ import org.bukkit.entity.Player;
 @Redirects.Redirect(from = {"/tpcancel", "/etpcancel", "/tpacancel", "/etpacancel"}, to = "/teleport cancel")
 public class TeleportCommand extends CustomCommand {
 	public static final String PREFIX = StringUtils.getPrefix("Teleport");
-	public static final int cost = 420;
+	public static final double COST = ConfigUtils.getSettings().getDouble("teleportCost");
 
 	public TeleportCommand(CommandEvent event) {
 		super(event);
@@ -35,7 +37,7 @@ public class TeleportCommand extends CustomCommand {
 		Request request = new Request(player(), target, Request.TeleportType.TELEPORT);
 		MenuUtils.ConfirmationMenu.builder()
 				.title("Teleport to " + target.getName())
-				.confirmLore("&cCosts: &6" + cost + " Crowns, if accepted")
+				.confirmLore("&cCosts: &6" + COST + " Crowns, if accepted")
 				.onConfirm(e -> {
 					Requests.add(request);
 
@@ -71,7 +73,7 @@ public class TeleportCommand extends CustomCommand {
 
 		MenuUtils.ConfirmationMenu.builder()
 				.title("Teleport to " + sender.getName())
-				.confirmLore("&cCosts: &6" + cost + " Crowns, if accepted")
+				.confirmLore("&cCosts: &6" + COST + " Crowns, if accepted")
 				.onConfirm(e -> runCommand("teleport accept"))
 				.open(player());
 	}
@@ -143,6 +145,12 @@ public class TeleportCommand extends CustomCommand {
 		if (!fromPlayer.isOnline())
 			throw new PlayerNotOnlineException(fromPlayer);
 
+		if (!ValeriaOnline.getEcon().has(fromPlayer, COST)) {
+			error(fromPlayer, PREFIX + "&cYou don't have enough Crowns!");
+			return;
+		}
+
+
 		if (request.getType() == Request.TeleportType.TELEPORT)
 			fromPlayer.getPlayer().teleport(toPlayer.getPlayer());
 		else
@@ -152,12 +160,14 @@ public class TeleportCommand extends CustomCommand {
 			send(toPlayer.getPlayer(), PREFIX + "&7You accepted &d" + fromPlayer.getName() + "'s &7tp request");
 			send(fromPlayer.getPlayer(), PREFIX + "&d" + toPlayer.getName() + " &7accepted your tp request");
 
-			send(fromPlayer.getPlayer(), PREFIX + "&6" + cost + " Crowns &cwere taken from your account");
+			ValeriaOnline.getEcon().withdrawPlayer(fromPlayer, COST);
+			send(fromPlayer.getPlayer(), PREFIX + "&6" + COST + " Crowns &cwere taken from your account");
 		} else {
 			send(fromPlayer.getPlayer(), PREFIX + "&7You accepted &d" + toPlayer.getName() + "'s &7tphere request");
 			send(toPlayer.getPlayer(), PREFIX + "&d" + fromPlayer.getName() + " &7accepted your tphere request");
 
-			send(fromPlayer.getPlayer(), PREFIX + "&6" + cost + " Crowns &cwere taken from your account");
+			ValeriaOnline.getEcon().withdrawPlayer(fromPlayer, COST);
+			send(fromPlayer.getPlayer(), PREFIX + "&6" + COST + " Crowns &cwere taken from your account");
 		}
 	}
 
