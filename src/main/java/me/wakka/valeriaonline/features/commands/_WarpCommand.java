@@ -36,14 +36,14 @@ public abstract class _WarpCommand extends CustomCommand {
 			if (!builder.isInitialized())
 				builder.initialize();
 			else
-				builder.next("&e, ").group();
+				builder.next("&d, ").group();
 
-			builder.next("&3" + warp)
+			builder.next("&7" + warp)
 					.command(getAliasUsed() + " tp " + warp)
 					.group();
 		}
 		line();
-		send(PREFIX + "&3List of warps &e(Click to teleport)");
+		send(PREFIX + "&7List of warps &d(Click to teleport)");
 		send(builder);
 	}
 
@@ -55,27 +55,27 @@ public abstract class _WarpCommand extends CustomCommand {
 			error("That warp is already set.");
 
 		service.save(new Warp(name, player().getLocation(), getWarpType().name()));
-		send(PREFIX + "&e" + name + " &3set to your current location");
+		send(PREFIX + "&d" + name + " &7set to your current location");
 	}
 
 	@Path("reset <name>")
 	@Permission(value = "group.staff", absolute = true)
 	public void reset(@Arg(tabCompleter = Warp.class) String name) {
 		service.save(new Warp(name, player().getLocation(), getWarpType().name()));
-		send(PREFIX + "&e" + name + " &3set to your current location");
+		send(PREFIX + "&d" + name + " &7set to your current location");
 	}
 
 	@Path("(rm|remove|delete|del) <name>")
 	@Permission(value = "group.staff", absolute = true)
 	public void delete(Warp warp) {
 		service.delete(warp);
-		send(PREFIX + "Successfully deleted warp &e" + warp.getName());
+		send(PREFIX + "Successfully deleted warp &d" + warp.getName());
 	}
 
 	@Path("(teleport|tp|warp) <name>")
 	public void teleport(Warp warp) {
 		warp.teleport(player());
-		send(PREFIX + "&3Warping to &e" + warp.getName());
+		send(PREFIX + "&7Warping to &d" + warp.getName());
 	}
 
 //	@Path("<name>")
@@ -93,7 +93,7 @@ public abstract class _WarpCommand extends CustomCommand {
 		Optional<Warp> warp = getNearestWarp(player().getLocation());
 		if (!warp.isPresent())
 			error("No nearest warp found");
-		send(PREFIX + "Nearest warp is &e" + warp.get().getName() + " &3(&e" + (int) warp.get().getLocation().distance(player().getLocation()) + " &3blocks away)");
+		send(PREFIX + "Nearest warp is &d" + warp.get().getName() + " &7(&d" + (int) warp.get().getLocation().distance(player().getLocation()) + " &7blocks away)");
 	}
 
 	public Optional<Warp> getNearestWarp(Location location) {

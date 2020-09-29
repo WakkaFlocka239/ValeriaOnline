@@ -1,11 +1,9 @@
 package me.wakka.valeriaonline.features.altars;
 
-import com.mewin.worldguardregionapi.events.RegionLeavingEvent;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import me.wakka.valeriaonline.ValeriaOnline;
 import me.wakka.valeriaonline.utils.Utils;
 import me.wakka.valeriaonline.utils.WorldGuardUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -16,7 +14,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -31,9 +29,12 @@ public class Altars implements Listener {
 	}
 
 	private void loadAltars() {
-		Altar test = new Altar(Bukkit.getWorld("world"), "altar_test");
+		Altar desert = new Altar("world", "altar_desert");
+		Altar plains = new Altar("world", "altar_plains");
+		Altar big = new Altar("world", "altar_big");
+		Altar snow = new Altar("world", "altar_snow");
 
-		altars = Collections.singletonList(test);
+		altars = Arrays.asList(desert, plains, big, snow);
 	}
 
 	public static void set(Location location, boolean enabled){
@@ -69,14 +70,14 @@ public class Altars implements Listener {
 		}
 	}
 
-	@EventHandler
-	public void onRegionLeave(RegionLeavingEvent event) {
-		if (event.getRegion().getId().contains("altar_")) {
-			ItemStack key = Utils.getTool(event.getPlayer());
-			if (Utils.isNullOrAir(key) || !key.getType().equals(Material.ORANGE_WOOL))
-				event.setCancelled(true);
-		}
-	}
+//	@EventHandler
+//	public void onRegionLeave(RegionLeavingEvent event) {
+//		if (event.getRegion().getId().contains("altar_")) {
+//			ItemStack key = Utils.getTool(event.getPlayer());
+//			if (Utils.isNullOrAir(key) || !key.getType().equals(Material.ORANGE_WOOL))
+//				event.setCancelled(true);
+//		}
+//	}
 
 	@EventHandler
 	public void onThrowEnderPearl(PlayerInteractEvent event) {

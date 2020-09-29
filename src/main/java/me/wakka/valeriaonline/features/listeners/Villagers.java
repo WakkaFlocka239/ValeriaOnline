@@ -24,6 +24,7 @@ import java.util.UUID;
 
 public class Villagers implements Listener {
 	private static final List<UUID> cancelInteraction = new ArrayList<>();
+	private static final int[][] tradeExp = {{1, 2}, {4, 6}, {9, 11}, {14, 18}, {22, 26}};
 
 	@EventHandler
 	public void onAcquireTrade(VillagerAcquireTradeEvent event) {
@@ -101,7 +102,9 @@ public class Villagers implements Listener {
 
 		MerchantRecipe recipe = new MerchantRecipe(trade.getResult(), trade.getStock());
 		recipe.setExperienceReward(true);
-		recipe.setVillagerExperience(1);
+
+		int exp = RandomUtils.randomInt(tradeExp[level - 1][0], tradeExp[level - 1][1]);
+		recipe.setVillagerExperience(exp);
 		recipe.addIngredient(trade.getIngredient1());
 
 		if (trade.getIngredient2() != null)

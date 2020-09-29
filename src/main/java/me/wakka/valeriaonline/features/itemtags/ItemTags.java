@@ -241,7 +241,7 @@ public class ItemTags {
 		List<String> lore = itemStack.getLore();
 		if (lore != null && lore.size() > 0) {
 			for (String line : lore) {
-				if (StringUtils.stripColor(line).equalsIgnoreCase("-----⫷Unique⫸-----"))
+				if (StringUtils.stripColor(line).equalsIgnoreCase("----⫷Unique⫸----"))
 					return true;
 			}
 		}

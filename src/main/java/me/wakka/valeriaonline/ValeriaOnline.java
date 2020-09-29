@@ -1,5 +1,6 @@
 package me.wakka.valeriaonline;
 
+import com.earth2me.essentials.Essentials;
 import lombok.Getter;
 import me.wakka.valeriaonline.features.altars.Altars;
 import me.wakka.valeriaonline.features.autorestart.AutoRestart;
@@ -11,6 +12,7 @@ import me.wakka.valeriaonline.framework.persistence.MySQLPersistence;
 import me.wakka.valeriaonline.utils.ConfigUtils;
 import me.wakka.valeriaonline.utils.SignMenuFactory;
 import me.wakka.valeriaonline.utils.Utils;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -19,8 +21,6 @@ import static me.wakka.valeriaonline.utils.StringUtils.stripColor;
 
 public class ValeriaOnline extends JavaPlugin {
 	private Commands commands;
-	@Getter
-	private static SignMenuFactory signMenuFactory;
 	private static ValeriaOnline instance;
 
 	public ValeriaOnline(){
@@ -82,6 +82,13 @@ public class ValeriaOnline extends JavaPlugin {
 			log("Could not register listener " + listener.toString() + "!");
 	}
 
+	@Getter
+	private static SignMenuFactory signMenuFactory;
+	@Getter
+	private static Essentials essentials;
+	@Getter
+	private static Economy econ = null;
+
 	private void enableFeatures() {
 		new Listeners();
 		new ItemTags();
@@ -90,6 +97,8 @@ public class ValeriaOnline extends JavaPlugin {
 		new Trading();
 
 		signMenuFactory = new SignMenuFactory(this);
+		essentials = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
+		econ = getServer().getServicesManager().getRegistration(Economy.class).getProvider();
 	}
 
 

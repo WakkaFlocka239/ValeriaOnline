@@ -23,20 +23,24 @@ import java.util.TimerTask;
 import static me.wakka.valeriaonline.utils.StringUtils.colorize;
 
 public class AutoRestart {
-	List<Double> warnTimes = ConfigUtils.getSettings().getDoubleList("autorestart.warnTimes");    // minutes till restart warning times
-	String PREFIX = ConfigUtils.getSettings().getString("autorestart.prefix");
-	String warningMessage = ConfigUtils.getSettings().getString("autorestart.warnMsg");
-	String restartMessage = ConfigUtils.getSettings().getString("autorestart.restartMsg");
-	int restartInterval = ConfigUtils.getSettings().getInt("autorestart.interval");                // hours
-	int restartTime = ConfigUtils.getSettings().getInt("autorestart.time");                        // time to start at, Ex: 6 == 0600
-	double cancelTime = ConfigUtils.getSettings().getDouble("autorestart.cancelTime");            // minutes
-	String timezone = ConfigUtils.getSettings().getString("autorestart.timezone");
+	private final List<Double> warnTimes = ConfigUtils.getSettings().getDoubleList("autorestart.warnTimes");     // minutes till restart warning times
+	private final String PREFIX = ConfigUtils.getSettings().getString("autorestart.prefix");
+	private final String warningMessage = ConfigUtils.getSettings().getString("autorestart.warnMsg");
+	private final String restartMessage = ConfigUtils.getSettings().getString("autorestart.restartMsg");
+	private final int restartInterval = ConfigUtils.getSettings().getInt("autorestart.interval");                // hours
+	private final int restartTime = ConfigUtils.getSettings().getInt("autorestart.time");                        // time to start at, Ex: 6 == 0600
+	private final double cancelTime = ConfigUtils.getSettings().getDouble("autorestart.cancelTime");             // minutes
+	private final String timezone = ConfigUtils.getSettings().getString("autorestart.timezone");
 	//
-	ZoneId zone = Strings.isNullOrEmpty(timezone) ? ZoneId.systemDefault() : ZoneId.of(timezone);
-	static List<Timer> warningTimers = new ArrayList<>();
-	static Timer rebootTimer;
+	private static final List<Timer> warningTimers = new ArrayList<>();
+	private static Timer rebootTimer = null;
+	public ZoneId zone = Strings.isNullOrEmpty(timezone) ? ZoneId.systemDefault() : ZoneId.of(timezone);
+	//
 	@Getter
 	public static boolean restartSoon = false;
+	public static LocalDateTime preventAt = null;
+	public static List<LocalDateTime> warningsAt = new ArrayList<>();
+	public static LocalDateTime restartAt = null;
 
 	public AutoRestart() {
 		scheduleRestart();
@@ -72,15 +76,14 @@ public class AutoRestart {
 		}
 
 		ValeriaOnline.log("Timezone: " + zone.getId());
-
-		int cancelSeconds = (int) (((restartIn * 60.0) - cancelTime) * 60);
-		Tasks.wait(Time.SECOND.x(cancelSeconds), () -> restartSoon = true);
-
 		LocalDateTime temp;
 
+		int cancelSeconds = Math.max((int) (((restartIn * 60.0) - cancelTime) * 60), 0);
+		Tasks.wait(Time.SECOND.x(cancelSeconds), () -> restartSoon = true);
 		temp = LocalDateTime.now(zone);
 		temp = temp.plusSeconds(cancelSeconds);
 		ValeriaOnline.log("Prevent at: " + StringUtils.longDateTimeFormat(temp) + " (~" + (cancelSeconds / 60) + " minutes)");
+		preventAt = temp;
 
 		// Schedule Warn Timers
 		for (Double time : warnTimes) {
@@ -103,6 +106,7 @@ public class AutoRestart {
 			temp = LocalDateTime.now(zone);
 			temp = temp.plusSeconds((long) (timeUntilWarn * 60.0));
 			ValeriaOnline.log("Warning at: " + StringUtils.longDateTimeFormat(temp) + " (~" + (int) timeUntilWarn + " minutes)");
+			warningsAt.add(temp);
 		}
 
 		// Schedule Restart
@@ -114,9 +118,10 @@ public class AutoRestart {
 			}
 		}, (long) ((restartIn) * (60.0 * 60.0 * 1000.0))); // milliseconds
 
-		LocalDateTime now = LocalDateTime.now(zone);
-		now = now.plusSeconds((long) ((restartIn * 60.0) * 60.0));
-		ValeriaOnline.log("Restart at: " + StringUtils.longDateTimeFormat(now) + " (~" + (int) (restartIn * 60.0) + " minutes)");
+		temp = LocalDateTime.now(zone);
+		temp = temp.plusSeconds((long) ((restartIn * 60.0) * 60.0));
+		ValeriaOnline.log("Restart at: " + StringUtils.longDateTimeFormat(temp) + " (~" + (int) (restartIn * 60.0) + " minutes)");
+		restartAt = temp;
 
 		ValeriaOnline.log(footer);
 	}

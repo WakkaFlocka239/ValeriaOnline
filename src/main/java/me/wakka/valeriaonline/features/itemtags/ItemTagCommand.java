@@ -47,7 +47,7 @@ public class ItemTagCommand extends CustomCommand {
 
 	@Path("update")
 	@Description("Update item tags on held item")
-	void update(){
+	void update() {
 		ItemStack tool = Utils.getToolRequired(player());
 
 		ItemStack updated = updateItem(tool);
@@ -55,8 +55,25 @@ public class ItemTagCommand extends CustomCommand {
 		player().getInventory().setItem(heldSlot, updated);
 	}
 
+	@Path("updateInv")
+	@Description("Update item tags on all items in inventory")
+	void updateInv() {
+		ItemStack[] contents = player().getInventory().getContents();
+		int count = 0;
+		for (ItemStack item : contents) {
+			if (Utils.isNullOrAir(item))
+				continue;
+
+			ItemStack updated = updateItem(item);
+			item.setItemMeta(updated.getItemMeta());
+			++count;
+		}
+
+		send(PREFIX + count + " items itemtags updated!");
+	}
+
 	@Path("setRarity <rarity>")
-	void setRarity(Rarity rarity){
+	void setRarity(Rarity rarity) {
 		ItemStack tool = Utils.getToolRequired(player());
 
 		ItemStack updated = finalizeItem(addRarity(tool, rarity, true));

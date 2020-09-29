@@ -4,6 +4,7 @@ package me.wakka.valeriaonline.features.commands;
 import me.wakka.valeriaonline.ValeriaOnline;
 import me.wakka.valeriaonline.framework.commands.models.CustomCommand;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Path;
+import me.wakka.valeriaonline.framework.commands.models.annotations.Permission;
 import me.wakka.valeriaonline.framework.commands.models.events.CommandEvent;
 import me.wakka.valeriaonline.utils.StringUtils;
 
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 
+@Permission("group.dev")
 public class TestCommand extends CustomCommand {
 
 	public TestCommand(CommandEvent event) {

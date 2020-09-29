@@ -7,8 +7,8 @@ public enum MySQLDatabase {
 		String name = name().toLowerCase();
 
 		if (name.equals("valeriaonline"))
-			return name;
+			return "customer_131501_valeriaonline";
 
-		return "valeriaonline_" + name;
+		return "customer_131501_valeriaonline_" + name;
 	}
 }

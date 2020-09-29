@@ -2,8 +2,10 @@ package me.wakka.valeriaonline.features.altars;
 
 import me.wakka.valeriaonline.framework.commands.models.CustomCommand;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Path;
+import me.wakka.valeriaonline.framework.commands.models.annotations.Permission;
 import me.wakka.valeriaonline.framework.commands.models.events.CommandEvent;
 
+@Permission("group.staff")
 public class AltarCommand extends CustomCommand {
 	public AltarCommand(CommandEvent event) {
 		super(event);
