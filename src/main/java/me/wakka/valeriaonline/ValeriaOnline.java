@@ -13,6 +13,7 @@ import me.wakka.valeriaonline.framework.persistence.MySQLPersistence;
 import me.wakka.valeriaonline.utils.ConfigUtils;
 import me.wakka.valeriaonline.utils.SignMenuFactory;
 import me.wakka.valeriaonline.utils.Utils;
+import me.wakka.valeriaonline.utils.WorldGuardFlagUtils;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
@@ -57,6 +58,12 @@ public class ValeriaOnline extends JavaPlugin {
 		commands = new Commands(this, "me.wakka.valeriaonline.features");
 		commands.registerAll();
 	}
+
+	@Override
+	public void onLoad() {
+		WorldGuardFlagUtils.CustomFlags.register();
+	}
+
 
 	// @formatter:off
 	@Override
