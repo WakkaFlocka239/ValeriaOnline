@@ -124,12 +124,15 @@ public class Listeners implements Listener {
 
 	@EventHandler
 	public void onItemFrameBreak(HangingBreakEvent event){
-		if(!(event.getEntity().getType().equals(EntityType.ITEM_FRAME)))
+		if (!(event.getEntity().getType().equals(EntityType.ITEM_FRAME)))
+			return;
+
+		if (event.isCancelled())
 			return;
 
 		ItemFrame itemFrame = (ItemFrame) event.getEntity();
 		ItemStack item = itemFrame.getItem();
-		if(Utils.isNullOrAir(item)) return;
+		if (Utils.isNullOrAir(item)) return;
 
 		ItemStack updated = updateItem(item);
 

@@ -4,6 +4,7 @@ import com.earth2me.essentials.Essentials;
 import lombok.Getter;
 import me.wakka.valeriaonline.features.altars.Altars;
 import me.wakka.valeriaonline.features.autorestart.AutoRestart;
+import me.wakka.valeriaonline.features.compass.Compass;
 import me.wakka.valeriaonline.features.itemtags.ItemTags;
 import me.wakka.valeriaonline.features.listeners.Listeners;
 import me.wakka.valeriaonline.features.trading.Trading;
@@ -95,6 +96,7 @@ public class ValeriaOnline extends JavaPlugin {
 		new Altars();
 		new AutoRestart();
 		new Trading();
+		new Compass();
 
 		signMenuFactory = new SignMenuFactory(this);
 		essentials = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");

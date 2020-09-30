@@ -1,14 +1,13 @@
 package me.wakka.valeriaonline.features.commands;
 
-import de.tr7zw.nbtapi.NBTItem;
 import fr.minuskube.inv.SmartInvsPlugin;
 import lombok.NoArgsConstructor;
+import me.wakka.valeriaonline.features.compass.Compass;
 import me.wakka.valeriaonline.framework.commands.models.CustomCommand;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Description;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Path;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Permission;
 import me.wakka.valeriaonline.framework.commands.models.events.CommandEvent;
-import me.wakka.valeriaonline.utils.StringUtils;
 import me.wakka.valeriaonline.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
@@ -46,9 +45,9 @@ public class ValeriaOnlineCommand extends CustomCommand implements Listener {
 		runCommand("plugman reload ValeriaOnline");
 	}
 
-	@Path("getNBT")
-	void NBT() {
-		NBTItem nbtI = new NBTItem(Utils.getToolRequired(player()));
-		send(StringUtils.stripColor(nbtI.toString()));
+	@Path("getItem <item>")
+	void getItem(String item) {
+		if (item.equalsIgnoreCase("compass"))
+			Utils.giveItem(player(), Compass.getItem());
 	}
 }

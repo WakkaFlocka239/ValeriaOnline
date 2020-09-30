@@ -5,10 +5,11 @@ public enum MySQLDatabase {
 
 	public String getDatabase() {
 		String name = name().toLowerCase();
+		String database = MySQLPersistence.config.getUsername();
 
 		if (name.equals("valeriaonline"))
-			return "customer_131501_valeriaonline";
+			return database;
 
-		return "customer_131501_valeriaonline_" + name;
+		return database + "_" + name;
 	}
 }

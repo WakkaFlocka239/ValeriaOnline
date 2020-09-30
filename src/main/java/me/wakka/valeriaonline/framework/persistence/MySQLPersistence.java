@@ -10,12 +10,13 @@ import java.util.Map;
 
 public class MySQLPersistence {
 	private static final Map<MySQLDatabase, Database> databases = new HashMap<>();
+	public static DatabaseConfig config;
 
 	@SneakyThrows
 	private static void openConnection(MySQLDatabase dbType) {
 		Class.forName("com.mysql.jdbc.Driver");
 
-		DatabaseConfig config = new DatabaseConfig("mysql");
+		config = new DatabaseConfig("mysql");
 		Database database = new Database();
 		database.setJdbcUrl("jdbc:mysql://" + config.getHost() + ":" + config.getPort() + "/"
 				+ config.getPrefix() + dbType.getDatabase() + "?useSSL=false&relaxAutoCommit=true&characterEncoding=UTF-8");
