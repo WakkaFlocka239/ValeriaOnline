@@ -1,10 +1,12 @@
 package me.wakka.valeriaonline.utils;
 
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -78,6 +80,19 @@ public class ItemBuilder implements Cloneable{
 			itemMeta.addEnchant(enchantment, level, ignoreLevelRestriction);
 		}
 
+		return this;
+	}
+
+	// Skulls
+
+	public ItemBuilder skullOwner(OfflinePlayer offlinePlayer) {
+		((SkullMeta) itemMeta).setOwningPlayer(offlinePlayer);
+		return this;
+	}
+
+	@Deprecated
+	public ItemBuilder skullOwner(String name) {
+		((SkullMeta) itemMeta).setOwner(name);
 		return this;
 	}
 

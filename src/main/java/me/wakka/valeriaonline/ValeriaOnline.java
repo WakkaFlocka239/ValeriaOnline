@@ -4,9 +4,12 @@ import com.earth2me.essentials.Essentials;
 import lombok.Getter;
 import me.wakka.valeriaonline.features.altars.Altars;
 import me.wakka.valeriaonline.features.autorestart.AutoRestart;
+import me.wakka.valeriaonline.features.chat.ChannelManager;
 import me.wakka.valeriaonline.features.compass.Compass;
 import me.wakka.valeriaonline.features.itemtags.ItemTags;
 import me.wakka.valeriaonline.features.listeners.Listeners;
+import me.wakka.valeriaonline.features.placeholders.Placeholders;
+import me.wakka.valeriaonline.features.playershops.PlayerShops;
 import me.wakka.valeriaonline.features.trading.Trading;
 import me.wakka.valeriaonline.framework.commands.Commands;
 import me.wakka.valeriaonline.framework.persistence.MySQLPersistence;
@@ -15,6 +18,7 @@ import me.wakka.valeriaonline.utils.SignMenuFactory;
 import me.wakka.valeriaonline.utils.Utils;
 import me.wakka.valeriaonline.utils.WorldGuardFlagUtils;
 import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -96,6 +100,8 @@ public class ValeriaOnline extends JavaPlugin {
 	private static Essentials essentials;
 	@Getter
 	private static Economy econ = null;
+	@Getter
+	private static Permission perms = null;
 
 	private void enableFeatures() {
 		new Listeners();
@@ -104,10 +110,15 @@ public class ValeriaOnline extends JavaPlugin {
 		new AutoRestart();
 		new Trading();
 		new Compass();
+		new PlayerShops();
+
+		new Placeholders().register();
+		new ChannelManager();
 
 		signMenuFactory = new SignMenuFactory(this);
 		essentials = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
 		econ = getServer().getServicesManager().getRegistration(Economy.class).getProvider();
+		perms = getServer().getServicesManager().getRegistration(Permission.class).getProvider();
 	}
 
 

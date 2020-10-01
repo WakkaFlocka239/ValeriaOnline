@@ -62,6 +62,8 @@ public class ConfigUtils {
 		YamlConfiguration settings = getSettings();
 		settings.set("prefix", "&f&l[&bValeriaOnline&f&l] ");
 		settings.set("teleportCost", 50.0);
+		settings.set("shopSetupCost", 50.0);
+		settings.set("shopResetCost", 10.0);
 		settings.set("endPortalRegions", Arrays.asList("", ""));
 
 		settings.set("databases.mysql.host", "localhost");

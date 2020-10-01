@@ -3,6 +3,7 @@ package me.wakka.valeriaonline.utils;
 import com.google.common.base.Strings;
 import de.tr7zw.nbtapi.NBTContainer;
 import de.tr7zw.nbtapi.NBTItem;
+import me.wakka.valeriaonline.ValeriaOnline;
 import me.wakka.valeriaonline.framework.exceptions.InvalidInputException;
 import me.wakka.valeriaonline.framework.exceptions.PlayerNotFoundException;
 import org.bukkit.Bukkit;
@@ -127,6 +128,24 @@ public class Utils {
 			if (!excess.isEmpty())
 				excess.values().forEach(itemStack -> player.getWorld().dropItemNaturally(player.getLocation(), itemStack));
 		}
+	}
+
+	public static void withdraw(Player from, double amount) {
+		withdraw(from, amount, "");
+	}
+
+	public static void withdraw(Player from, double amount, String prefix) {
+		withdraw(Utils.getPlayer(from.getUniqueId()), amount, prefix);
+	}
+
+	public static void withdraw(OfflinePlayer from, double amount) {
+		withdraw(from, amount, "");
+	}
+
+	public static void withdraw(OfflinePlayer from, double amount, String prefix) {
+		ValeriaOnline.getEcon().withdrawPlayer(from, amount);
+		if (from.isOnline() && from.getPlayer() != null)
+			send(from.getPlayer(), prefix + "&c" + amount + " Crowns have been taken from your account");
 	}
 
 	public static void runCommand(CommandSender sender, String commandNoSlash) {
