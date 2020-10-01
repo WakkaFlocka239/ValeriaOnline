@@ -23,7 +23,8 @@ public @interface Permission {
 	group.dm 			- dungeon master
 	group.builder 		- builder
 
-	group.creator		- builder & admin
+	group.creator		- admin & builder
+	group.staff			- trial & builder
 
               group.owner
             /             \

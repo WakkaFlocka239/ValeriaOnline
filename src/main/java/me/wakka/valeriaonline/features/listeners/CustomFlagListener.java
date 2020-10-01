@@ -12,7 +12,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import static me.wakka.valeriaonline.utils.WorldGuardFlagUtils.CustomFlags.TRAP_DOORS;
 import static me.wakka.valeriaonline.utils.WorldGuardFlagUtils.isFlagSetFor;
 
-public class CustomFlagListeners implements Listener {
+public class CustomFlagListener implements Listener {
 
 	@EventHandler
 	public void onInteract_trapDoor(PlayerInteractEvent event) {

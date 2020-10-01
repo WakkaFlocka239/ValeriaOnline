@@ -10,6 +10,7 @@ import me.wakka.valeriaonline.framework.commands.models.annotations.Aliases;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Arg;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Async;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Cooldown;
+import me.wakka.valeriaonline.framework.commands.models.annotations.Fallback;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Path;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Permission;
 import me.wakka.valeriaonline.framework.commands.models.events.CommandEvent;
@@ -300,16 +301,13 @@ public abstract class ICustomCommand {
 
 	// TODO: Use same methods as tab complete
 	private Method getMethod(CommandEvent event) {
-		Method method;
-		try {
-			method = new PathParser(event).match(event.getArgs());
-		} catch (Exception ex) {
-//			event.handleException(ex);
-			method = null;
-		}
+		Method method = new PathParser(event).match(event.getArgs());
 
 		if (method == null) {
-			if (!event.getArgsString().equalsIgnoreCase("help"))
+			Fallback fallback = event.getCommand().getClass().getAnnotation(Fallback.class);
+			if (fallback != null)
+				Utils.runCommand(event.getSender(), fallback.value() + ":" + event.getAliasUsed() + " " + event.getArgsString());
+			else if (!event.getArgsString().equalsIgnoreCase("help"))
 				Utils.runCommand(event.getSender(), event.getAliasUsed() + " help");
 			else
 				throw new InvalidInputException("No matching path");

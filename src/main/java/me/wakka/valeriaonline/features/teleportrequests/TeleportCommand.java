@@ -11,6 +11,7 @@ import me.wakka.valeriaonline.framework.exceptions.PlayerNotOnlineException;
 import me.wakka.valeriaonline.utils.ConfigUtils;
 import me.wakka.valeriaonline.utils.MenuUtils;
 import me.wakka.valeriaonline.utils.StringUtils;
+import me.wakka.valeriaonline.utils.Utils;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
@@ -142,33 +143,30 @@ public class TeleportCommand extends CustomCommand {
 			fromPlayer = request.getReceiver();
 		}
 
-		if (!fromPlayer.isOnline())
+		if (!fromPlayer.isOnline() || fromPlayer.getPlayer() == null)
 			throw new PlayerNotOnlineException(fromPlayer);
 
-		if (!ValeriaOnline.getEcon().has(fromPlayer, COST)) {
+		if (!toPlayer.isOnline() || toPlayer.getPlayer() == null)
+			throw new PlayerNotOnlineException(toPlayer);
+
+		if (!ValeriaOnline.getEcon().has(fromPlayer, COST))
 			error(fromPlayer, PREFIX + "&cYou don't have enough Crowns!");
-			return;
-		}
-
-
-		if (request.getType() == Request.TeleportType.TELEPORT)
-			fromPlayer.getPlayer().teleport(toPlayer.getPlayer());
-		else
-			fromPlayer.getPlayer().teleport(request.getLocation());
 
 		if (request.getType() == Request.TeleportType.TELEPORT) {
+			fromPlayer.getPlayer().teleport(toPlayer.getPlayer());
+
 			send(toPlayer.getPlayer(), PREFIX + "&7You accepted &d" + fromPlayer.getName() + "'s &7tp request");
 			send(fromPlayer.getPlayer(), PREFIX + "&d" + toPlayer.getName() + " &7accepted your tp request");
 
-			ValeriaOnline.getEcon().withdrawPlayer(fromPlayer, COST);
-			send(fromPlayer.getPlayer(), PREFIX + "&6" + COST + " Crowns &cwere taken from your account");
 		} else {
+			fromPlayer.getPlayer().teleport(request.getLocation());
+
 			send(fromPlayer.getPlayer(), PREFIX + "&7You accepted &d" + toPlayer.getName() + "'s &7tphere request");
 			send(toPlayer.getPlayer(), PREFIX + "&d" + fromPlayer.getName() + " &7accepted your tphere request");
 
-			ValeriaOnline.getEcon().withdrawPlayer(fromPlayer, COST);
-			send(fromPlayer.getPlayer(), PREFIX + "&6" + COST + " Crowns &cwere taken from your account");
 		}
+
+		Utils.withdraw(fromPlayer, COST, PREFIX);
 	}
 
 	public void deny(Player receiver) {

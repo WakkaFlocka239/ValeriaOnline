@@ -1,13 +1,16 @@
 package me.wakka.valeriaonline.features.compass;
 
 import me.wakka.valeriaonline.ValeriaOnline;
+import me.wakka.valeriaonline.utils.ActionBarUtils;
 import me.wakka.valeriaonline.utils.ConfigUtils;
 import me.wakka.valeriaonline.utils.ItemBuilder;
+import me.wakka.valeriaonline.utils.SoundUtils;
 import me.wakka.valeriaonline.utils.StringUtils;
 import me.wakka.valeriaonline.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -80,6 +83,9 @@ public class Compass implements Listener {
 					compassMeta.setLodestone(locationMap.get(target));
 					compassMeta.setLodestoneTracked(false);
 					compass.setItemMeta(compassMeta);
+
+					SoundUtils.playSound(event.getPlayer(), Sound.UI_BUTTON_CLICK, 0.5F, 1F);
+					ActionBarUtils.sendActionBar(event.getPlayer(), "&dTarget: &f" + target + " Kingdom");
 				}
 				event.setCancelled(true);
 				return;

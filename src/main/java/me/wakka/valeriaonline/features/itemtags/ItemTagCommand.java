@@ -24,6 +24,7 @@ import static me.wakka.valeriaonline.features.itemtags.ItemTagUtils.updateItem;
 @Aliases({"itemtags"})
 @Permission("group.creator")
 public class ItemTagCommand extends CustomCommand {
+
 	public ItemTagCommand(CommandEvent event) {
 		super(event);
 	}

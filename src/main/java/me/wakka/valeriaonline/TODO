@@ -1,14 +1,8 @@
 TODO:
-- compass item point towards cities / homes, able to change heading
-- teleporting resquest to players - GUI confirmation menu w/ money
-- shop warps - GUI Menu
-    - 1 per player
-    - costs money to set
 - altar restrictions & particles
-	- config
+- ambient sounds
+
 - teleport items (?)
-
-
 - MultiLine API - playername + prefix + (powerlevel/held item level)
     => Spams errors in console, bug is reported
 
