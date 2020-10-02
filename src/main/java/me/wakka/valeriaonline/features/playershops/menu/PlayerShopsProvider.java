@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,7 +24,7 @@ public class PlayerShopsProvider extends MenuUtils implements InventoryProvider 
 
 	@Override
 	public void init(Player player, InventoryContents contents) {
-		addBackItem(contents, e -> PlayerShopsMenu.open());
+		addCloseItem(contents);
 
 		contents.set(0, 8, ClickableItem.empty(new ItemBuilder(Material.BOOK).name("&dInfo")
 				.lore("&7Click a shop")
@@ -33,9 +34,17 @@ public class PlayerShopsProvider extends MenuUtils implements InventoryProvider 
 		Pagination page = contents.pagination();
 
 		List<ClickableItem> shopItems = new ArrayList<>();
-		List<PlayerShop> playerShops = service.getAll().stream()
-				.filter(playerShop -> playerShop.getLocation() != null)
-				.collect(Collectors.toList());
+		List<PlayerShop> playerShops;
+		try {
+			playerShops = service.getAll().stream()
+					.filter(playerShop -> playerShop.getLocation() != null)
+					.sorted(Comparator.comparing(playerShop -> playerShop.getPlayer().getName()))
+					.collect(Collectors.toList());
+		} catch (Exception ignored) {
+			playerShops = service.getAll().stream()
+					.filter(playerShop -> playerShop.getLocation() != null)
+					.collect(Collectors.toList());
+		}
 
 		for (PlayerShop playerShop : playerShops) {
 			OfflinePlayer shopPlayer = playerShop.getPlayer();

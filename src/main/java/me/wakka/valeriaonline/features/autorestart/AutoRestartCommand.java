@@ -18,13 +18,14 @@ public class AutoRestartCommand extends CustomCommand {
 
 	@Path()
 	void info() {
-		String preventAt = StringUtils.timespanDiff(LocalDateTime.now(), AutoRestart.preventAt);
+		String preventAt = getTimespanDiff(AutoRestart.preventAt);
 
 		List<String> warningsAt = new ArrayList<>();
-		for (LocalDateTime localDateTime : AutoRestart.warningsAt)
-			warningsAt.add(StringUtils.timespanDiff(LocalDateTime.now(), localDateTime));
+		for (LocalDateTime localDateTime : AutoRestart.warningsAt) {
+			warningsAt.add(getTimespanDiff(localDateTime));
+		}
 
-		String restartAt = StringUtils.timespanDiff(LocalDateTime.now(), AutoRestart.restartAt);
+		String restartAt = getTimespanDiff(AutoRestart.restartAt);
 		//
 		send(PREFIX + "Scheduled times: ");
 		send("&8- &7Prevent: " + preventAt);
@@ -32,6 +33,14 @@ public class AutoRestartCommand extends CustomCommand {
 			send("&8- &7Warning: " + warning);
 		}
 		send("&8- &7Restart: " + restartAt);
+	}
+
+	private String getTimespanDiff(LocalDateTime localDateTime) {
+		String timespanDiff = StringUtils.timespanDiff(LocalDateTime.now(AutoRestart.zone), localDateTime);
+		if (timespanDiff.startsWith("-"))
+			timespanDiff = timespanDiff.replace("-", "") + " ago";
+
+		return timespanDiff;
 	}
 
 }

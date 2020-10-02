@@ -1,18 +1,21 @@
 package me.wakka.valeriaonline;
 
 import com.earth2me.essentials.Essentials;
+import it.sauronsoftware.cron4j.Scheduler;
 import lombok.Getter;
 import me.wakka.valeriaonline.features.altars.Altars;
 import me.wakka.valeriaonline.features.autorestart.AutoRestart;
 import me.wakka.valeriaonline.features.chat.ChannelManager;
 import me.wakka.valeriaonline.features.compass.Compass;
 import me.wakka.valeriaonline.features.itemtags.ItemTags;
+import me.wakka.valeriaonline.features.listeners.AmbientSounds;
 import me.wakka.valeriaonline.features.listeners.Listeners;
 import me.wakka.valeriaonline.features.placeholders.Placeholders;
 import me.wakka.valeriaonline.features.playershops.PlayerShops;
 import me.wakka.valeriaonline.features.trading.Trading;
 import me.wakka.valeriaonline.framework.commands.Commands;
 import me.wakka.valeriaonline.framework.persistence.MySQLPersistence;
+import me.wakka.valeriaonline.models.hours.HoursFeature;
 import me.wakka.valeriaonline.utils.ConfigUtils;
 import me.wakka.valeriaonline.utils.SignMenuFactory;
 import me.wakka.valeriaonline.utils.Utils;
@@ -22,6 +25,8 @@ import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.TimeZone;
 
 import static me.wakka.valeriaonline.utils.StringUtils.stripColor;
 
@@ -73,6 +78,7 @@ public class ValeriaOnline extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		try { Utils.runCommandAsConsole("save-all");	} catch (Throwable ex) { ex.printStackTrace(); }
+		try { AmbientSounds.shutdown();								} catch (Throwable ex) { ex.printStackTrace(); }
 		try { AutoRestart.shutdown();								} catch (Throwable ex) { ex.printStackTrace(); }
 
 		try { broadcastReload(); 									} catch (Throwable ex) { ex.printStackTrace(); }
@@ -98,6 +104,11 @@ public class ValeriaOnline extends JavaPlugin {
 	private static SignMenuFactory signMenuFactory;
 	@Getter
 	private static Essentials essentials;
+
+	@Getter
+	// http://www.sauronsoftware.it/projects/cron4j/manual.php
+	private static Scheduler cron = new Scheduler();
+
 	@Getter
 	private static Economy econ = null;
 	@Getter
@@ -111,12 +122,18 @@ public class ValeriaOnline extends JavaPlugin {
 		new Trading();
 		new Compass();
 		new PlayerShops();
+		new AmbientSounds();
+		new HoursFeature();
 
 		new Placeholders().register();
 		new ChannelManager();
 
 		signMenuFactory = new SignMenuFactory(this);
 		essentials = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
+
+		cron.setTimeZone(TimeZone.getTimeZone(AutoRestart.zone));
+		cron.start();
+
 		econ = getServer().getServicesManager().getRegistration(Economy.class).getProvider();
 		perms = getServer().getServicesManager().getRegistration(Permission.class).getProvider();
 	}

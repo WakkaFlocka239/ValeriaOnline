@@ -1,6 +1,7 @@
 package me.wakka.valeriaonline.features.altars;
 
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
+import lombok.Getter;
 import me.wakka.valeriaonline.ValeriaOnline;
 import me.wakka.valeriaonline.utils.Utils;
 import me.wakka.valeriaonline.utils.WorldGuardUtils;
@@ -19,7 +20,8 @@ import java.util.List;
 import java.util.Set;
 
 public class Altars implements Listener {
-	private static List<Altar> altars = new ArrayList<>();
+	@Getter
+	public static List<Altar> altars = new ArrayList<>();
 	WorldGuardUtils WGUtils;
 
 	public Altars() {
@@ -68,6 +70,29 @@ public class Altars implements Listener {
 				break;
 			}
 		}
+	}
+
+	public static boolean isInAltar(Player player) {
+		Altar altar = fromLocation(player.getLocation());
+		return altar != null;
+	}
+
+	public static Altar fromLocation(Location location) {
+		WorldGuardUtils WGUtils = new WorldGuardUtils(location);
+		for (Altar altar : altars) {
+			if (WGUtils.isInRegion(location, altar.getRegionID()))
+				return altar;
+		}
+
+		return null;
+	}
+
+	public static boolean isAltarRegion(String id) {
+		for (Altar altar : altars) {
+			if (id.equalsIgnoreCase(altar.getRegionID()))
+				return true;
+		}
+		return false;
 	}
 
 //	@EventHandler

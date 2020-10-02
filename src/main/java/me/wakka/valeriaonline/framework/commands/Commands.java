@@ -61,8 +61,7 @@ public class Commands {
 	}
 
 	public void registerAll() {
-		for (Class<? extends CustomCommand> command : commandSet) {
-
+		for (Class<? extends CustomCommand> command : commandSet)
 			try {
 				if (!Modifier.isAbstract(command.getModifiers()) && command.getAnnotation(Disabled.class) == null)
 					register(new ObjenesisStd().newInstance(command));
@@ -70,7 +69,6 @@ public class Commands {
 				ValeriaOnline.log("Error while registering command " + command.getSimpleName());
 				ex.printStackTrace();
 			}
-		}
 	}
 
 	private void register(CustomCommand customCommand) {

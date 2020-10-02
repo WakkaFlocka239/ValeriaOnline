@@ -9,6 +9,8 @@ import me.wakka.valeriaonline.utils.Tasks;
 import me.wakka.valeriaonline.utils.Time;
 import me.wakka.valeriaonline.utils.Utils;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import java.time.LocalDateTime;
@@ -30,20 +32,26 @@ public class AutoRestart {
 	private final int restartInterval = ConfigUtils.getSettings().getInt("autorestart.interval");                // hours
 	private final int restartTime = ConfigUtils.getSettings().getInt("autorestart.time");                        // time to start at, Ex: 6 == 0600
 	private final double cancelTime = ConfigUtils.getSettings().getDouble("autorestart.cancelTime");             // minutes
-	private final String timezone = ConfigUtils.getSettings().getString("autorestart.timezone");
+	private static final String timezone = ConfigUtils.getSettings().getString("autorestart.timezone");
 	//
 	private static final List<Timer> warningTimers = new ArrayList<>();
 	private static Timer rebootTimer = null;
-	public ZoneId zone = Strings.isNullOrEmpty(timezone) ? ZoneId.systemDefault() : ZoneId.of(timezone);
+	public static ZoneId zone = Strings.isNullOrEmpty(timezone) ? ZoneId.systemDefault() : ZoneId.of(timezone);
 	//
 	@Getter
 	public static boolean restartSoon = false;
 	public static LocalDateTime preventAt = null;
 	public static List<LocalDateTime> warningsAt = new ArrayList<>();
 	public static LocalDateTime restartAt = null;
+	//
+	private final static Location closeDungeons = new Location(Bukkit.getWorld("events"), 46, 11, -40);
+	private final static Location openDungeons = new Location(Bukkit.getWorld("events"), 43, 13, -38);
 
 	public AutoRestart() {
 		scheduleRestart();
+
+		closeDungeons.getBlock().setType(Material.AIR);
+		openDungeons.getBlock().setType(Material.AIR);
 	}
 
 	public static void shutdown() {
@@ -79,7 +87,11 @@ public class AutoRestart {
 		LocalDateTime temp;
 
 		int cancelSeconds = Math.max((int) (((restartIn * 60.0) - cancelTime) * 60), 0);
-		Tasks.wait(Time.SECOND.x(cancelSeconds), () -> restartSoon = true);
+		Tasks.wait(Time.SECOND.x(cancelSeconds), () -> {
+			restartSoon = true;
+			closeDungeons.getBlock().setType(Material.REDSTONE_BLOCK);
+		});
+
 		temp = LocalDateTime.now(zone);
 		temp = temp.plusSeconds(cancelSeconds);
 		ValeriaOnline.log("Prevent at: " + StringUtils.longDateTimeFormat(temp) + " (~" + (cancelSeconds / 60) + " minutes)");

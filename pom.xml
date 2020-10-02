@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>me.wakka</groupId>
     <artifactId>ValeriaOnline</artifactId>
-    <version>0.3</version>
+    <version>0.4</version>
     <build>
         <finalName>${project.artifactId}</finalName>
         <sourceDirectory>src/main/java</sourceDirectory>
@@ -143,6 +143,12 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.16</version>
+        </dependency>
+        <!-- cron4j -->
+        <dependency>
+            <groupId>it.sauronsoftware.cron4j</groupId>
+            <artifactId>cron4j</artifactId>
+            <version>2.2.5</version>
         </dependency>
         <!-- VaultAPI -->
         <dependency>

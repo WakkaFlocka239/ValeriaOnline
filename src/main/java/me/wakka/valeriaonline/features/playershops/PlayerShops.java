@@ -11,8 +11,4 @@ public class PlayerShops {
 	public static final double setupCost = ConfigUtils.getSettings().getDouble("shopSetupCost");
 	public static final double resetCost = ConfigUtils.getSettings().getDouble("shopResetCost");
 	public static final List<World> allowedWorlds = Arrays.asList(Bukkit.getWorld("world"), Bukkit.getWorld("world_nether"));
-
-	public PlayerShops() {
-
-	}
 }

@@ -2,6 +2,7 @@ package me.wakka.valeriaonline.utils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 
 //@SuppressWarnings({"ConstantConditions", "UnusedAssignment"})
@@ -12,7 +13,15 @@ public class SoundUtils {
 	}
 
 	public static void playSound(Player player, Sound sound, float volume, float pitch) {
-		player.playSound(player.getLocation(), sound, volume, pitch);
+		playSound(player, sound, SoundCategory.MASTER, volume, pitch);
+	}
+
+	public static void playSound(Player player, Sound sound, SoundCategory category, float volume, float pitch) {
+		player.playSound(player.getLocation(), sound, category, volume, pitch);
+	}
+
+	public static void stopSound(Player player, Sound sound) {
+		player.stopSound(sound);
 	}
 
 //	public enum Jingle {
