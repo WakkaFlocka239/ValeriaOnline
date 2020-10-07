@@ -65,22 +65,22 @@ public class AmbientSounds {
 				inArea = Altars.isInAltar(player);
 				onList = altarTaskMap.containsKey(player);
 
-				if (inArea && !onList)
+				if (inArea && !onList) {
 					startLoop(player, AmbientSoundType.ALTAR);
 
-				else if (!inArea && onList)
+				} else if (!inArea && onList) {
 					stopLoop(player, AmbientSoundType.ALTAR);
-
+				}
 				// Dungeons
 				inArea = Dungeons.isInDungeon(player);
 				onList = dungeonTaskMap.containsKey(player);
 
-				if (inArea && !onList)
+				if (inArea && !onList) {
 					startLoop(player, AmbientSoundType.DUNGEON);
 
-				else if (!inArea && onList)
+				} else if (!inArea && onList) {
 					stopLoop(player, AmbientSoundType.DUNGEON);
-
+				}
 			}
 		});
 	}
@@ -117,7 +117,7 @@ public class AmbientSounds {
 		if (taskId != null)
 			Tasks.cancel(taskId);
 
-		SoundUtils.stopSound(player, sound);
+		SoundUtils.stopSound(player, sound, SoundCategory.AMBIENT);
 	}
 
 	public enum AmbientSoundType {
