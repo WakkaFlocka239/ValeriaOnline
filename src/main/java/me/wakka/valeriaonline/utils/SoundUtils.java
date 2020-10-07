@@ -21,7 +21,11 @@ public class SoundUtils {
 	}
 
 	public static void stopSound(Player player, Sound sound) {
-		player.stopSound(sound);
+		stopSound(player, sound, null);
+	}
+
+	public static void stopSound(Player player, Sound sound, SoundCategory category) {
+		player.stopSound(sound, category);
 	}
 
 //	public enum Jingle {

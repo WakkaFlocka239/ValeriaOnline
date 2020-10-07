@@ -1,16 +1,14 @@
 package me.wakka.valeriaonline.features.commands;
 
 
-import me.wakka.valeriaonline.ValeriaOnline;
+import me.wakka.valeriaonline.features.autorestart.AutoRestart;
 import me.wakka.valeriaonline.framework.commands.models.CustomCommand;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Path;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Permission;
 import me.wakka.valeriaonline.framework.commands.models.events.CommandEvent;
-import me.wakka.valeriaonline.utils.StringUtils;
-
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
+import me.wakka.valeriaonline.utils.Tasks;
+import me.wakka.valeriaonline.utils.Time;
+import org.bukkit.Material;
 
 @Permission("group.dev")
 public class TestCommand extends CustomCommand {
@@ -21,33 +19,13 @@ public class TestCommand extends CustomCommand {
 
 	@Path()
 	void run() {
-		int hour = 6;
-		int interval = 6;
-		ZoneId zone = ZoneId.of("GMT+2");
-		LocalDateTime now = LocalDateTime.now(zone);
-		send("Now: " + StringUtils.longDateTimeFormat(now));
+		AutoRestart.closeDungeons.getBlock().setType(Material.REDSTONE_BLOCK);
 
-		LocalDateTime then = LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), hour, 0);
-		for (int i = 0; i < 4; i++) {
-			int addHours = i * interval;
-			LocalDateTime localDateTime = then.plusHours(addHours);
-			long seconds = ChronoUnit.SECONDS.between(now, localDateTime);
-			double hours = (seconds / 60.0) / 60.0;
-			if (hours >= 1) {
-				then = localDateTime;
-				break;
-			}
-		}
+		Tasks.wait(Time.SECOND.x(5), () -> {
+			AutoRestart.closeDungeons.getBlock().setType(Material.AIR);
+			Tasks.wait(Time.SECOND.x(1), () -> AutoRestart.openDungeons.getBlock().setType(Material.AIR));
+		});
 
-		send("Then: " + StringUtils.longDateTimeFormat(then));
-		long seconds = ChronoUnit.SECONDS.between(now, then);
-		double hours = (seconds / 60.0) / 60.0;
-		if (hours < 1) {
-			ValeriaOnline.warn("Could not schedule a restart!");
-			return;
-		}
-
-		send("Hours between: " + hours);
 
 	}
 

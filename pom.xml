@@ -91,6 +91,10 @@
             <url>https://repo.codemc.io/repository/maven-public/</url>
         </repository>
         <repository>
+            <id>citizens-repo</id>
+            <url>https://repo.citizensnpcs.co/</url>
+        </repository>
+        <repository>
             <id>frost-repo</id>
             <url>https://repo.frostalf.net/</url>
         </repository>
@@ -257,6 +261,39 @@
             <artifactId>ProtocolLib</artifactId>
             <version>4.5.0</version>
             <scope>provided</scope>
+        </dependency>
+        <!-- CitizensAPI -->
+        <dependency>
+            <groupId>net.citizensnpcs</groupId>
+            <artifactId>citizens</artifactId>
+            <version>2.0.26-SNAPSHOT</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>net.citizensnpcs</groupId>
+                    <artifactId>citizens-v1_8_R3</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>net.citizensnpcs</groupId>
+                    <artifactId>citizens-v1_11_R1</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>net.citizensnpcs</groupId>
+                    <artifactId>citizens-v1_12_R1</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>net.citizensnpcs</groupId>
+                    <artifactId>citizens-v1_13_R2</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>net.citizensnpcs</groupId>
+                    <artifactId>citizens-v1_14_R1</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>net.citizensnpcs</groupId>
+                    <artifactId>citizens-v1_15_R1</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 </project>

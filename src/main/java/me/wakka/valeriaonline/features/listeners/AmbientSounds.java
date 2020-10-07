@@ -1,25 +1,22 @@
 package me.wakka.valeriaonline.features.listeners;
 
-import com.mewin.worldguardregionapi.events.RegionEnteredEvent;
-import com.mewin.worldguardregionapi.events.RegionLeftEvent;
 import me.wakka.valeriaonline.features.altars.Altars;
 import me.wakka.valeriaonline.features.dungeons.Dungeons;
 import me.wakka.valeriaonline.utils.RandomUtils;
 import me.wakka.valeriaonline.utils.SoundUtils;
 import me.wakka.valeriaonline.utils.Tasks;
 import me.wakka.valeriaonline.utils.Time;
+import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AmbientSounds implements Listener {
+public class AmbientSounds {
 	int startDelay = Time.SECOND.x(5);
 	//
 	private final static Map<Player, Integer> altarTaskMap = new HashMap<>();
@@ -44,81 +41,48 @@ public class AmbientSounds implements Listener {
 				Sound sound = RandomUtils.randomElement(altarSounds);
 				Map<Player, Integer> tempMap = new HashMap<>(altarTaskMap);
 
-				tempMap.forEach((player, integer) -> {
-					if (isInAltar(player))
-						SoundUtils.playSound(player, sound, SoundCategory.AMBIENT, 0.5F, 0.1F);
-				});
+				tempMap.forEach((player, integer) ->
+						SoundUtils.playSound(player, sound, SoundCategory.AMBIENT, 0.5F, 0.1F));
 			}
 
 			if (RandomUtils.chanceOf(50)) {
 				Sound sound = RandomUtils.randomElement(dungeonSounds);
 				Map<Player, Integer> tempMap = new HashMap<>(dungeonTaskMap);
 
-				tempMap.forEach((player, integer) -> {
-					if (isInDungeon(player))
-						SoundUtils.playSound(player, sound, SoundCategory.AMBIENT, 0.5F, 0.1F);
-				});
+				tempMap.forEach((player, integer) ->
+						SoundUtils.playSound(player, sound, SoundCategory.AMBIENT, 0.5F, 0.1F));
 			}
 		});
 
 		// Looping Sound Management
-		Tasks.repeat(startDelay, Time.SECOND.x(5), () -> {
-			Map<Player, Integer> tempMap;
+		Tasks.repeat(startDelay, Time.SECOND.x(1), () -> {
+			for (Player player : Bukkit.getOnlinePlayers()) {
 
-			tempMap = new HashMap<>(altarTaskMap);
-			tempMap.forEach((player, integer) -> isInAltar(player));
+				boolean inArea;
+				boolean onList;
 
-			tempMap = new HashMap<>(dungeonTaskMap);
-			tempMap.forEach((player, integer) -> isInDungeon(player));
+				// Altars
+				inArea = Altars.isInAltar(player);
+				onList = altarTaskMap.containsKey(player);
+
+				if (inArea && !onList)
+					startLoop(player, AmbientSoundType.ALTAR);
+
+				else if (!inArea && onList)
+					stopLoop(player, AmbientSoundType.ALTAR);
+
+				// Dungeons
+				inArea = Dungeons.isInDungeon(player);
+				onList = dungeonTaskMap.containsKey(player);
+
+				if (inArea && !onList)
+					startLoop(player, AmbientSoundType.DUNGEON);
+
+				else if (!inArea && onList)
+					stopLoop(player, AmbientSoundType.DUNGEON);
+
+			}
 		});
-	}
-
-	private boolean isInAltar(Player player) {
-		if (!Altars.isInAltar(player)) {
-			stopLoop(player, AmbientSoundType.ALTAR);
-			return false;
-		}
-
-		if (!altarTaskMap.containsKey(player))
-			startLoop(player, AmbientSoundType.ALTAR);
-
-		return true;
-	}
-
-	private boolean isInDungeon(Player player) {
-		if (!Dungeons.isInDungeon(player)) {
-			stopLoop(player, AmbientSoundType.DUNGEON);
-			return false;
-		}
-
-		if (!dungeonTaskMap.containsKey(player))
-			startLoop(player, AmbientSoundType.DUNGEON);
-
-		return true;
-	}
-
-	@EventHandler
-	public void onRegionEnter(RegionEnteredEvent event) {
-		String id = event.getRegion().getId();
-		Player player = event.getPlayer();
-
-		if (Altars.isAltarRegion(id)) {
-			startLoop(player, AmbientSoundType.ALTAR);
-		} else if (Dungeons.isDungeonRegion(id)) {
-			startLoop(player, AmbientSoundType.DUNGEON);
-		}
-	}
-
-	@EventHandler
-	public void onRegionExit(RegionLeftEvent event) {
-		String id = event.getRegion().getId();
-		Player player = event.getPlayer();
-
-		if (Altars.isAltarRegion(id)) {
-			stopLoop(player, AmbientSoundType.ALTAR);
-		} else if (Dungeons.isDungeonRegion(id)) {
-			stopLoop(player, AmbientSoundType.DUNGEON);
-		}
 	}
 
 	private void startLoop(Player player, AmbientSoundType type) {
@@ -137,16 +101,23 @@ public class AmbientSounds implements Listener {
 
 	private void stopLoop(Player player, AmbientSoundType type) {
 		Integer taskId;
+		Sound sound;
 		if (type.equals(AmbientSoundType.ALTAR)) {
-			taskId = altarTaskMap.remove(player);
-			SoundUtils.stopSound(player, altarLoop);
+			taskId = altarTaskMap.get(player);
+			altarTaskMap.remove(player);
+
+			sound = altarLoop;
 		} else {
-			taskId = dungeonTaskMap.remove(player);
-			SoundUtils.stopSound(player, dungeonLoop);
+			taskId = dungeonTaskMap.get(player);
+			dungeonTaskMap.remove(player);
+
+			sound = dungeonLoop;
 		}
 
 		if (taskId != null)
 			Tasks.cancel(taskId);
+
+		SoundUtils.stopSound(player, sound);
 	}
 
 	public enum AmbientSoundType {

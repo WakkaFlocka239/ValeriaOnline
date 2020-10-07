@@ -22,15 +22,10 @@ import java.util.Set;
 public class Altars implements Listener {
 	@Getter
 	public static List<Altar> altars = new ArrayList<>();
-	WorldGuardUtils WGUtils;
 
 	public Altars() {
 		ValeriaOnline.registerListener(this);
 
-		loadAltars();
-	}
-
-	private void loadAltars() {
 		Altar desert = new Altar("world", "altar_desert");
 		Altar plains = new Altar("world", "altar_plains");
 		Altar big = new Altar("world", "altar_big");
@@ -73,8 +68,7 @@ public class Altars implements Listener {
 	}
 
 	public static boolean isInAltar(Player player) {
-		Altar altar = fromLocation(player.getLocation());
-		return altar != null;
+		return fromLocation(player.getLocation()) != null;
 	}
 
 	public static Altar fromLocation(Location location) {
@@ -95,17 +89,8 @@ public class Altars implements Listener {
 		return false;
 	}
 
-//	@EventHandler
-//	public void onRegionLeave(RegionLeavingEvent event) {
-//		if (event.getRegion().getId().contains("altar_")) {
-//			ItemStack key = Utils.getTool(event.getPlayer());
-//			if (Utils.isNullOrAir(key) || !key.getType().equals(Material.ORANGE_WOOL))
-//				event.setCancelled(true);
-//		}
-//	}
-
 	@EventHandler
-	public void onThrowEnderPearl(PlayerInteractEvent event) {
+	public void onItemTeleport(PlayerInteractEvent event) {
 		if (!event.getAction().equals(Action.RIGHT_CLICK_AIR) && !event.getAction().equals(Action.RIGHT_CLICK_BLOCK))
 			return;
 
@@ -117,17 +102,8 @@ public class Altars implements Listener {
 			return;
 
 		Player player = event.getPlayer();
-		WGUtils = new WorldGuardUtils(player);
-		Set<ProtectedRegion> regions = WGUtils.getRegionsAt(player.getLocation());
-		if (regions == null || regions.size() == 0)
-			return;
-
-		for (ProtectedRegion region : regions) {
-			if (region.getId().contains("altar_")) {
-				event.setCancelled(true);
-				return;
-			}
-		}
+		if (isInAltar(player))
+			event.setCancelled(true);
 
 	}
 }

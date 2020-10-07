@@ -73,7 +73,7 @@ public class HoursCommand extends CustomCommand {
 	}
 
 	@Async
-	@Path("top")
+	@Path("top [args]")
 	void top() {
 		String type = isIntArg(2) ? "total" : arg(2);
 		int page = isIntArg(2) ? intArg(2) : isIntArg(3) ? intArg(3) : 1;
@@ -85,9 +85,9 @@ public class HoursCommand extends CustomCommand {
 			error(PREFIX + "&cNo results on page " + page);
 
 		send("");
-		send(PREFIX + "Total: " + TimespanFormatter.of(service.total(hoursType)).format() + (page > 1 ? "&d  |  &7Page " + page : ""));
+		send(PREFIX + "Total: " + TimespanFormatter.of(service.total(hoursType)).format() + (page > 1 ? "&7  |  &dPage " + page : ""));
 		int i = (page - 1) * 10 + 1;
 		for (Hours hours : results)
-			send("&7" + i++ + " &d" + hours.getPlayer().getName() + " &8- " + TimespanFormatter.of(hours.get(hoursType)).format());
+			send("&d" + i++ + " &7" + hours.getPlayer().getName() + " &8- &f" + TimespanFormatter.of(hours.get(hoursType)).format());
 	}
 }

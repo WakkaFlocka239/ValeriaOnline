@@ -4,19 +4,23 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.LocalPlayer;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.sk89q.worldguard.protection.association.RegionAssociable;
 import com.sk89q.worldguard.protection.flags.Flag;
 import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.flags.registry.FlagConflictException;
 import com.sk89q.worldguard.protection.flags.registry.SimpleFlagRegistry;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
+import lombok.NonNull;
 import me.wakka.valeriaonline.ValeriaOnline;
 import org.apache.commons.lang.Validate;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 public class WorldGuardFlagUtils {
 
 	public enum CustomFlags {
-		TRAP_DOORS(registerFlag(new StateFlag("trap-doors", true)));
+		TRAP_DOORS(registerFlag(new StateFlag("trap-doors", true))),
+		SOIL_WET(registerFlag(new StateFlag("soil-wet", false)));
 
 		public final Flag<?> flag;
 
@@ -60,13 +64,21 @@ public class WorldGuardFlagUtils {
 		return flag;
 	}
 
-	public static boolean isFlagSetFor(Player player, StateFlag flag) {
+	public static boolean isFlagSetFor(Player player, @NonNull StateFlag flag) {
 		Validate.notNull(flag, "Flag cannot be null");
 
 		LocalPlayer localPlayer = WorldGuardPlugin.inst().wrapPlayer(player);
 		com.sk89q.worldedit.util.Location loc = BukkitAdapter.adapt(player.getLocation());
 		RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
 		return container.createQuery().testState(loc, localPlayer, flag);
+	}
+
+	public static boolean isFlagSetFor(Block block, @NonNull StateFlag flag) {
+		Validate.notNull(flag, "Flag cannot be null");
+
+		RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
+		com.sk89q.worldedit.util.Location loc = BukkitAdapter.adapt(block.getLocation());
+		return StateFlag.test(container.createQuery().queryState(loc, (RegionAssociable) null, flag));
 	}
 
 }

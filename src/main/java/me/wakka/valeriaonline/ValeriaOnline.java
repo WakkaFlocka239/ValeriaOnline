@@ -7,6 +7,7 @@ import me.wakka.valeriaonline.features.altars.Altars;
 import me.wakka.valeriaonline.features.autorestart.AutoRestart;
 import me.wakka.valeriaonline.features.chat.ChannelManager;
 import me.wakka.valeriaonline.features.compass.Compass;
+import me.wakka.valeriaonline.features.dungeons.Dungeons;
 import me.wakka.valeriaonline.features.itemtags.ItemTags;
 import me.wakka.valeriaonline.features.listeners.AmbientSounds;
 import me.wakka.valeriaonline.features.listeners.Listeners;
@@ -62,10 +63,14 @@ public class ValeriaOnline extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
+		log("Enabling...");
+
 		ConfigUtils.setupConfig();
 		enableFeatures();
 		commands = new Commands(this, "me.wakka.valeriaonline.features");
 		commands.registerAll();
+
+		log("Enabled.");
 	}
 
 	@Override
@@ -77,12 +82,17 @@ public class ValeriaOnline extends JavaPlugin {
 	// @formatter:off
 	@Override
 	public void onDisable() {
+		log("Disabling...");
+
 		try { Utils.runCommandAsConsole("save-all");	} catch (Throwable ex) { ex.printStackTrace(); }
+		try { cron.stop();											} catch (Throwable ex) { ex.printStackTrace(); }
 		try { AmbientSounds.shutdown();								} catch (Throwable ex) { ex.printStackTrace(); }
 		try { AutoRestart.shutdown();								} catch (Throwable ex) { ex.printStackTrace(); }
 
 		try { broadcastReload(); 									} catch (Throwable ex) { ex.printStackTrace(); }
 		try { MySQLPersistence.shutdown(); 							} catch (Throwable ex) { ex.printStackTrace(); }
+
+		log("Disabled.");
 	}
 	// @formatter:on
 
@@ -107,7 +117,7 @@ public class ValeriaOnline extends JavaPlugin {
 
 	@Getter
 	// http://www.sauronsoftware.it/projects/cron4j/manual.php
-	private static Scheduler cron = new Scheduler();
+	private static final Scheduler cron = new Scheduler();
 
 	@Getter
 	private static Economy econ = null;
@@ -118,6 +128,7 @@ public class ValeriaOnline extends JavaPlugin {
 		new Listeners();
 		new ItemTags();
 		new Altars();
+		new Dungeons();
 		new AutoRestart();
 		new Trading();
 		new Compass();

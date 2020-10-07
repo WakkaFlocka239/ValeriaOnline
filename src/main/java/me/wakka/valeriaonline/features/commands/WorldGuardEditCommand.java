@@ -10,9 +10,11 @@ import me.wakka.valeriaonline.framework.commands.models.events.CommandEvent;
 import me.wakka.valeriaonline.models.setting.Setting;
 import me.wakka.valeriaonline.models.setting.SettingService;
 import me.wakka.valeriaonline.utils.WorldGuardUtils;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 @NoArgsConstructor
@@ -65,15 +67,26 @@ public class WorldGuardEditCommand extends CustomCommand implements Listener {
 	}
 
 	@EventHandler
-	public void onInteractInRegion(PlayerInteractEvent event) {
-		WorldGuardUtils WGUtils = new WorldGuardUtils(event.getPlayer());
-
-		if (WGUtils.getRegionsAt(event.getPlayer().getLocation()).size() == 0)
-			return;
-
-		setting = service.get(event.getPlayer(), "worldGuardEdit");
-
-		if (!setting.getBoolean())
+	public void onPlaceBlock(BlockPlaceEvent event) {
+		if (cancelEvent(event.getPlayer()))
 			event.setCancelled(true);
 	}
+
+	@EventHandler
+	public void onBreakBlock(BlockBreakEvent event) {
+		if (cancelEvent(event.getPlayer()))
+			event.setCancelled(true);
+	}
+
+	private boolean cancelEvent(Player player) {
+		if (!player.hasPermission("group.staff"))
+			return false;
+
+		WorldGuardUtils WGUtils = new WorldGuardUtils(player);
+		if (WGUtils.getRegionsAt(player.getLocation()).size() == 0)
+			return false;
+
+		return !service.get(player, "worldGuardEdit").getBoolean();
+	}
+
 }

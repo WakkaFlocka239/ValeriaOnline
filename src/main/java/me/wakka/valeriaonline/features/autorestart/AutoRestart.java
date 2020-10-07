@@ -13,7 +13,9 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -30,7 +32,7 @@ public class AutoRestart {
 	private final String warningMessage = ConfigUtils.getSettings().getString("autorestart.warnMsg");
 	private final String restartMessage = ConfigUtils.getSettings().getString("autorestart.restartMsg");
 	private final int restartInterval = ConfigUtils.getSettings().getInt("autorestart.interval");                // hours
-	private final int restartTime = ConfigUtils.getSettings().getInt("autorestart.time");                        // time to start at, Ex: 6 == 0600
+	private int restartTime = ConfigUtils.getSettings().getInt("autorestart.startTime");                   // time to start at, Ex: 6 == 0600
 	private final double cancelTime = ConfigUtils.getSettings().getDouble("autorestart.cancelTime");             // minutes
 	private static final String timezone = ConfigUtils.getSettings().getString("autorestart.timezone");
 	//
@@ -44,14 +46,14 @@ public class AutoRestart {
 	public static List<LocalDateTime> warningsAt = new ArrayList<>();
 	public static LocalDateTime restartAt = null;
 	//
-	private final static Location closeDungeons = new Location(Bukkit.getWorld("events"), 46, 11, -40);
-	private final static Location openDungeons = new Location(Bukkit.getWorld("events"), 43, 13, -38);
+	public final static Location closeDungeons = new Location(Bukkit.getWorld("events"), 46, 11, -40);
+	public final static Location openDungeons = new Location(Bukkit.getWorld("events"), 43, 13, -38);
 
 	public AutoRestart() {
 		scheduleRestart();
 
 		closeDungeons.getBlock().setType(Material.AIR);
-		openDungeons.getBlock().setType(Material.AIR);
+		Tasks.wait(Time.SECOND.x(1), () -> openDungeons.getBlock().setType(Material.AIR));
 	}
 
 	public static void shutdown() {
@@ -152,11 +154,14 @@ public class AutoRestart {
 	}
 
 	private double getNextRestart() {
-		LocalDateTime now = LocalDateTime.now(zone);
+		LocalDate nowDate = LocalDate.now(zone);
+		LocalDateTime now = LocalDateTime.of(nowDate, LocalTime.now(zone));
 		double latest = (warnTimes.get(0) / 60); // hours
 
-		LocalDateTime then = LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), restartTime, 0);
-		for (int i = 0; i < 24; i++) {
+		restartTime = Math.max(restartTime, 0);
+
+		LocalDateTime then = LocalDateTime.of(nowDate, LocalTime.of(restartTime, 0));
+		for (int i = 0; i < 8; i++) {
 			int addHours = i * restartInterval;
 			LocalDateTime localDateTime = then.plusHours(addHours);
 			long seconds = ChronoUnit.SECONDS.between(now, localDateTime);
