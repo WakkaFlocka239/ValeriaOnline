@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import me.wakka.valeriaonline.framework.commands.CommandBlockArgs;
 import me.wakka.valeriaonline.framework.commands.models.annotations.ConverterFor;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Description;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Fallback;
@@ -26,12 +27,14 @@ import me.wakka.valeriaonline.utils.Tasks;
 import me.wakka.valeriaonline.utils.Utils;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -573,6 +576,136 @@ public abstract class CustomCommand extends ICustomCommand{
 
 		send(PREFIX + "&dUsage: &7");
 		lines.forEach(this::send);
+	}
+
+	@ConverterFor(CommandBlockArgs.class)
+	public CommandBlockArgs convertToCommandBlockArgs(String value) {
+		BlockCommandSender commandBlock;
+		Entity sender;
+		Location senderLoc;
+		if (sender() instanceof BlockCommandSender) {
+			commandBlock = (BlockCommandSender) sender();
+			senderLoc = commandBlock.getBlock().getLocation();
+		} else {
+			sender = (Entity) sender();
+			senderLoc = sender.getLocation();
+		}
+
+		CommandBlockArgs commandBlockArgs = new CommandBlockArgs();
+
+		if (!value.startsWith("@"))
+			throw new InvalidInputException("Needs to start with a selector! (@<variable>)");
+
+		// Get selector
+		CommandBlockArgs.SelectorType selectorType;
+		String selector = value.substring(1, 2).toLowerCase();
+		try {
+			selectorType = CommandBlockArgs.SelectorType.valueOf(selector.toUpperCase());
+		} catch (Exception e) {
+			throw new InvalidInputException("Unknown/Unsupported selector: " + selector);
+		}
+		commandBlockArgs.setSelectorType(selectorType);
+		//
+
+		int maxDistance = -1;
+		int minDistance = 0;
+		boolean exact = false;
+		Location origin = senderLoc;
+		String destinationStr;
+
+		if (value.contains("[") && value.contains("]")) {
+			value = value.replaceAll("\\[", ", ");
+			String[] argGroups = value.split("]");
+			destinationStr = argGroups[1];
+
+			// Get location from & distance
+			argGroups[0] = argGroups[0].substring(4);
+			String[] selectorLoc = argGroups[0].split(", ");
+
+			if (selectorLoc.length >= 3) {
+				double x = Double.parseDouble(selectorLoc[0].replaceAll("x=", ""));
+				double y = Double.parseDouble(selectorLoc[1].replaceAll("y=", ""));
+				double z = Double.parseDouble(selectorLoc[2].replaceAll("z=", ""));
+				origin = new Location(origin.getWorld(), x, y, z);
+
+				if (selectorLoc.length == 4) {
+					String distanceStr = selectorLoc[3].replaceAll("distance=", "");
+					if (!distanceStr.matches("(([0-9]+)?(\\.\\.[0-9]+)?)"))
+						throw new InvalidInputException("Unknown distance format: " + distanceStr);
+
+					if (distanceStr.contains("..")) {
+						exact = false;
+						String[] distances = distanceStr.split("\\.\\.");
+						if (Strings.isNullOrEmpty(distances[0]))
+							distances[0] = "null";
+
+						maxDistance = Integer.parseInt(distances[1]);
+						if (!distances[0].equalsIgnoreCase("null"))
+							minDistance = Integer.parseInt(distances[0]);
+
+					} else {
+						maxDistance = Integer.parseInt(distanceStr);
+						exact = true;
+					}
+				}
+
+			}
+		} else {
+			String[] argGroups = value.split("@" + selector);
+			destinationStr = argGroups[1];
+		}
+
+		commandBlockArgs.setOrigin(origin);
+		try {
+			commandBlockArgs.setTargets(CommandBlockArgs.getSelectorTargets(sender(), selectorType, origin, minDistance, maxDistance, exact));
+		} catch (Exception e) {
+			throw new InvalidInputException("Invalid target selectors, targets = null");
+		}
+
+		if (commandBlockArgs.getTargets().size() == 0) {
+			throw new InvalidInputException("No targets found");
+		}
+
+		// Get to location & facing
+		if (Strings.isNullOrEmpty(destinationStr)) {
+			throw new InvalidInputException("Invalid destination, destination = null");
+		}
+
+		try {
+			destinationStr = destinationStr.trim();
+			String[] destinationArgs = destinationStr.split(" ");
+			double dest_x = Double.parseDouble(destinationArgs[0]);
+			double dest_y = Double.parseDouble(destinationArgs[1]);
+			double dest_z = Double.parseDouble(destinationArgs[2]);
+			Location destination = new Location(origin.getWorld(), dest_x, dest_y, dest_z);
+
+			Float dest_yaw = null;
+			Float dest_pitch = null;
+			if (destinationArgs.length == 5) {
+				dest_yaw = Float.parseFloat(destinationArgs[3]);
+				dest_pitch = Float.parseFloat(destinationArgs[4]);
+				destination = new Location(origin.getWorld(), dest_x, dest_y, dest_z, dest_yaw, dest_pitch);
+			}
+
+			commandBlockArgs.setDestination(destination);
+			commandBlockArgs.setDestinationYaw(dest_yaw);
+			commandBlockArgs.setDestinationPitch(dest_pitch);
+		} catch (Exception e) {
+			throw new InvalidInputException("Invalid destination, could not parse destination");
+		}
+		//
+
+//		Utils.wakka("");
+//		Utils.wakka("selector: " + commandBlockArgs.getSelectorType());
+//		Utils.wakka("origin: " + StringUtils.getShortLocationString(origin));
+//		Utils.wakka("minDistance: " + minDistance);
+//		Utils.wakka("maxDistnace: " + maxDistance);
+//		Utils.wakka("Exact: " + exact);
+//		Utils.wakka("Targets: " + (commandBlockArgs.getTargets() != null ? commandBlockArgs.getTargets().toString() : "null"));
+//		Utils.wakka("Destination: " + StringUtils.getShortLocationString(commandBlockArgs.getDestination()));
+
+		return commandBlockArgs;
+
 	}
 
 }
