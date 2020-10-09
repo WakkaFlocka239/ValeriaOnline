@@ -1,12 +1,15 @@
 package me.wakka.valeriaonline.utils;
 
+import lombok.Builder;
+import lombok.Getter;
 import me.wakka.valeriaonline.ValeriaOnline;
 import org.bukkit.scheduler.BukkitScheduler;
 
-public class Tasks {
+import java.util.function.Consumer;
 
-	private static final BukkitScheduler scheduler = ValeriaOnline.getInstance().getServer().getScheduler();
+public class Tasks {
 	private static final ValeriaOnline instance = ValeriaOnline.getInstance();
+	private static final BukkitScheduler scheduler = instance.getServer().getScheduler();
 
 	public static int wait(Time delay, Runnable runnable) {
 		return wait(delay.get(), runnable);
@@ -85,4 +88,86 @@ public class Tasks {
 	public static void cancel(int taskId) {
 		scheduler.cancelTask(taskId);
 	}
+
+	public static class Countdown {
+		private final int duration;
+		private final boolean doZero;
+		private final Consumer<Integer> onTick;
+		private final Consumer<Integer> onSecond;
+		private final Runnable onStart;
+		private final Runnable onComplete;
+
+		@Builder(buildMethodName = "start")
+		public Countdown(int duration, boolean doZero, Consumer<Integer> onTick, Consumer<Integer> onSecond, Runnable onStart, Runnable onComplete) {
+			this.duration = duration;
+			this.doZero = doZero;
+			this.onTick = onTick;
+			this.onSecond = onSecond;
+			this.onStart = onStart;
+			this.onComplete = onComplete;
+			start();
+		}
+
+		@Getter
+		private int taskId = -1;
+		private int ticks;
+		private int seconds;
+
+		public void start() {
+			if (duration < 0) {
+				stop();
+				return;
+			}
+
+			if (onStart != null)
+				onStart.run();
+
+			taskId = repeat(1, 1, () -> {
+				if (duration == ticks) {
+					if (doZero)
+						iteration();
+
+					if (onComplete != null)
+						try {
+							onComplete.run();
+						} catch (Exception ex) {
+							ex.printStackTrace();
+						}
+					stop();
+					return;
+				}
+
+				iteration();
+			});
+		}
+
+		private void iteration() {
+			if (ticks % 20 == 0)
+				if (onSecond != null)
+					onSecond.accept(((duration / 20) - seconds++));
+				else
+					++seconds;
+
+			if (onTick != null)
+				onTick.accept(duration - ticks++);
+			else
+				++ticks;
+		}
+
+		void stop() {
+			cancel(taskId);
+		}
+	}
+
+//	public static class GlowTask {
+//
+//		@Builder(buildMethodName = "start")
+//		public GlowTask(int duration, Entity entity, GlowAPI.Color color, Runnable onComplete, List<Player> viewers) {
+//			GlowAPI.setGlowing(entity, color, viewers);
+//			Tasks.wait(duration, () -> GlowAPI.setGlowing(entity, false, viewers));
+//			if (onComplete != null)
+//				Tasks.wait(duration + 1, onComplete);
+//		}
+//
+//	}
 }

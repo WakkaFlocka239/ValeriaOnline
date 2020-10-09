@@ -1,6 +1,5 @@
 package me.wakka.valeriaonline.features.cooldown;
 
-import me.wakka.valeriaonline.ValeriaOnline;
 import me.wakka.valeriaonline.utils.Time;
 import me.wakka.valeriaonline.utils.TimespanFormatter;
 import org.bukkit.OfflinePlayer;
@@ -11,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class Cooldowns {
-	public static List<Cooldown> cooldowns = new ArrayList<>();
+	public static final List<Cooldown> cooldowns = new ArrayList<>();
 
 	public static boolean check(OfflinePlayer player, String type, Time time) {
 		return check(player.getUniqueId(), type, time);
@@ -27,22 +26,27 @@ public class Cooldowns {
 
 	public static boolean check(UUID uuid, String type, double ticks) {
 		Cooldown cooldown = get(uuid);
-		if (cooldown == null) {
-			ValeriaOnline.warn("Cooldown object is null? " + uuid.toString() + " / " + type + " / " + ticks);
+		if (cooldown != null && !cooldown.check(type))
 			return false;
+
+		if (cooldown == null) {
+			cooldown = new Cooldown();
+			cooldown.setUuid(uuid);
 		}
 
-		if (!cooldown.check(type))
-			return false;
-
 		cooldown = cooldown.create(type, ticks);
-		Cooldowns.cooldowns.add(cooldown);
+		cooldowns.add(cooldown);
 		return true;
 	}
 
-	public static Cooldown get(UUID uuid){
-		for (Cooldown cooldown : cooldowns) {
-			if(cooldown.getUuid().equals(uuid))
+	public static Cooldown get(UUID uuid) {
+		for (Cooldown cooldown : new ArrayList<>(cooldowns)) {
+			if (cooldown == null || cooldown.getUuid() == null) {
+				cooldowns.remove(cooldown);
+				continue;
+			}
+
+			if (cooldown.getUuid().equals(uuid))
 				return cooldown;
 		}
 

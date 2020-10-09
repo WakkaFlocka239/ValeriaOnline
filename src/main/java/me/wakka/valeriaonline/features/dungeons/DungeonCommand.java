@@ -2,11 +2,14 @@ package me.wakka.valeriaonline.features.dungeons;
 
 import me.wakka.valeriaonline.framework.commands.CommandBlockArgs;
 import me.wakka.valeriaonline.framework.commands.models.CustomCommand;
+import me.wakka.valeriaonline.framework.commands.models.annotations.Aliases;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Arg;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Path;
+import me.wakka.valeriaonline.framework.commands.models.annotations.Permission;
 import me.wakka.valeriaonline.framework.commands.models.annotations.TabCompleteIgnore;
 import me.wakka.valeriaonline.framework.commands.models.events.CommandEvent;
 import me.wakka.valeriaonline.framework.exceptions.InvalidInputException;
+import me.wakka.valeriaonline.utils.StringUtils;
 import me.wakka.valeriaonline.utils.WorldGuardUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -19,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+@Aliases("dungeons")
 public class DungeonCommand extends CustomCommand {
 	WorldGuardUtils WGUtils = new WorldGuardUtils(Dungeons.world);
 
@@ -26,6 +30,16 @@ public class DungeonCommand extends CustomCommand {
 		super(event);
 	}
 
+	@Path("leave")
+	void leave() {
+		if (!Dungeons.isInDungeon(player()))
+			error("You're not in a dungeon!");
+
+		Dungeons.removeFromDungeonTeam(player());
+		Dungeons.lobby(player());
+	}
+
+	@Permission("group.creator")
 	@Path("clear <region>")
 	void clearRegion(String region) {
 		Collection<Entity> entities = WGUtils.getEntitiesInRegion(Dungeons.world, region);
@@ -48,6 +62,7 @@ public class DungeonCommand extends CustomCommand {
 		send("Removed " + count + " entities in region " + region);
 	}
 
+	@Permission("group.creator")
 	@Path("tp <player> <x> <y> <z> [yaw] [pitch] [world]")
 	void teleportPlayer(Player player, double x, double y, double z, Float yaw, Float pitch, String world) {
 
@@ -64,6 +79,7 @@ public class DungeonCommand extends CustomCommand {
 		Dungeons.teleport(player, loc);
 	}
 
+	@Permission("group.creator")
 	@Path("tp team <team> <x> <y> <z> [yaw] [pitch] [world]")
 	void teleportTeam(String teamArg, double x, double y, double z, Float yaw, Float pitch, @Arg("events") String world) {
 		if (teamArg == null)
@@ -95,20 +111,25 @@ public class DungeonCommand extends CustomCommand {
 		}
 	}
 
+	@Permission("group.dev")
 	@TabCompleteIgnore
 	@Path("tp cmdblock <args...>")
 	void teleportCommandBlock(String commandBlockArgs) {
 		CommandBlockArgs args = convertToCommandBlockArgs(commandBlockArgs);
+		int count = 0;
+		Location dest = args.getDestination();
 		for (Object target : args.getTargets()) {
 			Entity entity = (Entity) target;
 
-			Location dest = args.getDestination();
 			if (args.getDestinationYaw() == null)
 				dest.setYaw(entity.getLocation().getYaw());
 			if (args.getDestinationPitch() == null)
 				dest.setPitch(entity.getLocation().getPitch());
 
 			entity.teleport(dest);
+			++count;
 		}
+
+		send("Teleported " + count + " entities to " + StringUtils.getShortLocationString(dest));
 	}
 }

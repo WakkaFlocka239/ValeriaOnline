@@ -20,8 +20,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.Arrays;
 import java.util.function.Consumer;
 
-import static me.wakka.valeriaonline.utils.ItemBuilder.loreize;
 import static me.wakka.valeriaonline.utils.StringUtils.colorize;
+import static me.wakka.valeriaonline.utils.StringUtils.loreize;
 
 public abstract class MenuUtils {
 

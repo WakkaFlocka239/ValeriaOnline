@@ -1,19 +1,38 @@
 package me.wakka.valeriaonline.utils;
 
+import me.wakka.valeriaonline.framework.exceptions.InvalidInputException;
+import org.bukkit.Color;
+import org.bukkit.DyeColor;
+import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.block.ShulkerBox;
+import org.bukkit.block.banner.Pattern;
+import org.bukkit.block.banner.PatternType;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BannerMeta;
+import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
+import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.potion.PotionData;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ItemBuilder implements Cloneable{
+import static me.wakka.valeriaonline.utils.StringUtils.colorize;
+
+public class ItemBuilder implements Cloneable {
 	private final ItemStack itemStack;
 	private final ItemMeta itemMeta;
 	private List<String> lore = new ArrayList<>();
@@ -42,8 +61,24 @@ public class ItemBuilder implements Cloneable{
 		return this;
 	}
 
+	public ItemBuilder color(ColorType colorType) {
+		itemStack.setType(colorType.switchColor(itemStack.getType()));
+		return this;
+	}
+
+	@Deprecated
+	public ItemBuilder durability(int durability) {
+		return durability(Integer.valueOf(durability).shortValue());
+	}
+
+	@Deprecated
+	public ItemBuilder durability(short durability) {
+		itemStack.setDurability(durability);
+		return this;
+	}
+
 	public ItemBuilder name(String displayName) {
-		itemMeta.setDisplayName(StringUtils.colorize(displayName));
+		itemMeta.setDisplayName(colorize(displayName));
 		return this;
 	}
 
@@ -83,6 +118,76 @@ public class ItemBuilder implements Cloneable{
 		return this;
 	}
 
+	public ItemBuilder glow() {
+		enchant(Enchantment.ARROW_INFINITE);
+		itemFlags(ItemFlag.HIDE_ENCHANTS);
+		return this;
+	}
+
+	public ItemBuilder unbreakable() {
+		itemMeta.setUnbreakable(true);
+		return this;
+	}
+
+	public ItemBuilder itemFlags(ItemFlag... flags) {
+		itemMeta.addItemFlags(flags);
+		return this;
+	}
+
+	/**
+	 * Custom meta types
+	 */
+
+	public ItemBuilder armorColor(Color color) {
+		((LeatherArmorMeta) itemMeta).setColor(color);
+		return this;
+	}
+
+	// Potions
+
+	public ItemBuilder potionType(PotionType potionType) {
+		return potionType(potionType, false, false);
+	}
+
+	public ItemBuilder potionType(PotionType potionType, boolean extended, boolean upgraded) {
+		((PotionMeta) itemMeta).setBasePotionData(new PotionData(potionType, extended, upgraded));
+		return this;
+	}
+
+	public ItemBuilder potionEffect(PotionEffectType potionEffectType) {
+		return potionEffect(potionEffectType, 1, 1);
+	}
+
+	public ItemBuilder potionEffect(PotionEffectType potionEffectType, int seconds) {
+		return potionEffect(potionEffectType, seconds, 1);
+	}
+
+	public ItemBuilder potionEffect(PotionEffectType potionEffectType, int seconds, int amplifier) {
+		return potionEffect(new PotionEffect(potionEffectType, seconds * 20, amplifier - 1));
+	}
+
+	public ItemBuilder potionEffect(PotionEffect potionEffect) {
+		((PotionMeta) itemMeta).addCustomEffect(potionEffect, true);
+		return this;
+	}
+
+	public ItemBuilder potionEffectColor(Color color) {
+		((PotionMeta) itemMeta).setColor(color);
+		return this;
+	}
+
+	// Fireworks
+
+	public ItemBuilder fireworkPower(int power) {
+		((FireworkMeta) itemMeta).setPower(power);
+		return this;
+	}
+
+	public ItemBuilder fireworkEffect(FireworkEffect... effect) {
+		((FireworkMeta) itemMeta).addEffects(effect);
+		return this;
+	}
+
 	// Skulls
 
 	public ItemBuilder skullOwner(OfflinePlayer offlinePlayer) {
@@ -96,6 +201,50 @@ public class ItemBuilder implements Cloneable{
 		return this;
 	}
 
+	// Banners
+
+	public ItemBuilder pattern(DyeColor color, PatternType pattern) {
+		return pattern(new Pattern(color, pattern));
+	}
+
+	public ItemBuilder pattern(Pattern pattern) {
+		BannerMeta bannerMeta = (BannerMeta) itemMeta;
+		bannerMeta.addPattern(pattern);
+		return this;
+	}
+
+	public ItemBuilder symbolBanner(char character, DyeColor patternDye) {
+		return symbolBanner(SymbolBanner.getSymbol(character), patternDye);
+	}
+
+	public ItemBuilder symbolBanner(SymbolBanner.Symbol symbol, DyeColor patternDye) {
+		ItemBuilder symbolBanner = SymbolBanner.get(this, symbol, ColorType.of(itemStack.getType()).getDyeColor(), patternDye);
+		if (symbolBanner != null)
+			return symbolBanner;
+		return this;
+	}
+
+	// Shulker Boxes
+
+	public ItemBuilder shulkerBox(ItemBuilder... builders) {
+		for (ItemBuilder builder : builders)
+			shulkerBox(builder.build());
+		return this;
+	}
+
+	public ItemBuilder shulkerBox(ItemStack... items) {
+		BlockStateMeta blockStateMeta = (BlockStateMeta) itemMeta;
+		ShulkerBox box = (ShulkerBox) blockStateMeta.getBlockState();
+		for (ItemStack item : items)
+			box.getInventory().addItem(item);
+		blockStateMeta.setBlockState(box);
+		return this;
+	}
+
+	/**
+	 * Building
+	 */
+
 	public ItemStack build() {
 		ItemStack result = itemStack.clone();
 		buildLore();
@@ -107,9 +256,9 @@ public class ItemBuilder implements Cloneable{
 		List<String> colorized = new ArrayList<>();
 		for (String line : lore)
 			if (doLoreize)
-				colorized.addAll(Arrays.asList(loreize(StringUtils.colorize(line)).split("\\|\\|")));
+				colorized.addAll(Arrays.asList(StringUtils.loreize(colorize(line)).split("\\|\\|")));
 			else
-				colorized.addAll(Arrays.asList(StringUtils.colorize(line).split("\\|\\|")));
+				colorized.addAll(Arrays.asList(colorize(line).split("\\|\\|")));
 		itemMeta.setLore(colorized);
 	}
 
@@ -121,7 +270,26 @@ public class ItemBuilder implements Cloneable{
 		return builder;
 	}
 
-	// Static helpers
+	/**
+	 * Static helpers
+	 */
+
+	public static ItemStack setName(ItemStack item, String name) {
+		ItemMeta meta = item.getItemMeta();
+		if (name == null)
+			meta.setDisplayName(null);
+		else
+			meta.setDisplayName(colorize("&f" + name));
+		item.setItemMeta(meta);
+		return item;
+	}
+
+	public static ItemStack addItemFlags(ItemStack item, ItemFlag... flags) {
+		ItemMeta meta = item.getItemMeta();
+		meta.addItemFlags(flags);
+		item.setItemMeta(meta);
+		return item;
+	}
 
 	public static ItemStack addLore(ItemStack item, String... lore) {
 		return addLore(item, Arrays.asList(lore));
@@ -146,7 +314,7 @@ public class ItemBuilder implements Cloneable{
 		while (lore.size() < line)
 			lore.add("");
 
-		lore.set(line - 1, StringUtils.colorize(text));
+		lore.set(line - 1, colorize(text));
 		meta.setLore(lore);
 		item.setItemMeta(meta);
 		return item;
@@ -156,71 +324,12 @@ public class ItemBuilder implements Cloneable{
 		ItemMeta meta = item.getItemMeta();
 		List<String> lore = meta.getLore();
 
-		if (lore == null)
-			return item;
-		if (line - 1 > lore.size())
-			return item;
+		if (lore == null) throw new InvalidInputException("Item does not have lore");
+		if (line - 1 > lore.size()) throw new InvalidInputException("Line " + line + " does not exist");
 
 		lore.remove(line - 1);
 		meta.setLore(lore);
 		item.setItemMeta(meta);
 		return item;
 	}
-
-	public static String loreize(String string) {
-		int i = 0, lineLength = 0;
-		boolean watchForNewLine = false, watchForColor = false;
-		string = StringUtils.colorize(string);
-
-		for (String character : string.split("")) {
-			if (character.contains("\n")) {
-				lineLength = 0;
-				continue;
-			}
-
-			if (watchForNewLine) {
-				if ("|".equalsIgnoreCase(character))
-					lineLength = 0;
-				watchForNewLine = false;
-			} else if ("|".equalsIgnoreCase(character))
-				watchForNewLine = true;
-
-			if (watchForColor) {
-				if (character.matches("[A-Fa-fK-Ok-oRr0-9]"))
-					lineLength -= 2;
-				watchForColor = false;
-			} else if ("&".equalsIgnoreCase(character))
-				watchForColor = true;
-
-			++lineLength;
-
-			if (lineLength > 28)
-				if (" ".equalsIgnoreCase(character)) {
-					String before = StringUtils.left(string, i);
-					String excess = StringUtils.right(string, string.length() - i);
-					if (excess.length() > 5) {
-						excess = excess.trim();
-						boolean doSplit = true;
-						if (excess.contains("||") && excess.indexOf("||") <= 5)
-							doSplit = false;
-						if (excess.contains(" ") && excess.indexOf(" ") <= 5)
-							doSplit = false;
-						if (lineLength >= 38)
-							doSplit = true;
-
-						if (doSplit) {
-							string = before + "||" + StringUtils.getLastColor(before) + excess.trim();
-							lineLength = 0;
-							i += 4;
-						}
-					}
-				}
-
-			++i;
-		}
-
-		return string;
-	}
-
-
 }

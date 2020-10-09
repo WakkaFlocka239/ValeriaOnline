@@ -171,13 +171,13 @@ public abstract class CustomCommand extends ICustomCommand{
 		throw new InvalidInputException(error);
 	}
 
-	//	@Deprecated
+	@Deprecated
 	public void error(OfflinePlayer player, String error) {
 		if (player.getPlayer() != null && player.isOnline())
 			error(player.getPlayer(), error);
 	}
 
-	//	@Deprecated
+	@Deprecated
 	public void error(Player player, String error) {
 		player.sendMessage(StringUtils.colorize("&c" + error));
 	}

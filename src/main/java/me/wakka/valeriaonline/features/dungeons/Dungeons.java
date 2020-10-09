@@ -44,6 +44,7 @@ public class Dungeons implements Listener {
 	public static Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
 	public static List<String> disabledCommands = Arrays.asList("/sethome", "/tpa", "/tpask", "/tpahere",
 			"/teleporthere", "/teleport", "/back", "/spawn");
+	public static final String ERROR = "&cYou can't do that here.";
 
 	public Dungeons() {
 		ValeriaOnline.registerListener(this);
@@ -185,7 +186,7 @@ public class Dungeons implements Listener {
 
 		if (disabledCommands.contains(command)) {
 			event.setCancelled(true);
-			Utils.send(player, PREFIX + "&cYou cannot run that command here!");
+			error(player);
 		}
 	}
 
@@ -199,7 +200,7 @@ public class Dungeons implements Listener {
 		allowedTeleport.remove(player);
 	}
 
-	private Team getDungeonTeam(Player player) {
+	public static Team getDungeonTeam(Player player) {
 		Team playerTeam = null;
 		for (Team team : scoreboard.getTeams()) {
 			if (team.hasEntry(player.getName()))
@@ -216,5 +217,17 @@ public class Dungeons implements Listener {
 		}
 
 		return dungeonTeam;
+	}
+
+	public static void removeFromDungeonTeam(Player player) {
+		Team dungeonTeam = Dungeons.getDungeonTeam(player);
+		if (dungeonTeam == null)
+			return;
+
+		dungeonTeam.removeEntry(player.getName());
+	}
+
+	public static void error(Player player) {
+		Utils.send(player, PREFIX + ERROR);
 	}
 }

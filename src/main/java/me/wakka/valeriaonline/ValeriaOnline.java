@@ -1,6 +1,8 @@
 package me.wakka.valeriaonline;
 
 import com.earth2me.essentials.Essentials;
+import com.gmail.nossr50.mcMMO;
+import io.lumine.xikage.mythicmobs.MythicMobs;
 import it.sauronsoftware.cron4j.Scheduler;
 import lombok.Getter;
 import me.wakka.valeriaonline.features.altars.Altars;
@@ -114,6 +116,10 @@ public class ValeriaOnline extends JavaPlugin {
 	private static SignMenuFactory signMenuFactory;
 	@Getter
 	private static Essentials essentials;
+	@Getter
+	private static final MythicMobs mythicMobs = MythicMobs.inst();
+	@Getter
+	private static mcMMO mcmmo;
 
 	@Getter
 	// http://www.sauronsoftware.it/projects/cron4j/manual.php
@@ -147,6 +153,7 @@ public class ValeriaOnline extends JavaPlugin {
 
 		econ = getServer().getServicesManager().getRegistration(Economy.class).getProvider();
 		perms = getServer().getServicesManager().getRegistration(Permission.class).getProvider();
+		mcmmo = mcMMO.p;
 	}
 
 
