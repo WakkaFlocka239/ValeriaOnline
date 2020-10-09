@@ -12,6 +12,7 @@ import me.wakka.valeriaonline.models.warps.Warp;
 import me.wakka.valeriaonline.models.warps.WarpService;
 import me.wakka.valeriaonline.models.warps.WarpType;
 import me.wakka.valeriaonline.utils.JsonBuilder;
+import me.wakka.valeriaonline.utils.Utils;
 import org.bukkit.Location;
 
 import java.util.List;
@@ -74,6 +75,7 @@ public abstract class _WarpCommand extends CustomCommand {
 
 	@Path("(teleport|tp|warp) <name>")
 	public void teleport(Warp warp) {
+		Utils.setPlayerBackLoc(player());
 		warp.teleport(player());
 		send(PREFIX + "&7Warping to &d" + warp.getName());
 	}

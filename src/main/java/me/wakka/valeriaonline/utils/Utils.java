@@ -861,4 +861,12 @@ public class Utils {
 		return item;
 	}
 
+	public static void setPlayerBackLoc(Player player) {
+		setPlayerBackLoc(player, player.getLocation());
+	}
+
+	public static void setPlayerBackLoc(Player player, Location location) {
+		ValeriaOnline.getEssentials().getUser(player).setLastLocation(location);
+	}
+
 }

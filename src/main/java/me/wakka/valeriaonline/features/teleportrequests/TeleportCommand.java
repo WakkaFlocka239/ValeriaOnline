@@ -129,7 +129,7 @@ public class TeleportCommand extends CustomCommand {
 	public void accept(Player receiver) {
 		Request request = Requests.getByReceiver(receiver);
 		if (request == null || request.isExpired()) {
-			error(receiver, PREFIX + "&cYou do not have any pending tp requests");
+			Utils.send(receiver, PREFIX + "&cYou do not have any pending tp requests");
 			return;
 		}
 
@@ -149,21 +149,22 @@ public class TeleportCommand extends CustomCommand {
 		if (!toPlayer.isOnline() || toPlayer.getPlayer() == null)
 			throw new PlayerNotOnlineException(toPlayer);
 
-		if (!ValeriaOnline.getEcon().has(fromPlayer, COST))
-			error(fromPlayer, PREFIX + "&cYou don't have enough Crowns!");
+		if (!ValeriaOnline.getEcon().has(fromPlayer, COST)) {
+			Utils.send(fromPlayer, PREFIX + "&cYou don't have enough Crowns!");
+			return;
+		}
 
+		Utils.setPlayerBackLoc(fromPlayer.getPlayer());
 		if (request.getType() == Request.TeleportType.TELEPORT) {
 			fromPlayer.getPlayer().teleport(toPlayer.getPlayer());
 
 			send(toPlayer.getPlayer(), PREFIX + "&7You accepted &d" + fromPlayer.getName() + "'s &7tp request");
 			send(fromPlayer.getPlayer(), PREFIX + "&d" + toPlayer.getName() + " &7accepted your tp request");
-
 		} else {
 			fromPlayer.getPlayer().teleport(request.getLocation());
 
 			send(fromPlayer.getPlayer(), PREFIX + "&7You accepted &d" + toPlayer.getName() + "'s &7tphere request");
 			send(toPlayer.getPlayer(), PREFIX + "&d" + fromPlayer.getName() + " &7accepted your tphere request");
-
 		}
 
 		Utils.withdraw(fromPlayer, COST, PREFIX);

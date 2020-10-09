@@ -98,6 +98,11 @@
             <id>frost-repo</id>
             <url>https://repo.frostalf.net/</url>
         </repository>
+        <repository>
+            <id>nexus</id>
+            <name>Lumine Releases</name>
+            <url>https://mvn.lumine.io/repository/maven-public/</url>
+        </repository>
     </repositories>
     <dependencies>
         <!-- Paper API -->
@@ -159,6 +164,13 @@
             <groupId>com.github.MilkBowl</groupId>
             <artifactId>VaultAPI</artifactId>
             <version>1.7</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- McMMO -->
+        <dependency>
+            <groupId>com.github.mcMMO-Dev</groupId>
+            <artifactId>mcMMO</artifactId>
+            <version>a3612b6ae3</version>
             <scope>provided</scope>
         </dependency>
         <!-- PlaceholderAPI -->
@@ -260,6 +272,13 @@
             <groupId>com.comphenix.protocol</groupId>
             <artifactId>ProtocolLib</artifactId>
             <version>4.5.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- MythicMobs -->
+        <dependency>
+            <groupId>io.lumine.xikage</groupId>
+            <artifactId>MythicMobs</artifactId>
+            <version>4.9.1</version>
             <scope>provided</scope>
         </dependency>
         <!-- CitizensAPI -->
