@@ -3,6 +3,10 @@ package me.wakka.valeriaonline.features.placeholders;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.wakka.valeriaonline.ValeriaOnline;
+import me.wakka.valeriaonline.features.prefixtags.PrefixTags;
+import me.wakka.valeriaonline.models.fame.Fame;
+import me.wakka.valeriaonline.models.fame.FameService;
+import me.wakka.valeriaonline.models.fame.PrefixTag;
 import me.wakka.valeriaonline.utils.StringUtils;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -10,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 public class Placeholders extends PlaceholderExpansion {
 
 	private final ValeriaOnline plugin = ValeriaOnline.getInstance();
+	FameService service = new FameService();
 
 	/**
 	 * Because this is an internal class,
@@ -102,6 +107,25 @@ public class Placeholders extends PlaceholderExpansion {
 			}
 
 			return "null";
+		} else if (identifier.equals("tag")) {
+			Fame fame = service.get(player);
+			PrefixTag tag = PrefixTags.parseTag(fame.getActiveTag());
+			String format = "";
+
+			if (player.hasPermission("group.staff")) {
+				if (tag != null)
+					format = tag.getFormat();
+
+				return PrefixTags.getGroupFormat(player) + format;
+			} else {
+				if (tag != null)
+					format = tag.getFormat();
+				else
+					format = PrefixTags.getGroupFormat(player);
+
+				return format;
+			}
+
 		}
 
 		return null;

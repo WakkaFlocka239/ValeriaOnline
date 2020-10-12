@@ -4,6 +4,7 @@ import com.destroystokyo.paper.Title;
 import lombok.Getter;
 import me.wakka.valeriaonline.ValeriaOnline;
 import me.wakka.valeriaonline.utils.CitizensUtils;
+import me.wakka.valeriaonline.utils.StringUtils;
 import me.wakka.valeriaonline.utils.Tasks;
 import me.wakka.valeriaonline.utils.Time;
 import me.wakka.valeriaonline.utils.Utils;
@@ -38,12 +39,13 @@ public class Dungeons implements Listener {
 	@Getter
 	public static List<Dungeon> dungeons = new ArrayList<>();
 	public static final World world = Bukkit.getWorld("events");
-	public static final Location lobby = new Location(world, 128, 5, -33, 180, 0);
-	public static final String PREFIX = "[Dungeons] ";
+	public static final Location lobby = new Location(world, 128.5, 5, -33.5, 180, 0);
+	public static final String PREFIX = StringUtils.getPrefix("Dungeon");
 	public static List<Player> allowedTeleport = new ArrayList<>();
 	public static Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
 	public static List<String> disabledCommands = Arrays.asList("/sethome", "/tpa", "/tpask", "/tpahere",
-			"/teleporthere", "/teleport", "/back", "/spawn");
+			"/teleporthere", "/teleport", "/back", "/spawn", "/back");
+
 	public static final String ERROR = "&cYou can't do that here.";
 
 	public Dungeons() {
@@ -51,6 +53,16 @@ public class Dungeons implements Listener {
 
 		Dungeon crypt = new Dungeon("dungeon_crypt", "Green");
 		dungeons = Collections.singletonList(crypt);
+	}
+
+	public static boolean isInDungeonOrOnTeam(Player player) {
+		boolean inDungeon = isInDungeon(player);
+		if (!inDungeon) {
+			Team team = getDungeonTeam(player);
+			return team != null;
+		}
+
+		return inDungeon;
 	}
 
 	public static boolean isInDungeon(Player player) {
@@ -97,7 +109,7 @@ public class Dungeons implements Listener {
 		if (CitizensUtils.isNPC(player))
 			return;
 
-		if (!isInDungeon(player)) {
+		if (!isInDungeonOrOnTeam(player)) {
 			return;
 		}
 
@@ -106,11 +118,6 @@ public class Dungeons implements Listener {
 		}
 
 		if (isInDungeonExit(player)) {
-			return;
-		}
-
-		Team dungeonTeam = getDungeonTeam(player);
-		if (dungeonTeam == null) {
 			return;
 		}
 
@@ -181,8 +188,10 @@ public class Dungeons implements Listener {
 		String[] args = event.getMessage().toLowerCase().split(" ");
 		String command = args[0];
 
-		if (!isInDungeon(player))
+		// Only return if you're NOT in a dungeon, or in a dungeon team
+		if (!isInDungeonOrOnTeam(player)) {
 			return;
+		}
 
 		if (disabledCommands.contains(command)) {
 			event.setCancelled(true);

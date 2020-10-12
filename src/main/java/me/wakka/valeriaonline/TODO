@@ -2,6 +2,8 @@ TODO:
 - rules
 - altars
 - dungeon overhaul
+trapdoors --> cancel if block is in region not player
+soil-wet true also cancels dry -> wet
 
 - MultiLine API - playername + prefix + (powerlevel/held item level)
     => Spams errors in console, bug is reported

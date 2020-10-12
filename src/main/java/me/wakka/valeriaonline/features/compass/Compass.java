@@ -24,7 +24,9 @@ import java.util.List;
 
 public class Compass implements Listener {
 	private static final LinkedHashMap<String, Location> locationMap = new LinkedHashMap<>();
-	private static final ItemBuilder item = new ItemBuilder(Material.COMPASS).name("Kingdom Compass").lore("&dTarget: &7Elven Kingdom", "&f", "&7[Left-Click: Switch Target]");
+	private static final ItemBuilder item = new ItemBuilder(Material.COMPASS)
+			.name("Kingdom Compass")
+			.lore("&dTarget: &7Elven Kingdom", "&f", "&7[Left-Click: Switch Target]");
 
 	public Compass() {
 		ValeriaOnline.registerListener(this);

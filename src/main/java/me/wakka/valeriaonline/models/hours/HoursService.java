@@ -3,6 +3,7 @@ package me.wakka.valeriaonline.models.hours;
 import me.wakka.valeriaonline.framework.exceptions.InvalidInputException;
 import me.wakka.valeriaonline.models.MySQLService;
 import me.wakka.valeriaonline.utils.Time;
+import org.bukkit.OfflinePlayer;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -17,6 +18,11 @@ public class HoursService extends MySQLService {
 
 	public void clearCache() {
 		cache.clear();
+	}
+
+	@Override
+	public Hours get(OfflinePlayer offlinePlayer) {
+		return get(offlinePlayer.getUniqueId().toString());
 	}
 
 	@Override

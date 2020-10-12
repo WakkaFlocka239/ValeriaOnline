@@ -52,7 +52,7 @@ public class TeleportScrolls implements Listener {
 			.glow()
 			.build();
 
-	private static final List<ItemStack> scrolls = Arrays.asList(scroll_valeria, scroll_eredhil, scroll_maldun);
+	public static final List<ItemStack> scrolls = Arrays.asList(scroll_valeria, scroll_eredhil, scroll_maldun);
 	private static final Map<ItemStack, Location> scrollMap = new HashMap<>();
 
 	static {
@@ -74,7 +74,7 @@ public class TeleportScrolls implements Listener {
 		if (!isHoldingAScroll(player))
 			return;
 
-		if (Dungeons.isInDungeon(player)) {
+		if (Dungeons.isInDungeonOrOnTeam(player)) {
 			Dungeons.error(player);
 			return;
 		}

@@ -51,13 +51,9 @@ public class ValeriaOnlineCommand extends CustomCommand implements Listener {
 		if (item.equalsIgnoreCase("compass"))
 			Utils.giveItem(player(), Compass.getItem());
 
-		if (item.equalsIgnoreCase("valeria scroll"))
-			Utils.giveItem(player(), TeleportScrolls.scroll_valeria);
+		if (item.equalsIgnoreCase("scrolls")) {
+			Utils.giveItems(player(), TeleportScrolls.scrolls);
+		}
 
-		if (item.equalsIgnoreCase("eredhil scroll"))
-			Utils.giveItem(player(), TeleportScrolls.scroll_eredhil);
-
-		if (item.equalsIgnoreCase("maldun scroll"))
-			Utils.giveItem(player(), TeleportScrolls.scroll_maldun);
 	}
 }

@@ -15,6 +15,7 @@ import me.wakka.valeriaonline.features.listeners.AmbientSounds;
 import me.wakka.valeriaonline.features.listeners.Listeners;
 import me.wakka.valeriaonline.features.placeholders.Placeholders;
 import me.wakka.valeriaonline.features.playershops.PlayerShops;
+import me.wakka.valeriaonline.features.prefixtags.PrefixTags;
 import me.wakka.valeriaonline.features.trading.Trading;
 import me.wakka.valeriaonline.framework.commands.Commands;
 import me.wakka.valeriaonline.framework.persistence.MySQLPersistence;
@@ -141,6 +142,7 @@ public class ValeriaOnline extends JavaPlugin {
 		new PlayerShops();
 		new AmbientSounds();
 		new HoursFeature();
+		new PrefixTags();
 
 		new Placeholders().register();
 		new ChannelManager();

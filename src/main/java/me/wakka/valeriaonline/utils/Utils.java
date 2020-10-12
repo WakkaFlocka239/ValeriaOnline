@@ -111,12 +111,31 @@ public class Utils {
 		if (partialName.length() == 36)
 			return getPlayer(UUID.fromString(partialName));
 
-		for (Player player : Bukkit.getOnlinePlayers())
+		for (Player player : Bukkit.getOnlinePlayers()) {
 			if (player.getName().toLowerCase().startsWith(partialName))
 				return player;
-		for (Player player : Bukkit.getOnlinePlayers())
+		}
+
+		for (Player player : Bukkit.getOnlinePlayers()) {
 			if (player.getName().toLowerCase().contains((partialName)))
 				return player;
+		}
+
+		for (OfflinePlayer player : Bukkit.getOfflinePlayers()) {
+			if (player.getName() == null)
+				continue;
+
+			if (player.getName().toLowerCase().startsWith(partialName))
+				return player;
+		}
+
+		for (OfflinePlayer player : Bukkit.getOfflinePlayers()) {
+			if (player.getName() == null)
+				continue;
+
+			if (player.getName().toLowerCase().contains((partialName)))
+				return player;
+		}
 
 		throw new PlayerNotFoundException(original);
 	}

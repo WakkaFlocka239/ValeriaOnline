@@ -1,13 +1,18 @@
 package me.wakka.valeriaonline.features.commands;
 
 
+import io.lumine.xikage.mythicmobs.adapters.bukkit.BukkitAdapter;
 import io.lumine.xikage.mythicmobs.items.MythicItem;
 import me.wakka.valeriaonline.ValeriaOnline;
 import me.wakka.valeriaonline.framework.commands.models.CustomCommand;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Path;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Permission;
 import me.wakka.valeriaonline.framework.commands.models.events.CommandEvent;
+import me.wakka.valeriaonline.utils.Utils;
+import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Permission("group.dev")
@@ -39,20 +44,13 @@ public class TestCommand extends CustomCommand {
 		send(mythicItem.toString());
 	}
 
-//	@Path("mcmmo")
-//	void mcmmo(){
-//		Objective powerObjective;
-//		Scoreboard scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
-//		String POWER_OBJECTIVE = "McMMO_PL_OBJ";
-//
-//		powerObjective = scoreboard.registerNewObjective(POWER_OBJECTIVE, "dummy", POWER_OBJECTIVE);
-//		powerObjective.setDisplayName("Power Level: ");
-//		powerObjective.setDisplaySlot(DisplaySlot.BELOW_NAME);
-//		McMMOPlayer mcMMOPlayer = UserManager.getPlayer(player().getPlayer());
-//
-//		if (mcMMOPlayer != null) {
-//			powerObjective.getScore(mcMMOPlayer.getProfile().getPlayerName()).setScore(mcMMOPlayer.getPowerLevel());
-//			player().setScoreboard(scoreboard);
-//		}
-//	}
+	@Path("giveAllMMItems")
+	void allMMItems() {
+		List<ItemStack> items = new ArrayList<>();
+		for (MythicItem item : ValeriaOnline.getMythicMobs().getItemManager().getItems()) {
+			items.add(BukkitAdapter.adapt((item).generateItemStack(1)));
+		}
+		Utils.giveItems(player(), items);
+
+	}
 }

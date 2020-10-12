@@ -32,8 +32,9 @@ public class DungeonCommand extends CustomCommand {
 
 	@Path("leave")
 	void leave() {
-		if (!Dungeons.isInDungeon(player()))
+		if (!Dungeons.isInDungeonOrOnTeam(player())) {
 			error("You're not in a dungeon!");
+		}
 
 		Dungeons.removeFromDungeonTeam(player());
 		Dungeons.lobby(player());

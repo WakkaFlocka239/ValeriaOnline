@@ -20,6 +20,7 @@ public @interface Permission {
 	group.admin 		- admin
 	group.mod 			- mod
 	group.trial 		- trial mod
+	group.qm			= quest master
 	group.dm 			- dungeon master
 	group.builder 		- builder
 
@@ -28,9 +29,9 @@ public @interface Permission {
 
               group.owner
             /             \
-       group.dev        group.dm
-       group.hadmin     group.builder
-       group.admin         |
+       group.dev        group.qm
+       group.hadmin     group.dm
+       group.admin      group.builder
        group.mod           |
        group.trial         |
             \             /
