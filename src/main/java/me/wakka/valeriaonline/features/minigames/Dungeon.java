@@ -1,4 +1,4 @@
-package me.wakka.valeriaonline.features.dungeons;
+package me.wakka.valeriaonline.features.minigames;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

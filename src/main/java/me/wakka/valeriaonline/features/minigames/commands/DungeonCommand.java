@@ -1,5 +1,6 @@
-package me.wakka.valeriaonline.features.dungeons;
+package me.wakka.valeriaonline.features.minigames.commands;
 
+import me.wakka.valeriaonline.features.minigames.Dungeons;
 import me.wakka.valeriaonline.framework.commands.CommandBlockArgs;
 import me.wakka.valeriaonline.framework.commands.models.CustomCommand;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Aliases;
