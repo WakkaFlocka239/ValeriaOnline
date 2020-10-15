@@ -1,5 +1,6 @@
-package me.wakka.valeriaonline.features.commands;
+package me.wakka.valeriaonline.features.commands.staff;
 
+import me.wakka.valeriaonline.features.commands._WarpCommand;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Aliases;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Permission;
 import me.wakka.valeriaonline.framework.commands.models.events.CommandEvent;

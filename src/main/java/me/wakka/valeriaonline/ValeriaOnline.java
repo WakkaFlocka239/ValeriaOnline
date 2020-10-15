@@ -8,11 +8,11 @@ import lombok.Getter;
 import me.wakka.valeriaonline.features.altars.Altars;
 import me.wakka.valeriaonline.features.autorestart.AutoRestart;
 import me.wakka.valeriaonline.features.chat.ChannelManager;
-import me.wakka.valeriaonline.features.compass.Compass;
-import me.wakka.valeriaonline.features.dungeons.Dungeons;
 import me.wakka.valeriaonline.features.itemtags.ItemTags;
 import me.wakka.valeriaonline.features.listeners.AmbientSounds;
 import me.wakka.valeriaonline.features.listeners.Listeners;
+import me.wakka.valeriaonline.features.minigames.Dungeons;
+import me.wakka.valeriaonline.features.misc.MiscFeatures;
 import me.wakka.valeriaonline.features.placeholders.Placeholders;
 import me.wakka.valeriaonline.features.playershops.PlayerShops;
 import me.wakka.valeriaonline.features.prefixtags.PrefixTags;
@@ -138,11 +138,11 @@ public class ValeriaOnline extends JavaPlugin {
 		new Dungeons();
 		new AutoRestart();
 		new Trading();
-		new Compass();
 		new PlayerShops();
 		new AmbientSounds();
 		new HoursFeature();
 		new PrefixTags();
+		new MiscFeatures();
 
 		new Placeholders().register();
 		new ChannelManager();

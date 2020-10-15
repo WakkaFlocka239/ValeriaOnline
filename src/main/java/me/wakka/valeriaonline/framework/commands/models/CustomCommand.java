@@ -50,7 +50,7 @@ import static me.wakka.valeriaonline.utils.StringUtils.trimFirst;
 @NoArgsConstructor
 @AllArgsConstructor
 @RequiredArgsConstructor
-@SuppressWarnings({"SameParameterValue", "unused", "WeakerAccess", "UnusedReturnValue"})
+@SuppressWarnings({"SameParameterValue", "WeakerAccess", "UnusedReturnValue"})
 public abstract class CustomCommand extends ICustomCommand{
 	@NonNull
 	@Getter

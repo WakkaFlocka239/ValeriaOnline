@@ -24,6 +24,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -38,6 +39,7 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.util.BlockIterator;
+import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
@@ -886,6 +888,55 @@ public class Utils {
 
 	public static void setPlayerBackLoc(Player player, Location location) {
 		ValeriaOnline.getEssentials().getUser(player).setLastLocation(location);
+	}
+
+	public static Entity getNearestEntityType(Location location, EntityType filter, double radius) {
+		List<Entity> entities = location.getNearbyEntities(radius, radius, radius).stream()
+				.filter(_entity -> _entity.getType().equals(filter))
+				.collect(Collectors.toList());
+
+		double shortest = radius;
+		Entity result = null;
+		for (Entity entity : entities) {
+			double distance = entity.getLocation().distance(location);
+			if (distance < shortest) {
+				shortest = distance;
+				result = entity;
+			}
+		}
+
+		return result;
+	}
+
+	public static void makeArmorStandLookAtPlayer(ArmorStand stand, Player player,
+												  Double minYaw, Double maxYaw, Double minPitch, Double maxPitch) {
+		Location origin = stand.getEyeLocation(); //our original location (Point A)
+		double initYaw = origin.getYaw();
+		Vector tgt = player.getEyeLocation().toVector(); //our target location (Point B)
+		origin.setDirection(tgt.subtract(origin.toVector())); //set the origin's direction to be the direction vector between point A and B.
+		double yaw = origin.getYaw() - initYaw;
+		double pitch = origin.getPitch();
+
+		if (yaw < -180)
+			yaw = yaw + 360;
+		else if (yaw >= 180)
+			yaw -= 360;
+
+		if (maxYaw != null && yaw > maxYaw)
+			yaw = maxYaw;
+		else if (minYaw != null && yaw < minYaw)
+			yaw = minYaw;
+
+		if (maxPitch != null && pitch > maxPitch)
+			pitch = maxPitch;
+		else if (minPitch != null && pitch < minPitch)
+			pitch = minPitch;
+
+		double x = Math.toRadians(pitch);
+		double y = Math.toRadians(yaw);
+
+		EulerAngle ea = new EulerAngle(x, y, 0);
+		stand.setHeadPose(ea);
 	}
 
 }

@@ -16,12 +16,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class StringUtils {
 	@Getter
 	public static final String colorChar = "§";
+	public static final Pattern hexPattern = Pattern.compile("(#[a-fA-F0-9]{6})");
 
 	public static String getPrefix(String prefix) {
 		return colorize("&f&l[&b" + prefix + "&f&l]&7 ");
@@ -30,7 +32,16 @@ public class StringUtils {
 	public static String colorize(String input) {
 		if (input == null)
 			return null;
-		return ChatColor.translateAlternateColorCodes('&', input);
+
+		Matcher matcher = hexPattern.matcher(input);
+		while (matcher.find()) {
+			String color = input.substring(matcher.start(), matcher.end());
+			input = input.replace(color, "" + net.md_5.bungee.api.ChatColor.of(color));
+		}
+
+		input = ChatColor.translateAlternateColorCodes('&', input);
+
+		return input;
 	}
 
 	@Deprecated

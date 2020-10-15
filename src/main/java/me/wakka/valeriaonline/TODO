@@ -1,15 +1,12 @@
 TODO:
-- rules
 - altars
 - dungeon overhaul
-trapdoors --> cancel if block is in region not player
-soil-wet true also cancels dry -> wet
+- apply itemtags to:
+    - fishing drops
+    - generated chests (if possible)
 
 - MultiLine API - playername + prefix + (powerlevel/held item level)
     => Spams errors in console, bug is reported
-
-// on command: /auctionelf
-// 		click "sell" --> run xyz command
 
 // on command: /xyz
 //			add to list

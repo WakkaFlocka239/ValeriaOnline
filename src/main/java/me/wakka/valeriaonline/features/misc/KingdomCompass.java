@@ -1,4 +1,4 @@
-package me.wakka.valeriaonline.features.compass;
+package me.wakka.valeriaonline.features.misc;
 
 import me.wakka.valeriaonline.ValeriaOnline;
 import me.wakka.valeriaonline.utils.ActionBarUtils;
@@ -22,13 +22,13 @@ import org.bukkit.inventory.meta.CompassMeta;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public class Compass implements Listener {
+public class KingdomCompass implements Listener {
 	private static final LinkedHashMap<String, Location> locationMap = new LinkedHashMap<>();
 	private static final ItemBuilder item = new ItemBuilder(Material.COMPASS)
 			.name("Kingdom Compass")
 			.lore("&dTarget: &7Elven Kingdom", "&f", "&7[Left-Click: Switch Target]");
 
-	public Compass() {
+	public KingdomCompass() {
 		ValeriaOnline.registerListener(this);
 
 		List<String> strings = ConfigUtils.getSettings().getStringList("compassLocs");

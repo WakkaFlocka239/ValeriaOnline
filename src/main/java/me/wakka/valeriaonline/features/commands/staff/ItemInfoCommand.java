@@ -1,4 +1,4 @@
-package me.wakka.valeriaonline.features.commands;
+package me.wakka.valeriaonline.features.commands.staff;
 
 import de.tr7zw.nbtapi.NBTItem;
 import me.wakka.valeriaonline.framework.commands.models.CustomCommand;

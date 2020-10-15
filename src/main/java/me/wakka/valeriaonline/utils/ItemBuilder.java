@@ -14,6 +14,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.BlockStateMeta;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -35,6 +36,7 @@ import static me.wakka.valeriaonline.utils.StringUtils.colorize;
 public class ItemBuilder implements Cloneable {
 	private final ItemStack itemStack;
 	private final ItemMeta itemMeta;
+	private int damage = 0;
 	private List<String> lore = new ArrayList<>();
 	private boolean doLoreize = true;
 
@@ -66,14 +68,19 @@ public class ItemBuilder implements Cloneable {
 		return this;
 	}
 
-	@Deprecated
-	public ItemBuilder durability(int durability) {
-		return durability(Integer.valueOf(durability).shortValue());
-	}
+//	@Deprecated
+//	public ItemBuilder durability(int durability) {
+//		return durability(Integer.valueOf(durability).shortValue());
+//	}
 
-	@Deprecated
-	public ItemBuilder durability(short durability) {
-		itemStack.setDurability(durability);
+//	@Deprecated
+//	public ItemBuilder durability(short durability) {
+//		itemStack.setDurability(durability);
+//		return this;
+//	}
+
+	public ItemBuilder damage(int damage) {
+		this.damage = damage;
 		return this;
 	}
 
@@ -248,8 +255,13 @@ public class ItemBuilder implements Cloneable {
 	public ItemStack build() {
 		ItemStack result = itemStack.clone();
 		buildLore();
+		setDamage();
 		result.setItemMeta(itemMeta.clone());
 		return result;
+	}
+
+	private void setDamage() {
+		((Damageable) itemMeta).setDamage(damage);
 	}
 
 	public void buildLore() {

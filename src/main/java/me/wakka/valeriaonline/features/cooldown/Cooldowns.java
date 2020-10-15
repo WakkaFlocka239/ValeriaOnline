@@ -3,6 +3,7 @@ package me.wakka.valeriaonline.features.cooldown;
 import me.wakka.valeriaonline.utils.Time;
 import me.wakka.valeriaonline.utils.TimespanFormatter;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -37,6 +38,10 @@ public class Cooldowns {
 		cooldown = cooldown.create(type, ticks);
 		cooldowns.add(cooldown);
 		return true;
+	}
+
+	public static Cooldown get(Player player) {
+		return get(player.getUniqueId());
 	}
 
 	public static Cooldown get(UUID uuid) {

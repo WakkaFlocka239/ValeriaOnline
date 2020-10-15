@@ -1,5 +1,6 @@
 package me.wakka.valeriaonline.features.fame.menu.providers;
 
+import com.google.common.base.Strings;
 import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
@@ -66,10 +67,13 @@ public class TagsProvider extends MenuUtils implements InventoryProvider {
 
 			String name = prefixTag.getName();
 			String format = prefixTag.getFormat();
+			String description = prefixTag.getDescription();
+			if (Strings.isNullOrEmpty(description))
+				description = "";
 
-			ItemBuilder nameTag = new ItemBuilder(Material.NAME_TAG).name("&f" + name).lore(format);
+			ItemBuilder nameTag = new ItemBuilder(Material.NAME_TAG).name("&f" + name).lore(format, "", description).loreize(true);
 			if (prefixTag.equals(activeTag))
-				nameTag.name("&a" + name).glow();
+				nameTag.name("&f&n" + name).glow();
 
 			ClickableItem clickableTag = ClickableItem.from(nameTag.build(), e -> {
 				PrefixTags.setActiveTag(player, prefixTag);

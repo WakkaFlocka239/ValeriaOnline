@@ -16,13 +16,15 @@ public class PrefixTag {
 	String format;
 	int cost;
 	@NonNull PrefixTags.PrefixTagType type;
+	String description;
 	@NonNull String permission;
 
-	public PrefixTag(String name, String format, int cost, PrefixTags.PrefixTagType type) {
+	public PrefixTag(String name, String format, int cost, PrefixTags.PrefixTagType type, String description) {
 		this.name = name;
 		this.format = format;
 		this.cost = cost;
 		this.type = type;
+		this.description = description;
 		this.permission = "prefixtags." + type.name().toLowerCase() + "." + name.toLowerCase();
 	}
 }

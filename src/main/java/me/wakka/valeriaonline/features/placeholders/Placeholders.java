@@ -126,6 +126,8 @@ public class Placeholders extends PlaceholderExpansion {
 				return format;
 			}
 
+		} else if (identifier.equals("group")) {
+			return PrefixTags.getGroupFormat(player);
 		}
 
 		return null;

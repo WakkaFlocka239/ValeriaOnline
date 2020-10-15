@@ -1,8 +1,10 @@
 package me.wakka.valeriaonline.models.fame;
 
+import me.wakka.valeriaonline.features.prefixtags.PrefixTags;
 import me.wakka.valeriaonline.framework.commands.models.annotations.ConverterFor;
 import me.wakka.valeriaonline.framework.commands.models.annotations.TabCompleterFor;
 import me.wakka.valeriaonline.models.MySQLService;
+import me.wakka.valeriaonline.utils.Tasks;
 import org.bukkit.OfflinePlayer;
 
 import java.util.Arrays;
@@ -22,12 +24,17 @@ public class FameService extends MySQLService {
 		if (fame.getUuid() == null) {
 			fame = new Fame(uuid);
 			save(fame);
+			Tasks.wait(5, () -> PrefixTags.updatePrefixTags(uuid));
 		}
 		return fame;
 	}
 
 	public List<Fame> getAll() {
 		return database.select("*").results(Fame.class);
+	}
+
+	public void delete(Fame fame) {
+		database.table("fame").where("uuid = ? ", fame.getUuid()).delete();
 	}
 
 	public enum FameType {

@@ -23,10 +23,13 @@ public class PrefixTagsCommand extends CustomCommand {
 			String format = activeTag.getFormat();
 			int cost = activeTag.getCost();
 			String permission = activeTag.getPermission();
+			String description = activeTag.getDescription();
+
 			send(json(" - " + name)
 					.hover("Format: " + format + "\n"
 							+ "Cost: " + cost + "\n"
-							+ "Perm: " + permission));
+							+ "Perm: " + permission + "\n"
+							+ "Desc: " + description));
 		}
 		send("");
 	}

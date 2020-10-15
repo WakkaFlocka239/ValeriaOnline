@@ -26,7 +26,8 @@ public class ChannelCommand extends CustomCommand {
 	@ConverterFor(Channel.class)
 	Channel convertToWarp(String value) {
 		Channel channel = ChannelManager.getChannel(value);
-		if (channel == null) error("Channel " + value + " not found");
+		if (channel == null)
+			error("Channel " + value + " not found");
 		return channel;
 	}
 

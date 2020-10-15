@@ -1,7 +1,7 @@
 package me.wakka.valeriaonline.features.listeners;
 
 import me.wakka.valeriaonline.features.cooldown.Cooldowns;
-import me.wakka.valeriaonline.features.dungeons.Dungeons;
+import me.wakka.valeriaonline.features.minigames.Dungeons;
 import me.wakka.valeriaonline.utils.ItemBuilder;
 import me.wakka.valeriaonline.utils.SoundUtils;
 import me.wakka.valeriaonline.utils.Tasks;
@@ -37,18 +37,24 @@ public class TeleportScrolls implements Listener {
 	public static final ItemStack scroll_valeria = new ItemBuilder(Material.PAPER)
 			.name("&f[&dTeleport Scroll&f]")
 			.lore("&7Destination: &b&oValeria &7(Human)")
+			.unbreakable()
+			.damage(10000)
 			.glow()
 			.build();
 
 	public static final ItemStack scroll_eredhil = new ItemBuilder(Material.PAPER)
 			.name("&f[&dTeleport Scroll&f]")
 			.lore("&7Destination: &b&oEredhil &7(Elven)")
+			.unbreakable()
+			.damage(10000)
 			.glow()
 			.build();
 
 	public static final ItemStack scroll_maldun = new ItemBuilder(Material.PAPER)
 			.name("&f[&dTeleport Scroll&f]")
 			.lore("&7Destination: &b&oMaldun &7(Dwarven)")
+			.unbreakable()
+			.damage(10000)
 			.glow()
 			.build();
 

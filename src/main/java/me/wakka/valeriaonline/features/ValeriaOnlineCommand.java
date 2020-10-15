@@ -1,9 +1,9 @@
-package me.wakka.valeriaonline.features.commands;
+package me.wakka.valeriaonline.features;
 
 import fr.minuskube.inv.SmartInvsPlugin;
 import lombok.NoArgsConstructor;
-import me.wakka.valeriaonline.features.compass.Compass;
 import me.wakka.valeriaonline.features.listeners.TeleportScrolls;
+import me.wakka.valeriaonline.features.misc.KingdomCompass;
 import me.wakka.valeriaonline.framework.commands.models.CustomCommand;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Description;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Path;
@@ -46,14 +46,11 @@ public class ValeriaOnlineCommand extends CustomCommand implements Listener {
 		runCommand("plugman reload ValeriaOnline");
 	}
 
-	@Path("getItem <item...>")
-	void getItem(String item) {
-		if (item.equalsIgnoreCase("compass"))
-			Utils.giveItem(player(), Compass.getItem());
+	@Path("getItems")
+	void getItem() {
+		Utils.giveItem(player(), KingdomCompass.getItem());
+		Utils.giveItems(player(), TeleportScrolls.scrolls);
 
-		if (item.equalsIgnoreCase("scrolls")) {
-			Utils.giveItems(player(), TeleportScrolls.scrolls);
-		}
 
 	}
 }

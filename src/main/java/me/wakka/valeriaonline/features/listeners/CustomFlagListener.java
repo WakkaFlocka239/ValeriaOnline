@@ -21,6 +21,7 @@ import org.bukkit.event.block.MoistureChangeEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
+import static me.wakka.valeriaonline.utils.StringUtils.colorize;
 import static me.wakka.valeriaonline.utils.WorldGuardFlagUtils.CustomFlags.DENY_HOSTILE_SPAWN;
 import static me.wakka.valeriaonline.utils.WorldGuardFlagUtils.CustomFlags.FAREWELL_SUBTITLE;
 import static me.wakka.valeriaonline.utils.WorldGuardFlagUtils.CustomFlags.FAREWELL_TITLE;
@@ -49,7 +50,7 @@ public class CustomFlagListener implements Listener {
 		if (greeting_subtitle == null)
 			greeting_subtitle = "";
 
-		player.sendTitle(greeting_title, greeting_subtitle, 10, 20, 10);
+		player.sendTitle(colorize(greeting_title), colorize(greeting_subtitle), 10, 20, 10);
 	}
 
 	@EventHandler
@@ -70,7 +71,7 @@ public class CustomFlagListener implements Listener {
 		if (farewell_subtitle == null)
 			farewell_subtitle = "";
 
-		player.sendTitle(farewell_title, farewell_subtitle, 10, 20, 10);
+		player.sendTitle(colorize(farewell_title), colorize(farewell_subtitle), 10, 20, 10);
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
@@ -85,9 +86,6 @@ public class CustomFlagListener implements Listener {
 		if (isFlagSetFor(event.getLocation(), (StateFlag) DENY_HOSTILE_SPAWN.get())) {
 			if (event.getEntity() instanceof Monster) {
 				event.setCancelled(true);
-			} else {
-				if (event.isCancelled())
-					event.setCancelled(false);
 			}
 		}
 	}
@@ -129,8 +127,8 @@ public class CustomFlagListener implements Listener {
 			return;
 
 		if (isFlagSetFor(block, (StateFlag) SOIL_WET.get())) {
-			if (farmland.getMoisture() < 8) {
-				farmland.setMoisture(8);
+			if (farmland.getMoisture() < 7) {
+				farmland.setMoisture(7);
 				block.setBlockData(farmland);
 			}
 

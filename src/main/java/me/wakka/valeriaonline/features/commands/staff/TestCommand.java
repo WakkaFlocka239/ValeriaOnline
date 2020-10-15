@@ -1,4 +1,4 @@
-package me.wakka.valeriaonline.features.commands;
+package me.wakka.valeriaonline.features.commands.staff;
 
 
 import io.lumine.xikage.mythicmobs.adapters.bukkit.BukkitAdapter;
@@ -8,6 +8,7 @@ import me.wakka.valeriaonline.framework.commands.models.CustomCommand;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Path;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Permission;
 import me.wakka.valeriaonline.framework.commands.models.events.CommandEvent;
+import me.wakka.valeriaonline.utils.StringUtils;
 import me.wakka.valeriaonline.utils.Utils;
 import org.bukkit.inventory.ItemStack;
 
@@ -53,4 +54,10 @@ public class TestCommand extends CustomCommand {
 		Utils.giveItems(player(), items);
 
 	}
+
+	@Path("hex <string...>")
+	void hex(String string) {
+		player().chat(StringUtils.colorize(string));
+	}
+
 }
