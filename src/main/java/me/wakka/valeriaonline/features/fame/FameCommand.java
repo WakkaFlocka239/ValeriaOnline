@@ -15,6 +15,7 @@ import me.wakka.valeriaonline.models.fame.PrefixTag;
 import me.wakka.valeriaonline.utils.Tasks;
 import org.bukkit.OfflinePlayer;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -37,7 +38,7 @@ public class FameCommand extends CustomCommand {
 		ValeriaOnline.getPerms().playerAdd(player.getPlayer(), tag.getPermission());
 		send("Gave " + player.getName() + " tag: " + tag.getName());
 		if (player.isOnline())
-			PrefixTags.obtainedMessage(player, tag);
+			PrefixTags.obtainedMessage(player, Collections.singletonList(tag));
 	}
 
 	@Path("give <player> <amount> <type>")

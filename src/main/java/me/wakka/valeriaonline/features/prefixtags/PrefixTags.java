@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 public class PrefixTags {
+	public static String PREFIX = StringUtils.getPrefix("Tags");
 	@Getter
 	public static List<PrefixTag> activeTags = new ArrayList<>();
 	private static Map<String, String> groupFormats = new HashMap<>();
@@ -36,9 +37,19 @@ public class PrefixTags {
 		loadGroupFormats();
 	}
 
-	public static void obtainedMessage(OfflinePlayer player, PrefixTag tag) {
-		if (player.isOnline())
-			Utils.send(player, "New Tag Available: " + tag.getName());
+	public static void obtainedMessage(OfflinePlayer player, List<PrefixTag> tags) {
+		StringBuilder formats = new StringBuilder();
+		for (PrefixTag tag : tags) {
+			formats.append(tag.getFormat()).append(" ");
+		}
+
+		formats = new StringBuilder(formats.toString().trim());
+
+		if (player.isOnline()) {
+			Utils.send(player, PREFIX + "New tags available: " + formats);
+			Utils.send(player, "&7To edit your tags, use /fame");
+		}
+
 	}
 
 	private void loadGroupFormats() {
@@ -110,8 +121,16 @@ public class PrefixTags {
 	}
 
 	public static String getGroupFormat(Player player) {
+		return getGroupFormat(player, true);
+	}
+
+	public static String getGroupFormat(Player player, boolean colorize) {
 		String group = ValeriaOnline.getPerms().getPrimaryGroup(player);
-		return StringUtils.colorize(groupFormats.get(group.toUpperCase()));
+		String format = groupFormats.get(group.toUpperCase());
+		if (colorize)
+			return StringUtils.colorize(format);
+		else
+			return format;
 	}
 
 	public static void updatePrefixTags(String uuid) {
@@ -156,11 +175,17 @@ public class PrefixTags {
 			}
 		}
 
+		boolean sendMessage = false;
 		for (PrefixTag tag : addTags) {
 			String perm = tag.getPermission();
 			ValeriaOnline.getPerms().playerAdd(player.getPlayer(), perm);
-			obtainedMessage(player, tag);
+			sendMessage = true;
+
 		}
+
+		if (sendMessage)
+			obtainedMessage(player, addTags);
+
 	}
 
 	public enum PrefixTagType {

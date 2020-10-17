@@ -6,6 +6,7 @@ import me.wakka.valeriaonline.framework.commands.models.annotations.Path;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Permission;
 import me.wakka.valeriaonline.framework.commands.models.events.CommandEvent;
 import me.wakka.valeriaonline.models.fame.PrefixTag;
+import me.wakka.valeriaonline.utils.StringUtils;
 
 @Aliases("tags")
 @Permission("group.staff")
@@ -20,10 +21,10 @@ public class PrefixTagsCommand extends CustomCommand {
 		send("All Tags:");
 		for (PrefixTag activeTag : PrefixTags.getActiveTags()) {
 			String name = activeTag.getName();
-			String format = activeTag.getFormat();
+			String format = StringUtils.colorize(activeTag.getFormat());
 			int cost = activeTag.getCost();
 			String permission = activeTag.getPermission();
-			String description = activeTag.getDescription();
+			String description = StringUtils.colorize(activeTag.getDescription());
 
 			send(json(" - " + name)
 					.hover("Format: " + format + "\n"

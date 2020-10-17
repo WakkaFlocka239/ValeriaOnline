@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Permission("proCosmetics.open")
+@Permission("procosmetics.open")
 public class CosmeticCommand extends CustomCommand {
 	public CosmeticCommand(CommandEvent event) {
 		super(event);

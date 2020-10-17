@@ -16,4 +16,5 @@ public class LocationSerializer implements DbSerializable {
 		return JSON.deserializeLocation(in);
 	}
 
+
 }

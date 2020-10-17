@@ -50,4 +50,25 @@ public class Misc implements Listener {
 			ValeriaOnline.getPerms().playerRemove(player, perm);
 		});
 	}
+
+//	@EventHandler
+//	public void onMMMobSpawn(MythicMobSpawnEvent event){
+//		Team team = Bukkit.getScoreboardManager().getMainScoreboard().getTeam("NoName");
+//		if(team != null)
+//			team.addEntry(event.getMob().getUniqueId().toString());
+//	}
+//
+//	@EventHandler
+//	public void onMMMobDespawn(MythicMobDespawnEvent event){
+//		Team team = Bukkit.getScoreboardManager().getMainScoreboard().getTeam("NoName");
+//		if(team != null)
+//			team.removeEntry(event.getMob().getUniqueId().toString());
+//	}
+//
+//	@EventHandler
+//	public void onMMMobDeath(MythicMobDeathEvent event){
+//		Team team = Bukkit.getScoreboardManager().getMainScoreboard().getTeam("NoName");
+//		if(team != null)
+//			team.removeEntry(event.getMob().getUniqueId().toString());
+//	}
 }

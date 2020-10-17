@@ -1,7 +1,7 @@
 package me.wakka.valeriaonline.features.listeners;
 
 import me.wakka.valeriaonline.features.altars.Altars;
-import me.wakka.valeriaonline.features.minigames.Dungeons;
+import me.wakka.valeriaonline.features.dungeons.Dungeons;
 import me.wakka.valeriaonline.utils.RandomUtils;
 import me.wakka.valeriaonline.utils.SoundUtils;
 import me.wakka.valeriaonline.utils.Tasks;

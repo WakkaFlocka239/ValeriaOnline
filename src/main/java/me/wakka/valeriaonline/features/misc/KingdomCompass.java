@@ -1,17 +1,20 @@
 package me.wakka.valeriaonline.features.misc;
 
 import me.wakka.valeriaonline.ValeriaOnline;
+import me.wakka.valeriaonline.features.cooldown.Cooldowns;
 import me.wakka.valeriaonline.utils.ActionBarUtils;
 import me.wakka.valeriaonline.utils.ConfigUtils;
 import me.wakka.valeriaonline.utils.ItemBuilder;
 import me.wakka.valeriaonline.utils.SoundUtils;
 import me.wakka.valeriaonline.utils.StringUtils;
+import me.wakka.valeriaonline.utils.Time;
 import me.wakka.valeriaonline.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -58,7 +61,8 @@ public class KingdomCompass implements Listener {
 		if (!event.getAction().equals(Action.LEFT_CLICK_BLOCK) && !event.getAction().equals(Action.LEFT_CLICK_AIR))
 			return;
 
-		ItemStack compass = Utils.getTool(event.getPlayer());
+		Player player = event.getPlayer();
+		ItemStack compass = Utils.getTool(player);
 		if (Utils.isNullOrAir(compass) || !compass.getType().equals(Material.COMPASS)) return;
 
 		List<String> lore = compass.getLore();
@@ -73,6 +77,11 @@ public class KingdomCompass implements Listener {
 		if (!hasTarget)
 			return;
 
+		// If you're on cooldown
+		if (!Cooldowns.check(player, "kingdomCompass", Time.SECOND.x(1))) {
+			return;
+		}
+
 		int loreNdx = 0;
 		for (String line : lore) {
 			if (line.contains("Target:")) {
@@ -86,8 +95,8 @@ public class KingdomCompass implements Listener {
 					compassMeta.setLodestoneTracked(false);
 					compass.setItemMeta(compassMeta);
 
-					SoundUtils.playSound(event.getPlayer(), Sound.UI_BUTTON_CLICK, 0.5F, 1F);
-					ActionBarUtils.sendActionBar(event.getPlayer(), "&dTarget: &f" + target + " Kingdom");
+					SoundUtils.playSound(player, Sound.UI_BUTTON_CLICK, 0.5F, 1F);
+					ActionBarUtils.sendActionBar(player, "&dTarget: &f" + target + " Kingdom");
 				}
 				event.setCancelled(true);
 				return;

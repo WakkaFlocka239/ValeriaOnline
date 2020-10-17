@@ -114,12 +114,12 @@ public class Placeholders extends PlaceholderExpansion {
 
 			if (player.hasPermission("group.staff")) {
 				if (tag != null)
-					format = tag.getFormat();
+					format = StringUtils.colorize(tag.getFormat());
 
 				return PrefixTags.getGroupFormat(player) + format;
 			} else {
 				if (tag != null)
-					format = tag.getFormat();
+					format = StringUtils.colorize(tag.getFormat());
 				else
 					format = PrefixTags.getGroupFormat(player);
 

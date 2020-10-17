@@ -37,6 +37,8 @@ public class Setting {
 	}
 
 	public Location getLocation() {
+		if (value == null)
+			return null;
 		return new LocationSerializer().deserialize(value);
 	}
 
