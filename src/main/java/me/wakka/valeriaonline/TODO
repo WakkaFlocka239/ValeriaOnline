@@ -1,21 +1,15 @@
 TODO:
-- altars
-- dungeon overhaul
+- /staff
+
+- prevent phantom spawn in regions
+
 - apply itemtags to:
     - fishing drops
     - generated chests (if possible)
+    - mythicmob death
+
+- altars
+- dungeon overhaul
 
 - MultiLine API - playername + prefix + (powerlevel/held item level)
     => Spams errors in console, bug is reported
-
-// on command: /xyz
-//			add to list
-//			wait x amount of seconds:
-//				remove from list
-//
-// on command: /ah sell <price> [amount]
-//			if on list:
-//				fallback --> "/auctionhouse sell args" as op
-//			else
-//				"error"
-//

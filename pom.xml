@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>me.wakka</groupId>
     <artifactId>ValeriaOnline</artifactId>
-    <version>0.5</version>
+    <version>0.6</version>
     <build>
         <finalName>${project.artifactId}</finalName>
         <sourceDirectory>src/main/java</sourceDirectory>

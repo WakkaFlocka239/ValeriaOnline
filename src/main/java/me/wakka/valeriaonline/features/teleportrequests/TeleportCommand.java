@@ -37,7 +37,7 @@ public class TeleportCommand extends CustomCommand {
 
 		Request request = new Request(player(), target, Request.TeleportType.TELEPORT);
 		MenuUtils.ConfirmationMenu.builder()
-				.title("Teleport to " + target.getName())
+				.title("&fTeleport to " + target.getName())
 				.confirmLore("&cCosts: &6" + COST + " Crowns, if accepted")
 				.onConfirm(e -> {
 					Requests.add(request);
@@ -73,7 +73,7 @@ public class TeleportCommand extends CustomCommand {
 		}
 
 		MenuUtils.ConfirmationMenu.builder()
-				.title("Teleport to " + sender.getName())
+				.title("&fTeleport to " + sender.getName())
 				.confirmLore("&cCosts: &6" + COST + " Crowns, if accepted")
 				.onConfirm(e -> runCommand("teleport accept"))
 				.open(player());

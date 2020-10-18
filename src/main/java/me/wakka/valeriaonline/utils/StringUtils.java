@@ -23,6 +23,8 @@ import java.util.stream.Collectors;
 public class StringUtils {
 	@Getter
 	public static final String colorChar = "§";
+	@Getter
+	public static final String hexChar = "#";
 	public static final Pattern hexPattern = Pattern.compile("(#[a-fA-F0-9]{6})");
 
 	public static String getPrefix(String prefix) {
@@ -30,13 +32,19 @@ public class StringUtils {
 	}
 
 	public static String colorize(String input) {
+		return colorize(input, true);
+	}
+
+	public static String colorize(String input, boolean hex) {
 		if (input == null)
 			return null;
 
-		Matcher matcher = hexPattern.matcher(input);
-		while (matcher.find()) {
-			String color = input.substring(matcher.start(), matcher.end());
-			input = input.replace(color, "" + net.md_5.bungee.api.ChatColor.of(color));
+		if (hex) {
+			Matcher matcher = hexPattern.matcher(input);
+			while (matcher.find()) {
+				String color = input.substring(matcher.start(), matcher.end());
+				input = input.replace(color, "" + net.md_5.bungee.api.ChatColor.of(color));
+			}
 		}
 
 		input = ChatColor.translateAlternateColorCodes('&', input);
@@ -125,7 +133,7 @@ public class StringUtils {
 	}
 
 	public static String getLastColor(String text) {
-		String reversed = new StringBuilder(colorize(text)).reverse().toString();
+		String reversed = new StringBuilder(colorize(text, false)).reverse().toString();
 		StringBuilder result = new StringBuilder();
 		String lastChar = null;
 

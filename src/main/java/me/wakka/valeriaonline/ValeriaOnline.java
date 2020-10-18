@@ -7,11 +7,11 @@ import it.sauronsoftware.cron4j.Scheduler;
 import lombok.Getter;
 import me.wakka.valeriaonline.features.altars.Altars;
 import me.wakka.valeriaonline.features.autorestart.AutoRestart;
-import me.wakka.valeriaonline.features.chat.ChannelManager;
+import me.wakka.valeriaonline.features.chat.Chat;
+import me.wakka.valeriaonline.features.dungeons.Dungeons;
 import me.wakka.valeriaonline.features.itemtags.ItemTags;
 import me.wakka.valeriaonline.features.listeners.AmbientSounds;
 import me.wakka.valeriaonline.features.listeners.Listeners;
-import me.wakka.valeriaonline.features.minigames.Dungeons;
 import me.wakka.valeriaonline.features.misc.MiscFeatures;
 import me.wakka.valeriaonline.features.placeholders.Placeholders;
 import me.wakka.valeriaonline.features.playershops.PlayerShops;
@@ -22,6 +22,7 @@ import me.wakka.valeriaonline.framework.persistence.MySQLPersistence;
 import me.wakka.valeriaonline.models.hours.HoursFeature;
 import me.wakka.valeriaonline.utils.ConfigUtils;
 import me.wakka.valeriaonline.utils.SignMenuFactory;
+import me.wakka.valeriaonline.utils.Time;
 import me.wakka.valeriaonline.utils.Utils;
 import me.wakka.valeriaonline.utils.WorldGuardFlagUtils;
 import net.milkbowl.vault.economy.Economy;
@@ -31,14 +32,17 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.TimeZone;
+import java.util.UUID;
 
 import static me.wakka.valeriaonline.utils.StringUtils.stripColor;
 
 public class ValeriaOnline extends JavaPlugin {
 	private Commands commands;
 	private static ValeriaOnline instance;
+	@Getter
+	private final static UUID UUID0 = new UUID(0, 0);
 
-	public ValeriaOnline(){
+	public ValeriaOnline() {
 		if (instance == null)
 			instance = this;
 		else
@@ -93,6 +97,7 @@ public class ValeriaOnline extends JavaPlugin {
 		try { AutoRestart.shutdown();								} catch (Throwable ex) { ex.printStackTrace(); }
 
 		try { broadcastReload(); 									} catch (Throwable ex) { ex.printStackTrace(); }
+		try { Chat.shutdown(); 										} catch (Throwable ex) { ex.printStackTrace(); }
 		try { MySQLPersistence.shutdown(); 							} catch (Throwable ex) { ex.printStackTrace(); }
 
 		log("Disabled.");
@@ -113,6 +118,8 @@ public class ValeriaOnline extends JavaPlugin {
 			log("Could not register listener " + listener.toString() + "!");
 	}
 
+	public static Chat chat;
+
 	@Getter
 	private static SignMenuFactory signMenuFactory;
 	@Getter
@@ -132,6 +139,7 @@ public class ValeriaOnline extends JavaPlugin {
 	private static Permission perms = null;
 
 	private void enableFeatures() {
+		new Time.Timer("  Chat", () -> chat = new Chat());
 		new Listeners();
 		new ItemTags();
 		new Altars();
@@ -145,7 +153,6 @@ public class ValeriaOnline extends JavaPlugin {
 		new MiscFeatures();
 
 		new Placeholders().register();
-		new ChannelManager();
 
 		signMenuFactory = new SignMenuFactory(this);
 		essentials = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");

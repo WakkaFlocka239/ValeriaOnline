@@ -5,8 +5,14 @@ import lombok.SneakyThrows;
 import me.wakka.valeriaonline.ValeriaOnline;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 
 public class ConfigUtils {
@@ -85,4 +91,20 @@ public class ConfigUtils {
 	}
 
 
+	public static void fileLog(String file, String message) {
+		Tasks.async(() -> {
+			try {
+				Path path = Paths.get("plugins/ValeriaOnline/logs/" + file + ".log");
+				if (!path.toFile().exists())
+					path.toFile().createNewFile();
+				try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8, StandardOpenOption.APPEND)) {
+					writer.append(System.lineSeparator()).append("[").append(StringUtils.shortDateTimeFormat(LocalDateTime.now())).append("] ").append(message);
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		});
+	}
 }

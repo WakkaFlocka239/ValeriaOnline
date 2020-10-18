@@ -52,6 +52,27 @@ public class PrefixTags {
 
 	}
 
+	public static String getActiveTagFormat(Player player) {
+		FameService service = new FameService();
+		Fame fame = service.get(player);
+		PrefixTag tag = PrefixTags.parseTag(fame.getActiveTag());
+		String format = "";
+
+		if (player.hasPermission("group.staff")) {
+			if (tag != null)
+				format = StringUtils.colorize(tag.getFormat());
+
+			return PrefixTags.getGroupFormat(player) + format;
+		} else {
+			if (tag != null)
+				format = StringUtils.colorize(tag.getFormat());
+			else
+				format = PrefixTags.getGroupFormat(player);
+
+			return format;
+		}
+	}
+
 	private void loadGroupFormats() {
 		ConfigurationSection section = config.getConfigurationSection("groupformats");
 		if (section == null)
@@ -126,7 +147,10 @@ public class PrefixTags {
 
 	public static String getGroupFormat(Player player, boolean colorize) {
 		String group = ValeriaOnline.getPerms().getPrimaryGroup(player);
-		String format = groupFormats.get(group.toUpperCase());
+		String format = groupFormats.getOrDefault(group.toUpperCase(), null);
+		if (format == null)
+			return null;
+
 		if (colorize)
 			return StringUtils.colorize(format);
 		else

@@ -74,7 +74,7 @@ public class JsonBuilder {
 	}
 
 	// https://stackoverflow.com/a/6041965
-	private static final Pattern URL_PATTERN = Pattern.compile("(https?)://([\\w_-]+(?:(?:\\.[\\w_-]+)+))([\\w.,@?^=%&:/~+#-]*[\\w@?^=%&/~+#-])?");
+	public static final Pattern URL_PATTERN = Pattern.compile("(https?)://([\\w_-]+(?:(?:\\.[\\w_-]+)+))([\\w.,@?^=%&:/~+#-]*[\\w@?^=%&/~+#-])?");
 
 	public JsonBuilder urlize(String input) {
 		Matcher matcher = URL_PATTERN.matcher(input);

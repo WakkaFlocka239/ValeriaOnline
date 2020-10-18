@@ -1,20 +1,19 @@
 package me.wakka.valeriaonline.features.placeholders;
 
-import me.clip.placeholderapi.PlaceholderAPI;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.wakka.valeriaonline.ValeriaOnline;
 import me.wakka.valeriaonline.features.prefixtags.PrefixTags;
-import me.wakka.valeriaonline.models.fame.Fame;
-import me.wakka.valeriaonline.models.fame.FameService;
-import me.wakka.valeriaonline.models.fame.PrefixTag;
-import me.wakka.valeriaonline.utils.StringUtils;
+import me.wakka.valeriaonline.models.chat.Channel;
+import me.wakka.valeriaonline.models.chat.ChatService;
+import me.wakka.valeriaonline.models.chat.Chatter;
+import me.wakka.valeriaonline.models.chat.PrivateChannel;
+import me.wakka.valeriaonline.models.chat.PublicChannel;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public class Placeholders extends PlaceholderExpansion {
 
 	private final ValeriaOnline plugin = ValeriaOnline.getInstance();
-	FameService service = new FameService();
 
 	/**
 	 * Because this is an internal class,
@@ -94,40 +93,29 @@ public class Placeholders extends PlaceholderExpansion {
 
 		if (player == null) return "";
 
-		if (identifier.equals("chatradius")) {
-			String chatManagerRadius = StringUtils.stripColor(PlaceholderAPI.setPlaceholders(player, "%chatmanager_radius%")).toLowerCase();
+		switch (identifier) {
+			case "chatradius":
+				Chatter chatter = new ChatService().get(player);
 
-			switch (chatManagerRadius) {
-				case "l":
-					return "&eLocal";
-				case "g":
-					return "&2Global";
-				case "world":
-					return "&cWorld";
-			}
+				Channel activeChannel = chatter.getActiveChannel();
+				if (activeChannel == null)
+					return "&dNone";
 
-			return "null";
-		} else if (identifier.equals("tag")) {
-			Fame fame = service.get(player);
-			PrefixTag tag = PrefixTags.parseTag(fame.getActiveTag());
-			String format = "";
+				if (activeChannel instanceof PrivateChannel)
+					return "&b" + String.join(",", ((PrivateChannel) activeChannel).getOthersNames(chatter));
 
-			if (player.hasPermission("group.staff")) {
-				if (tag != null)
-					format = StringUtils.colorize(tag.getFormat());
+				if (activeChannel instanceof PublicChannel) {
+					PublicChannel channel = (PublicChannel) activeChannel;
+					return channel.getColor() + channel.getName();
+				}
 
-				return PrefixTags.getGroupFormat(player) + format;
-			} else {
-				if (tag != null)
-					format = StringUtils.colorize(tag.getFormat());
-				else
-					format = PrefixTags.getGroupFormat(player);
+				return "&cUnknown";
 
-				return format;
-			}
+			case "tag":
+				return PrefixTags.getActiveTagFormat(player);
 
-		} else if (identifier.equals("group")) {
-			return PrefixTags.getGroupFormat(player);
+			case "group":
+				return PrefixTags.getGroupFormat(player);
 		}
 
 		return null;

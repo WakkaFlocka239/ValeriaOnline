@@ -13,7 +13,7 @@ public class FameMenu {
 
 	public static void openMain(Player player) {
 		SmartInventory.builder()
-				.title("Fame Menu")
+				.title("&fFame Menu")
 				.size(3, 9)
 				.provider(new MainProvider())
 				.build()
@@ -22,7 +22,7 @@ public class FameMenu {
 
 	public static SmartInventory openTags(Player player, TagsProvider.TagFilter filter) {
 		return SmartInventory.builder()
-				.title("Select A Tag:")
+				.title("&fSelect A Tag:")
 				.size(getTagsSize(player), 9)
 				.provider(new TagsProvider(filter))
 				.build();
@@ -36,7 +36,7 @@ public class FameMenu {
 
 	public static SmartInventory openFameLeaderboard(FameService.FameType filter) {
 		return SmartInventory.builder()
-				.title(StringUtils.camelCase(filter.name()) + " Fame Leaderboard")
+				.title("&f" + StringUtils.camelCase(filter.name()) + " Fame Leaderboard")
 				.size(4, 9)
 				.provider(new FameLeaderboardProvider(filter))
 				.build();

@@ -6,7 +6,7 @@ public class PlayerShopsMenu {
 
 	public static SmartInventory open() {
 		return SmartInventory.builder()
-				.title("Player Shops")
+				.title("&fPlayer Shops")
 				.size(6, 9)
 				.provider(new PlayerShopsProvider())
 				.build();

@@ -17,7 +17,7 @@ public class TradeEditorMenus {
 
 	public static void openMain(Player player) {
 		SmartInventory.builder()
-				.title("Edit Profession")
+				.title("&fEdit Profession")
 				.size(4, 9)
 				.provider(new MainProvider())
 				.build()
@@ -27,7 +27,7 @@ public class TradeEditorMenus {
 	public static void openLevel(Player player, Profession profession) {
 		String professionName = StringUtils.camelCase(profession.name());
 		SmartInventory.builder()
-				.title("Select " + professionName + " Trade Level")
+				.title("&fSelect " + professionName + " Trade Level")
 				.size(3, 9)
 				.provider(new LevelProvider(profession))
 				.build()
@@ -37,7 +37,7 @@ public class TradeEditorMenus {
 	public static SmartInventory getTrades(Profession profession, int level, Type filter) {
 		String professionName = StringUtils.camelCase(profession.name());
 		return SmartInventory.builder()
-				.title("Edit " + professionName + " Lvl " + level)
+				.title("&fEdit " + professionName + " Lvl " + level)
 				.size(getTradeSize(profession, level), 9)
 				.provider(new TradesProvider(profession, level, filter))
 				.build();
@@ -56,7 +56,7 @@ public class TradeEditorMenus {
 
 	public static void openTradeEditor(Player player, Profession profession, int level, Trade trade, Type filter) {
 		SmartInventory.builder()
-				.title("Edit Trade")
+				.title("&fEdit Trade")
 				.size(4, 9)
 				.provider(new TradeEditProvider(profession, level, trade, filter))
 				.build()
@@ -65,7 +65,7 @@ public class TradeEditorMenus {
 
 	public static void openTypeProvider(Player player, Profession profession, int level, Trade trade, Type filter) {
 		SmartInventory.builder()
-				.title("Select Villager Types")
+				.title("&fSelect Villager Types")
 				.size(4, 9)
 				.provider(new TypeProvider(profession, level, trade, filter))
 				.build()
