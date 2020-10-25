@@ -1,5 +1,6 @@
 package me.wakka.valeriaonline.models.setting;
 
+import com.google.common.base.Strings;
 import com.google.gson.Gson;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,7 +11,9 @@ import me.wakka.valeriaonline.utils.Utils;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Data
@@ -44,6 +47,46 @@ public class Setting {
 
 	public void setLocation(Location location) {
 		this.value = new LocationSerializer().serialize(location);
+	}
+
+	public List<Location> getLocationList() {
+		if (value == null)
+			return null;
+
+		List<Location> result = new ArrayList<>();
+		for (String locationStr : value.split(";")) {
+			result.add(new LocationSerializer().deserialize(locationStr));
+		}
+
+		return result;
+	}
+
+	public void setLocationList(List<Location> locList) {
+		if (Utils.isNullOrEmpty(locList)) {
+			this.value = null;
+			return;
+		}
+
+		List<String> locStrList = new ArrayList<>();
+		for (Location loc : locList) {
+			locStrList.add(new LocationSerializer().serialize(loc));
+		}
+
+		this.value = String.join(";", locStrList);
+	}
+
+	public void addToLocationList(Location location) {
+		String locStr = new LocationSerializer().serialize(location);
+		if (Strings.isNullOrEmpty(this.value))
+			this.value = locStr;
+		else
+			this.value = this.value + ";" + locStr;
+	}
+
+	public void removeFromLocationList(Location location) {
+		List<Location> locations = getLocationList();
+		locations.remove(location);
+		setLocationList(locations);
 	}
 
 	public int getInt() {

@@ -1,13 +1,8 @@
 TODO:
+- mcmmo prestiege
+- make tutorial shop it's own thing not owned by a player, and always make it the first shop on the list
 - /staff
-
 - prevent phantom spawn in regions
-
-- apply itemtags to:
-    - fishing drops
-    - generated chests (if possible)
-    - mythicmob death
-
 - altars
 - dungeon overhaul
 

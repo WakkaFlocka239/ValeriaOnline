@@ -10,6 +10,7 @@ import me.wakka.valeriaonline.framework.commands.models.annotations.Permission;
 import me.wakka.valeriaonline.framework.commands.models.events.CommandEvent;
 import me.wakka.valeriaonline.models.playershop.PlayerShop;
 import me.wakka.valeriaonline.models.playershop.PlayerShopService;
+import me.wakka.valeriaonline.utils.MenuUtils;
 import me.wakka.valeriaonline.utils.Utils;
 import org.bukkit.OfflinePlayer;
 
@@ -70,29 +71,40 @@ public class PlayerShopsCommand extends CustomCommand {
 
 		shop = service.get(player());
 
-		boolean paid = false;
+		boolean newShop = false;
 		if (shop == null) {
 			double setupCost = PlayerShops.setupCost;
 			if (!ValeriaOnline.getEcon().has(player(), setupCost))
 				error("You need " + setupCost + " Crowns to setup your shop!");
 
-			Utils.withdraw(player(), setupCost, PREFIX);
-			shop = new PlayerShop(player(), null, "");
-			paid = true;
+			newShop = true;
 		}
 
-		if (!paid) {
-			double resetCost = PlayerShops.resetCost;
-			if (!ValeriaOnline.getEcon().has(player(), resetCost))
-				error("You need " + resetCost + " Crowns to reset your shop!");
+		if (!newShop && !ValeriaOnline.getEcon().has(player(), PlayerShops.resetCost))
+			error("You need " + PlayerShops.resetCost + " Crowns to reset your shop!");
 
-			Utils.withdraw(player(), resetCost, PREFIX);
+		boolean createNewShop = newShop;
+		String confirmLore = "&cCosts: &6" + PlayerShops.resetCost + " Crowns";
+		if (createNewShop) {
+			confirmLore = "&cCosts: &6" + PlayerShops.setupCost + " Crowns";
 		}
 
-		shop.setLocation(player().getLocation());
-		service.save(shop);
+		MenuUtils.ConfirmationMenu.builder()
+				.confirmLore(confirmLore)
+				.onConfirm(e -> {
+					if (createNewShop) {
+						shop = new PlayerShop(player(), null, "");
+						Utils.withdraw(player(), PlayerShops.setupCost, PREFIX);
+					} else {
+						Utils.withdraw(player(), PlayerShops.resetCost, PREFIX);
+					}
 
-		send(PREFIX + "Shop location set!");
+					shop.setLocation(player().getLocation());
+					service.save(shop);
+
+					send(PREFIX + "Shop location set!");
+				})
+				.open(player());
 	}
 
 	@Path("remove")

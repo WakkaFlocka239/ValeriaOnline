@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
 import me.wakka.valeriaonline.framework.exceptions.InvalidInputException;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -24,6 +25,11 @@ import static me.wakka.valeriaonline.utils.StringUtils.colorize;
 import static me.wakka.valeriaonline.utils.StringUtils.loreize;
 
 public abstract class MenuUtils {
+	public static final ChatColor baseColor = ChatColor.BLACK;
+
+	public static String title(String title) {
+		return StringUtils.colorize(baseColor + title);
+	}
 
 	protected ItemStack addGlowing(ItemStack itemStack) {
 		return Utils.addGlowing(itemStack);

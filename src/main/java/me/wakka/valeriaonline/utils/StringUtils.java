@@ -1,7 +1,7 @@
 package me.wakka.valeriaonline.utils;
 
 import lombok.Getter;
-import org.bukkit.ChatColor;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -22,34 +22,37 @@ import java.util.stream.Collectors;
 
 public class StringUtils {
 	@Getter
-	public static final String colorChar = "§";
+	private static final String colorChar = "§";
 	@Getter
-	public static final String hexChar = "#";
-	public static final Pattern hexPattern = Pattern.compile("(#[a-fA-F0-9]{6})");
+	private static final String colorCharsRegex = "[" + colorChar + "&]";
+	@Getter
+	private static final Pattern colorPattern = Pattern.compile(colorCharsRegex + "[0-9a-fA-f]");
+	@Getter
+	private static final Pattern formatPattern = Pattern.compile(colorCharsRegex + "[k-orK-OR]");
+	@Getter
+	private static final Pattern hexPattern = Pattern.compile("#[a-fA-F0-9]{6}");
+	@Getter
+	private static final Pattern hexColorizedPattern = Pattern.compile(colorCharsRegex + "x(" + colorCharsRegex + "[a-fA-F0-9]){6}");
+	@Getter
+	private static final Pattern colorGroupPattern = Pattern.compile("(" + colorPattern + "|(" + hexPattern + "|" + hexColorizedPattern + "))((" + formatPattern + ")+)?");
 
 	public static String getPrefix(String prefix) {
 		return colorize("&f&l[&b" + prefix + "&f&l]&7 ");
 	}
 
 	public static String colorize(String input) {
-		return colorize(input, true);
-	}
-
-	public static String colorize(String input, boolean hex) {
 		if (input == null)
 			return null;
 
-		if (hex) {
+		while (true) {
 			Matcher matcher = hexPattern.matcher(input);
-			while (matcher.find()) {
-				String color = input.substring(matcher.start(), matcher.end());
-				input = input.replace(color, "" + net.md_5.bungee.api.ChatColor.of(color));
-			}
+			if (!matcher.find()) break;
+
+			String color = matcher.group();
+			input = input.replace(color, ChatColor.of(color).toString());
 		}
 
-		input = ChatColor.translateAlternateColorCodes('&', input);
-
-		return input;
+		return ChatColor.translateAlternateColorCodes('&', input);
 	}
 
 	@Deprecated
@@ -62,17 +65,18 @@ public class StringUtils {
 	}
 
 	public static String stripFormat(String input) {
-		return Pattern.compile("(?i)" + colorChar + "[K-OR]").matcher(colorize(input)).replaceAll("");
+		return formatPattern.matcher(colorize(input)).replaceAll("");
 	}
 
 	public static int countUpperCase(String s) {
-		return (int) s.codePoints().filter(c-> c >= 'A' && c <= 'Z').count();
+		return (int) s.codePoints().filter(c -> c >= 'A' && c <= 'Z').count();
 	}
 
 	public static int countLowerCase(String s) {
-		return (int) s.codePoints().filter(c-> c >= 'a' && c <= 'z').count();
+		return (int) s.codePoints().filter(c -> c >= 'a' && c <= 'z').count();
 	}
 
+	// TODO This will break with hex
 	public static String loreize(String string) {
 		int i = 0, lineLength = 0;
 		boolean watchForNewLine = false, watchForColor = false;
@@ -133,31 +137,11 @@ public class StringUtils {
 	}
 
 	public static String getLastColor(String text) {
-		String reversed = new StringBuilder(colorize(text, false)).reverse().toString();
-		StringBuilder result = new StringBuilder();
-		String lastChar = null;
-
-		for (String character : reversed.split("")) {
-			if (character.equals(getColorChar()) && lastChar != null) {
-				ChatColor color = ChatColor.getByChar(lastChar);
-
-				if (color != null) {
-					if (color.isFormat()) {
-						result.insert(0, color.toString());
-						continue;
-					} else {
-						if (color == ChatColor.RESET)
-							color = ChatColor.WHITE;
-						result.insert(0, color);
-						break;
-					}
-				}
-			}
-
-			lastChar = character;
-		}
-
-		return result.toString();
+		Matcher matcher = colorGroupPattern.matcher(text);
+		String last = "";
+		while (matcher.find())
+			last = matcher.group();
+		return last;
 	}
 
 	public static String plural(String label, double number) {
@@ -174,6 +158,10 @@ public class StringUtils {
 
 	public static String left(String string, int number) {
 		return string.substring(0, Math.min(number, string.length()));
+	}
+
+	public static String camelCase(Enum<?> _enum) {
+		return camelCase(_enum.name());
 	}
 
 	public static String camelCase(String text) {
@@ -226,6 +214,12 @@ public class StringUtils {
 
 	private static String uuidUnformat(String uuid) {
 		return uuid.replaceAll("-", "");
+	}
+
+	public static final String UUID_REGEX = "[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}";
+
+	public static boolean isUuid(String uuid) {
+		return uuid.matches(UUID_REGEX);
 	}
 
 	public static String pretty(ItemStack item) {

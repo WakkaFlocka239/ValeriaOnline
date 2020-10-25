@@ -7,16 +7,18 @@ import lombok.RequiredArgsConstructor;
 import me.wakka.valeriaonline.utils.Utils;
 import org.bukkit.OfflinePlayer;
 
+import javax.persistence.Id;
+
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
 public class Fame {
+	@Id
 	@NonNull
 	String uuid;
 	int points_quest;
 	int points_guild;
 	String activeTag;
-
 
 	public OfflinePlayer getPlayer() {
 		return Utils.getPlayer(uuid);

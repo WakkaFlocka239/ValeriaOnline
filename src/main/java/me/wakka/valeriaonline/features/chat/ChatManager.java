@@ -2,6 +2,7 @@ package me.wakka.valeriaonline.features.chat;
 
 import lombok.Getter;
 import lombok.Setter;
+import me.wakka.valeriaonline.ValeriaOnline;
 import me.wakka.valeriaonline.features.chat.events.PrivateChatEvent;
 import me.wakka.valeriaonline.features.chat.events.PublicChatEvent;
 import me.wakka.valeriaonline.framework.exceptions.InvalidInputException;
@@ -10,6 +11,7 @@ import me.wakka.valeriaonline.models.chat.Channel;
 import me.wakka.valeriaonline.models.chat.Chatter;
 import me.wakka.valeriaonline.models.chat.PrivateChannel;
 import me.wakka.valeriaonline.models.chat.PublicChannel;
+import me.wakka.valeriaonline.utils.JsonBuilder;
 import me.wakka.valeriaonline.utils.Tasks;
 import me.wakka.valeriaonline.utils.Utils;
 import org.bukkit.Bukkit;
@@ -77,36 +79,26 @@ public class ChatManager {
 		if (!event.wasSeen())
 			Tasks.wait(1, () -> event.getChatter().send(PREFIX + "No one can hear you! Type &c/ch g &7to talk globally"));
 
-//		JsonBuilder json = new JsonBuilder()
-//				.next(event.getChannel().getChatterFormat(event.getChatter()))
-//				.urlize(event.getChannel().getMessageColor() + event.getMessage());
+		JsonBuilder json = new JsonBuilder()
+				.next(event.getChannel().getChatterFormat(event.getChatter()))
+				.next(event.getChannel().getMessageColor() + event.getMessage());
 
-//		Utils.wakka("JsonNext: " + event.getChannel().getChatterFormat(event.getChatter()));
-//		Utils.wakka("Text: ");
-//		Utils.send(Utils.wakka(), json.build());
-
-		String json = event.getChannel().getChatterFormat(event.getChatter())
-				+ event.getChannel().getMessageColor() + event.getMessage();
+		String discordJson = stripColor(event.getChannel().getDiscordChatterFormat(event.getChatter()) + event.getMessage());
 
 
 		event.getRecipients().forEach(recipient -> recipient.send(json));
+		ValeriaOnline.discordSRV.getMainTextChannel().sendMessage(discordJson).submit();
 
-//		Bukkit.getConsoleSender().sendMessage(stripColor(json.toString()));
-		Bukkit.getConsoleSender().sendMessage(stripColor(json));
+		Bukkit.getConsoleSender().sendMessage(stripColor(json.toString()));
 	}
 
 	public static void process(PrivateChatEvent event) {
 		Set<String> othersNames = event.getChannel().getOthersNames(event.getChatter());
 
-//		JsonBuilder to = new JsonBuilder("&7&l[&bPM&7&l] &dTo &7" + String.join(", ", othersNames) + " &b&l> ")
-//				.urlize(event.getChannel().getMessageColor() + event.getMessage());
-//		JsonBuilder from = new JsonBuilder("&7&l[&bPM&7&l] &dFrom &7" + event.getChatter().getOfflinePlayer().getName() + " &b&l> ")
-//				.urlize(event.getChannel().getMessageColor() + event.getMessage());
-
-		String to = "&7&l[&bPM&7&l] &dTo &7" + String.join(", ", othersNames) + " &b&l> "
-				+ event.getChannel().getMessageColor() + event.getMessage();
-		String from = "&7&l[&bPM&7&l] &dFrom &7" + event.getChatter().getOfflinePlayer().getName()
-				+ " &b&l> " + event.getChannel().getMessageColor() + event.getMessage();
+		JsonBuilder to = new JsonBuilder("&7&l[&bPM&7&l] &dTo &7" + String.join(", ", othersNames) + " &b&l> ")
+				.next(event.getChannel().getMessageColor() + event.getMessage());
+		JsonBuilder from = new JsonBuilder("&7&l[&bPM&7&l] &dFrom &7" + event.getChatter().getOfflinePlayer().getName() + " &b&l> ")
+				.next(event.getChannel().getMessageColor() + event.getMessage());
 
 		int seen = 0;
 		for (Chatter recipient : event.getRecipients()) {
@@ -115,14 +107,14 @@ public class ChatManager {
 			if (!recipient.equals(event.getChatter())) {
 				boolean canSee = Utils.canSee(event.getChatter().getOfflinePlayer(), recipient.getOfflinePlayer());
 				String notOnline = new PlayerNotOnlineException(recipient.getOfflinePlayer()).getMessage();
-				if (!recipient.getOfflinePlayer().isOnline())
-					event.getChatter().send(PREFIX + notOnline);
-				else {
+				if (!recipient.getOfflinePlayer().isOnline()) {
+					recipientNotOnline(PREFIX + notOnline, event);
+				} else {
 					recipient.send(from);
 					if (canSee)
 						++seen;
 					else
-						event.getChatter().send(PREFIX + notOnline);
+						recipientNotOnline(PREFIX + notOnline, event);
 				}
 			}
 		}
@@ -131,6 +123,11 @@ public class ChatManager {
 			event.getChatter().send(to);
 
 		Bukkit.getConsoleSender().sendMessage(event.getChatter().getOfflinePlayer().getName() + " -> " + String.join(", ", othersNames) + ": " + event.getMessage());
+	}
+
+	private static void recipientNotOnline(String message, PrivateChatEvent event) {
+		event.getChatter().send(message + ", switching you to global chat");
+		event.getChatter().setActiveChannel(Chat.StaticChannel.GLOBAL.getChannel());
 	}
 
 }

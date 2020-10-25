@@ -39,6 +39,14 @@ public class PublicChannel implements Channel {
 		return "Now chatting in " + color + name;
 	}
 
+	public String getDiscordChatterFormat(Chatter chatter) {
+		Player player = chatter.getPlayer();
+		String channel = nickname.toUpperCase();
+		String rank = PrefixTags.getGroupFormat(player, false);
+
+		return "**[" + channel + "] " + rank + "" + player.getName() + " >** ";
+	}
+
 	public String getChatterFormat(Chatter chatter) {
 		Player player = chatter.getPlayer();
 		return "&7[" + color + ChatColor.BOLD + nickname.toUpperCase() + "&7] " +

@@ -868,6 +868,12 @@ public class Utils {
 			send(from.getPlayer(), prefix + "&c" + amount + " Crowns have been taken from your account");
 	}
 
+	public static void deposit(OfflinePlayer to, double amount, String prefix) {
+		ValeriaOnline.getEcon().depositPlayer(to, amount);
+		if (to.isOnline() && to.getPlayer() != null)
+			send(to.getPlayer(), prefix + "&a" + amount + " Crowns have been added to your account");
+	}
+
 	public static ItemStack setDurability(ItemStack item, int percentage) {
 		ItemMeta meta = item.getItemMeta();
 		if (meta instanceof Damageable) {

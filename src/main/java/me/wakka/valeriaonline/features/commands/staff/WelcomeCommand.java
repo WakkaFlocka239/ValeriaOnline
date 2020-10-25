@@ -52,7 +52,7 @@ public class WelcomeCommand extends CustomCommand {
 			else
 				message = message.replaceAll("\\[player]", player.getName());
 
-			player().chat(message);
+			runCommand("ch qm g " + message);
 		} else {
 			if (player == null)
 				runCommand("ch qm g Welcome to the server!");

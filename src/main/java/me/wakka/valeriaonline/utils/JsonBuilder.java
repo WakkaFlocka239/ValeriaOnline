@@ -7,12 +7,10 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.ComponentBuilder.FormatRetention;
 import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static me.wakka.valeriaonline.utils.StringUtils.colorize;
 import static me.wakka.valeriaonline.utils.StringUtils.getLastColor;
@@ -41,7 +39,7 @@ public class JsonBuilder {
 	}
 
 	public JsonBuilder next(String text) {
-		builder.append(getColoredWords(colorize(text)));
+		builder.append(TextComponent.fromLegacyText(getColoredWords(colorize(text))), FormatRetention.NONE);
 		return this;
 	}
 
@@ -73,51 +71,6 @@ public class JsonBuilder {
 		return this;
 	}
 
-	// https://stackoverflow.com/a/6041965
-	public static final Pattern URL_PATTERN = Pattern.compile("(https?)://([\\w_-]+(?:(?:\\.[\\w_-]+)+))([\\w.,@?^=%&:/~+#-]*[\\w@?^=%&/~+#-])?");
-
-	public JsonBuilder urlize(String input) {
-		Matcher matcher = URL_PATTERN.matcher(input);
-		if (matcher.groupCount() > 0) {
-			int index = 0;
-			while (matcher.find()) {
-				++index;
-				debug("Matches");
-				debug("  toString() before: " + toString());
-				debug("  Input before: " + input);
-				String original = matcher.group();
-				String[] split = input.split(original.replaceAll("\\?", "\\\\?").replaceAll("\\+", "\\\\+"));
-				String url = colorize(original).replaceAll(StringUtils.getColorChar(), "&&f");
-
-				debug("  Match: " + url + ", Split: " + String.join(" // ", split) + " (" + split.length + ")");
-				if (split.length == 0) {
-					next(url).url(original);
-					input = input.replace(original, "");
-				} else if (split.length == 1) {
-					next(split[0]).group().next(url).url(original);
-					input = input.replace(split[0] + original, "");
-				} else {
-					debug("  Index: " + index + ", Groups: " + matcher.groupCount());
-					if (index == matcher.groupCount() - 1) {
-						debug("  Final match");
-						next(split[0]).group().next(url).url(original).group().next(split[1]);
-						input = input.replace(split[0] + original + split[1], "");
-					} else {
-						debug("  Not final match");
-						next(split[0]).group().next(url).url(original);
-						input = input.replace(split[0] + original, "");
-					}
-				}
-				group();
-				debug("  toString() after: " + toString());
-				debug("  Input after: " + input);
-			}
-		}
-
-		next(input);
-		return this;
-	}
-
 	private void debug(String message) {
 		if (false)
 			ValeriaOnline.log(message);
@@ -132,6 +85,11 @@ public class JsonBuilder {
 
 	public JsonBuilder suggest(String command) {
 		builder.event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, command));
+		return this;
+	}
+
+	public JsonBuilder copy(String command) {
+		builder.event(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, command));
 		return this;
 	}
 

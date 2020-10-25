@@ -1,15 +1,11 @@
 package me.wakka.valeriaonline.models.fame;
 
 import me.wakka.valeriaonline.features.prefixtags.PrefixTags;
-import me.wakka.valeriaonline.framework.commands.models.annotations.ConverterFor;
-import me.wakka.valeriaonline.framework.commands.models.annotations.TabCompleterFor;
 import me.wakka.valeriaonline.models.MySQLService;
 import me.wakka.valeriaonline.utils.Tasks;
 import org.bukkit.OfflinePlayer;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class FameService extends MySQLService {
 
@@ -30,28 +26,15 @@ public class FameService extends MySQLService {
 	}
 
 	public List<Fame> getAll() {
-		return database.select("*").results(Fame.class);
+		return database.results(Fame.class);
 	}
 
 	public void delete(Fame fame) {
-		database.table("fame").where("uuid = ? ", fame.getUuid()).delete();
+		database.delete(fame);
 	}
 
 	public enum FameType {
 		QUEST,
 		GUILD
-	}
-
-	@ConverterFor(FameType.class)
-	FameType convertToFameType(String value) {
-		return FameType.valueOf(value);
-	}
-
-	@TabCompleterFor(FameType.class)
-	List<String> tabCompleteFameType(String filter) {
-		return Arrays.stream(FameType.values())
-				.filter(fameType -> fameType.name().toLowerCase().startsWith(filter.toLowerCase()))
-				.map(Enum::name)
-				.collect(Collectors.toList());
 	}
 }

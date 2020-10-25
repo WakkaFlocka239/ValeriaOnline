@@ -10,6 +10,7 @@ import me.wakka.valeriaonline.features.trading.menu.providers.TypeProvider;
 import me.wakka.valeriaonline.features.trading.models.Profession;
 import me.wakka.valeriaonline.features.trading.models.Trade;
 import me.wakka.valeriaonline.features.trading.models.Type;
+import me.wakka.valeriaonline.utils.MenuUtils;
 import me.wakka.valeriaonline.utils.StringUtils;
 import org.bukkit.entity.Player;
 
@@ -17,7 +18,7 @@ public class TradeEditorMenus {
 
 	public static void openMain(Player player) {
 		SmartInventory.builder()
-				.title("&fEdit Profession")
+				.title(MenuUtils.title("Edit Profession"))
 				.size(4, 9)
 				.provider(new MainProvider())
 				.build()
@@ -27,7 +28,7 @@ public class TradeEditorMenus {
 	public static void openLevel(Player player, Profession profession) {
 		String professionName = StringUtils.camelCase(profession.name());
 		SmartInventory.builder()
-				.title("&fSelect " + professionName + " Trade Level")
+				.title(MenuUtils.title("Select " + professionName + " Trade Level"))
 				.size(3, 9)
 				.provider(new LevelProvider(profession))
 				.build()
@@ -37,7 +38,7 @@ public class TradeEditorMenus {
 	public static SmartInventory getTrades(Profession profession, int level, Type filter) {
 		String professionName = StringUtils.camelCase(profession.name());
 		return SmartInventory.builder()
-				.title("&fEdit " + professionName + " Lvl " + level)
+				.title(MenuUtils.title("Edit " + professionName + " Lvl " + level))
 				.size(getTradeSize(profession, level), 9)
 				.provider(new TradesProvider(profession, level, filter))
 				.build();
@@ -56,7 +57,7 @@ public class TradeEditorMenus {
 
 	public static void openTradeEditor(Player player, Profession profession, int level, Trade trade, Type filter) {
 		SmartInventory.builder()
-				.title("&fEdit Trade")
+				.title(MenuUtils.title("Edit Trade"))
 				.size(4, 9)
 				.provider(new TradeEditProvider(profession, level, trade, filter))
 				.build()
@@ -65,7 +66,7 @@ public class TradeEditorMenus {
 
 	public static void openTypeProvider(Player player, Profession profession, int level, Trade trade, Type filter) {
 		SmartInventory.builder()
-				.title("&fSelect Villager Types")
+				.title(MenuUtils.title("Select Villager Types"))
 				.size(4, 9)
 				.provider(new TypeProvider(profession, level, trade, filter))
 				.build()

@@ -2,6 +2,7 @@ package me.wakka.valeriaonline;
 
 import com.earth2me.essentials.Essentials;
 import com.gmail.nossr50.mcMMO;
+import github.scarsz.discordsrv.DiscordSRV;
 import io.lumine.xikage.mythicmobs.MythicMobs;
 import it.sauronsoftware.cron4j.Scheduler;
 import lombok.Getter;
@@ -9,6 +10,7 @@ import me.wakka.valeriaonline.features.altars.Altars;
 import me.wakka.valeriaonline.features.autorestart.AutoRestart;
 import me.wakka.valeriaonline.features.chat.Chat;
 import me.wakka.valeriaonline.features.dungeons.Dungeons;
+import me.wakka.valeriaonline.features.events.Events;
 import me.wakka.valeriaonline.features.itemtags.ItemTags;
 import me.wakka.valeriaonline.features.listeners.AmbientSounds;
 import me.wakka.valeriaonline.features.listeners.Listeners;
@@ -119,6 +121,7 @@ public class ValeriaOnline extends JavaPlugin {
 	}
 
 	public static Chat chat;
+	public static DiscordSRV discordSRV;
 
 	@Getter
 	private static SignMenuFactory signMenuFactory;
@@ -140,6 +143,7 @@ public class ValeriaOnline extends JavaPlugin {
 
 	private void enableFeatures() {
 		new Time.Timer("  Chat", () -> chat = new Chat());
+		new Time.Timer("  DiscordSRV", () -> discordSRV = DiscordSRV.getPlugin());
 		new Listeners();
 		new ItemTags();
 		new Altars();
@@ -151,6 +155,7 @@ public class ValeriaOnline extends JavaPlugin {
 		new HoursFeature();
 		new PrefixTags();
 		new MiscFeatures();
+		new Events();
 
 		new Placeholders().register();
 
