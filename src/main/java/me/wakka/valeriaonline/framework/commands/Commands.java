@@ -1,39 +1,34 @@
 package me.wakka.valeriaonline.framework.commands;
 
 import lombok.Getter;
-import me.wakka.valeriaonline.ValeriaOnline;
 import me.wakka.valeriaonline.framework.commands.models.CustomCommand;
+import me.wakka.valeriaonline.framework.commands.models.ICustomCommand;
 import me.wakka.valeriaonline.framework.commands.models.annotations.ConverterFor;
-import me.wakka.valeriaonline.framework.commands.models.annotations.Disabled;
 import me.wakka.valeriaonline.framework.commands.models.annotations.DoubleSlash;
 import me.wakka.valeriaonline.framework.commands.models.annotations.TabCompleterFor;
 import me.wakka.valeriaonline.utils.ConfigUtils;
-import me.wakka.valeriaonline.utils.StringUtils;
 import me.wakka.valeriaonline.utils.Time;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
+import me.wakka.valeriaonline.utils.Utils;
 import org.bukkit.plugin.Plugin;
 import org.objenesis.ObjenesisStd;
 import org.reflections.Reflections;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Stream;
 
-import static org.reflections.ReflectionUtils.getAllMethods;
 import static org.reflections.ReflectionUtils.getMethods;
 import static org.reflections.ReflectionUtils.withAnnotation;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "unchecked"})
 public class Commands {
 	public static final String VO_PREFIX = ConfigUtils.getSettings().getString("prefix");
 
 	private final Plugin plugin;
-	private final String path;
 	private final CommandMapUtils mapUtils;
 	private final Set<Class<? extends CustomCommand>> commandSet;
 	@Getter
@@ -45,11 +40,10 @@ public class Commands {
 	@Getter
 	private static final Map<String, String> redirects = new HashMap<>();
 	@Getter
-	private static final String pattern = "\\/(\\/|)[a-zA-Z0-9\\-_]+";
+	private static final String pattern = "(\\/){1,2}[a-zA-Z0-9\\-_]+";
 
 	public Commands(Plugin plugin, String path) {
 		this.plugin = plugin;
-		this.path = path;
 		this.mapUtils = new CommandMapUtils(plugin);
 		this.commandSet = new Reflections(path).getSubTypesOf(CustomCommand.class);
 		registerConvertersAndTabCompleters();
@@ -60,21 +54,42 @@ public class Commands {
 		return commands.getOrDefault(alias, null);
 	}
 
+	public static CustomCommand get(Class<? extends CustomCommand> clazz) {
+		return commands.getOrDefault(prettyName(clazz), null);
+	}
+
+	public static String prettyName(ICustomCommand customCommand) {
+		return prettyName(customCommand.getClass());
+	}
+
+	public static String prettyName(Class<? extends ICustomCommand> clazz) {
+		return clazz.getSimpleName().replaceAll("Command$", "");
+	}
+
 	public void registerAll() {
-		for (Class<? extends CustomCommand> command : commandSet)
+		commandSet.forEach(this::register);
+	}
+
+	public void register(Class<? extends CustomCommand>... customCommands) {
+		for (Class<? extends CustomCommand> clazz : customCommands)
 			try {
-				if (!Modifier.isAbstract(command.getModifiers()) && command.getAnnotation(Disabled.class) == null)
-					register(new ObjenesisStd().newInstance(command));
+				if (Utils.canEnable(clazz))
+					register(new ObjenesisStd().newInstance(clazz));
 			} catch (Throwable ex) {
-				ValeriaOnline.log("Error while registering command " + command.getSimpleName());
+				plugin.getLogger().info("Error while registering command " + prettyName(clazz));
 				ex.printStackTrace();
 			}
 	}
 
+	public void registerExcept(Class<? extends CustomCommand>... customCommands) {
+		List<Class<? extends CustomCommand>> excluded = Arrays.asList(customCommands);
+		for (Class<? extends CustomCommand> clazz : commandSet)
+			if (!excluded.contains(clazz))
+				register(clazz);
+	}
+
 	private void register(CustomCommand customCommand) {
 		new Time.Timer("  Register command " + customCommand.getName(), () -> {
-			if (StringUtils.listLast(customCommand.getClass().toString(), ".").startsWith("_")) return;
-
 			try {
 				for (String alias : customCommand.getAllAliases()) {
 					mapUtils.register(alias, customCommand);
@@ -86,48 +101,48 @@ public class Commands {
 				ex.printStackTrace();
 			}
 
-			try {
-				boolean hasNoArgsConstructor = Stream.of(customCommand.getClass().getConstructors()).anyMatch((c) -> c.getParameterCount() == 0);
-				if (customCommand instanceof Listener) {
-					if (!hasNoArgsConstructor)
-						ValeriaOnline.warn("Cannot register listener on command " + customCommand.getClass().getSimpleName() + ", needs @NoArgsConstructor");
-					else
-						ValeriaOnline.registerListener((Listener) customCommand.getClass().newInstance());
-				} else
-				if (new ArrayList<>(getAllMethods(customCommand.getClass(), withAnnotation(EventHandler.class))).size() > 0)
-					ValeriaOnline.warn("Found @EventHandlers in " + customCommand.getClass().getSimpleName() + " which does not implement Listener"
-							+ (hasNoArgsConstructor ? "" : " or have a @NoArgsConstructor"));
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
+			Utils.tryRegisterListener(customCommand);
 		});
 	}
 
 	public void unregisterAll() {
-		for (Class<? extends CustomCommand> command : commandSet)
+		for (Class<? extends CustomCommand> clazz : commandSet)
 			try {
-				if (!Modifier.isAbstract(command.getModifiers()))
-					unregister(new ObjenesisStd().newInstance(command));
+				if (!Modifier.isAbstract(clazz.getModifiers()))
+					unregister(clazz);
 			} catch (Throwable ex) {
-				ValeriaOnline.log("Error while unregistering command " + command.getSimpleName());
+				plugin.getLogger().info("Error while unregistering command " + prettyName(clazz));
 				ex.printStackTrace();
 			}
 	}
 
+	public void unregister(Class<? extends CustomCommand>... customCommands) {
+		for (Class<? extends CustomCommand> clazz : customCommands)
+			unregister(new ObjenesisStd().newInstance(clazz));
+	}
+
+	public void unregisterExcept(Class<? extends CustomCommand>... customCommands) {
+		List<Class<? extends CustomCommand>> excluded = Arrays.asList(customCommands);
+		for (Class<? extends CustomCommand> clazz : commandSet)
+			if (!excluded.contains(clazz))
+				unregister(clazz);
+	}
+
 	private void unregister(CustomCommand customCommand) {
-		try {
-			for (String alias : customCommand.getAllAliases()) {
+		new Time.Timer("  Unregister command " + customCommand.getName(), () -> {
+			try {
 				mapUtils.unregister(customCommand.getName());
-				commands.remove(alias);
+				for (String alias : customCommand.getAllAliases())
+					commands.remove(alias);
+			} catch (Exception ex) {
+				ex.printStackTrace();
 			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		try {
-			customCommand._shutdown();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
+			try {
+				customCommand._shutdown();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		});
 	}
 
 	private void registerConvertersAndTabCompleters() {
