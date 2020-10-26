@@ -6,23 +6,14 @@ import github.scarsz.discordsrv.DiscordSRV;
 import io.lumine.xikage.mythicmobs.MythicMobs;
 import it.sauronsoftware.cron4j.Scheduler;
 import lombok.Getter;
-import me.wakka.valeriaonline.features.altars.Altars;
 import me.wakka.valeriaonline.features.autorestart.AutoRestart;
 import me.wakka.valeriaonline.features.chat.Chat;
-import me.wakka.valeriaonline.features.dungeons.Dungeons;
-import me.wakka.valeriaonline.features.events.Events;
-import me.wakka.valeriaonline.features.itemtags.ItemTags;
-import me.wakka.valeriaonline.features.listeners.AmbientSounds;
-import me.wakka.valeriaonline.features.listeners.Listeners;
-import me.wakka.valeriaonline.features.misc.MiscFeatures;
 import me.wakka.valeriaonline.features.placeholders.Placeholders;
-import me.wakka.valeriaonline.features.playershops.PlayerShops;
-import me.wakka.valeriaonline.features.prefixtags.PrefixTags;
-import me.wakka.valeriaonline.features.trading.Trading;
 import me.wakka.valeriaonline.framework.commands.Commands;
+import me.wakka.valeriaonline.framework.features.Features;
 import me.wakka.valeriaonline.framework.persistence.MySQLPersistence;
-import me.wakka.valeriaonline.models.hours.HoursFeature;
 import me.wakka.valeriaonline.utils.ConfigUtils;
+import me.wakka.valeriaonline.utils.Env;
 import me.wakka.valeriaonline.utils.SignMenuFactory;
 import me.wakka.valeriaonline.utils.Time;
 import me.wakka.valeriaonline.utils.Utils;
@@ -40,6 +31,7 @@ import static me.wakka.valeriaonline.utils.StringUtils.stripColor;
 
 public class ValeriaOnline extends JavaPlugin {
 	private Commands commands;
+	private Features features;
 	private static ValeriaOnline instance;
 	@Getter
 	private final static UUID UUID0 = new UUID(0, 0);
@@ -58,6 +50,17 @@ public class ValeriaOnline extends JavaPlugin {
 		return instance;
 	}
 
+	public static Env getEnv() {
+		String env = ConfigUtils.getSettings().getString("env", Env.DEV.name()).toUpperCase();
+		try {
+			return Env.valueOf(env);
+		} catch (IllegalArgumentException ex) {
+			ValeriaOnline.severe("Could not parse environment variable " + env + ", options are: " + String.join(", ", Utils.EnumUtils.valueNameList(Env.class)));
+			ValeriaOnline.severe("Defaulting to " + Env.DEV.name() + " environment");
+			return Env.DEV;
+		}
+	}
+
 	public static void log(String message) {
 		getInstance().getLogger().info(stripColor(message));
 	}
@@ -72,14 +75,20 @@ public class ValeriaOnline extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		log("Enabling...");
-
-		ConfigUtils.setupConfig();
-		enableFeatures();
-		commands = new Commands(this, "me.wakka.valeriaonline.features");
-		commands.registerAll();
-
-		log("Enabled.");
+		new Time.Timer("Enable", () -> {
+			ConfigUtils.setupConfig();
+			new Time.Timer(" Databases", this::databases);
+			new Time.Timer(" Hooks", this::hooks);
+			new Time.Timer(" Features", () -> {
+				features = new Features(this, "me.wakka.valeriaonline.features");
+				features.register(Chat.class); // prioritize
+				features.registerAll();
+			});
+			new Time.Timer(" Commands", () -> {
+				commands = new Commands(this, "me.wakka.valeriaonline.features");
+				commands.registerAll();
+			});
+		});
 	}
 
 	@Override
@@ -93,14 +102,15 @@ public class ValeriaOnline extends JavaPlugin {
 	public void onDisable() {
 		log("Disabling...");
 
+		try { broadcastReload(); 									} catch (Throwable ex) { ex.printStackTrace(); }
 		try { Utils.runCommandAsConsole("save-all");	} catch (Throwable ex) { ex.printStackTrace(); }
 		try { cron.stop();											} catch (Throwable ex) { ex.printStackTrace(); }
-		try { AmbientSounds.shutdown();								} catch (Throwable ex) { ex.printStackTrace(); }
-		try { AutoRestart.shutdown();								} catch (Throwable ex) { ex.printStackTrace(); }
 
-		try { broadcastReload(); 									} catch (Throwable ex) { ex.printStackTrace(); }
-		try { Chat.shutdown(); 										} catch (Throwable ex) { ex.printStackTrace(); }
+		try { commands.unregisterAll();								} catch (Throwable ex) { ex.printStackTrace(); }
+		try { features.unregisterExcept(Chat.class);				} catch (Throwable ex) { ex.printStackTrace(); }
+		try { features.unregister(Chat.class);						} catch (Throwable ex) { ex.printStackTrace(); }
 		try { MySQLPersistence.shutdown(); 							} catch (Throwable ex) { ex.printStackTrace(); }
+//		try { MongoDBPersistence.shutdown();							} catch (Throwable ex) { ex.printStackTrace(); }
 
 		log("Disabled.");
 	}
@@ -120,9 +130,8 @@ public class ValeriaOnline extends JavaPlugin {
 			log("Could not register listener " + listener.toString() + "!");
 	}
 
-	public static Chat chat;
-	public static DiscordSRV discordSRV;
-
+	@Getter
+	private static final DiscordSRV discordSRV = DiscordSRV.getPlugin();
 	@Getter
 	private static SignMenuFactory signMenuFactory;
 	@Getter
@@ -131,34 +140,20 @@ public class ValeriaOnline extends JavaPlugin {
 	private static final MythicMobs mythicMobs = MythicMobs.inst();
 	@Getter
 	private static mcMMO mcmmo;
-
-	@Getter
-	// http://www.sauronsoftware.it/projects/cron4j/manual.php
-	private static final Scheduler cron = new Scheduler();
-
 	@Getter
 	private static Economy econ = null;
 	@Getter
 	private static Permission perms = null;
 
-	private void enableFeatures() {
-		new Time.Timer("  Chat", () -> chat = new Chat());
-		new Time.Timer("  DiscordSRV", () -> discordSRV = DiscordSRV.getPlugin());
-		new Listeners();
-		new ItemTags();
-		new Altars();
-		new Dungeons();
-		new AutoRestart();
-		new Trading();
-		new PlayerShops();
-		new AmbientSounds();
-		new HoursFeature();
-		new PrefixTags();
-		new MiscFeatures();
-		new Events();
+	@Getter
+	// http://www.sauronsoftware.it/projects/cron4j/manual.php
+	private static final Scheduler cron = new Scheduler();
 
-		new Placeholders().register();
+	private void databases() {
+		//
+	}
 
+	private void hooks() {
 		signMenuFactory = new SignMenuFactory(this);
 		essentials = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
 
@@ -168,6 +163,8 @@ public class ValeriaOnline extends JavaPlugin {
 		econ = getServer().getServicesManager().getRegistration(Economy.class).getProvider();
 		perms = getServer().getServicesManager().getRegistration(Permission.class).getProvider();
 		mcmmo = mcMMO.p;
+
+		new Placeholders().register();
 	}
 
 

@@ -3,6 +3,7 @@ package me.wakka.valeriaonline.features.chat;
 import lombok.Getter;
 import me.wakka.valeriaonline.ValeriaOnline;
 import me.wakka.valeriaonline.features.chat.alerts.AlertsListener;
+import me.wakka.valeriaonline.framework.features.Feature;
 import me.wakka.valeriaonline.models.chat.ChatService;
 import me.wakka.valeriaonline.models.chat.Chatter;
 import me.wakka.valeriaonline.models.chat.PublicChannel;
@@ -15,17 +16,19 @@ import org.bukkit.ChatColor;
 
 import java.util.HashMap;
 
-public class Chat {
+public class Chat extends Feature {
 
 	public static final String PREFIX = StringUtils.getPrefix("Chat");
 
-	public Chat() {
+	@Override
+	public void startup() {
+		new Time.Timer("    addChannels", this::addChannels);
 		new Time.Timer("    ChatListener", () -> ValeriaOnline.registerListener(new ChatListener()));
 		new Time.Timer("    AlertsListener", () -> ValeriaOnline.registerListener(new AlertsListener()));
-		new Time.Timer("    addChannels", this::addChannels);
 	}
 
-	public static void shutdown() {
+	@Override
+	public void shutdown() {
 		new HashMap<>(new ChatService().getCache()).forEach((uuid, chatter) -> new ChatService().saveSync(chatter));
 	}
 

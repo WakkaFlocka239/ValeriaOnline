@@ -2,6 +2,7 @@ package me.wakka.valeriaonline.features;
 
 import fr.minuskube.inv.SmartInvsPlugin;
 import lombok.NoArgsConstructor;
+import me.wakka.valeriaonline.ValeriaOnline;
 import me.wakka.valeriaonline.features.listeners.TeleportScrolls;
 import me.wakka.valeriaonline.features.misc.KingdomCompass;
 import me.wakka.valeriaonline.framework.commands.models.CustomCommand;
@@ -9,6 +10,7 @@ import me.wakka.valeriaonline.framework.commands.models.annotations.Description;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Path;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Permission;
 import me.wakka.valeriaonline.framework.commands.models.events.CommandEvent;
+import me.wakka.valeriaonline.utils.SoundUtils;
 import me.wakka.valeriaonline.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
@@ -46,11 +48,19 @@ public class ValeriaOnlineCommand extends CustomCommand implements Listener {
 		runCommand("plugman reload ValeriaOnline");
 	}
 
+	@Path("getEnv")
+	void getEnv() {
+		send(ValeriaOnline.getEnv().name());
+	}
+
 	@Path("getItems")
 	void getItem() {
 		Utils.giveItem(player(), KingdomCompass.getItem());
 		Utils.giveItems(player(), TeleportScrolls.scrolls);
+	}
 
-
+	@Path("jingles <jingle>")
+	void jingles(SoundUtils.Jingle jingle) {
+		jingle.play(player());
 	}
 }

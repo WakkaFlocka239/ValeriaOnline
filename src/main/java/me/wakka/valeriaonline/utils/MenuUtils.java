@@ -9,7 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
-import me.wakka.valeriaonline.framework.exceptions.InvalidInputException;
+import me.wakka.valeriaonline.framework.exceptions.postconfigured.InvalidInputException;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;

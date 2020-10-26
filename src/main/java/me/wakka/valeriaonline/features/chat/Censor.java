@@ -142,7 +142,7 @@ public class Censor {
 		if (message.toLowerCase().matches("(http(s)?:\\/\\/.)?(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}( ?\\. ?)[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)"))
 			cancel = true;
 
-		if (cancel) {
+		if (cancel && !event.getChatter().getPlayer().hasPermission("group.mod")) {
 			Chat.broadcast(PREFIX + "Prevented a possible advertisement attempt by " + event.getOrigin() + ": " + message, Chat.StaticChannel.STAFF);
 			event.setCancelled(true);
 		}

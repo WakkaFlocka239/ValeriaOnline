@@ -3,6 +3,7 @@ package me.wakka.valeriaonline.features.altars;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import lombok.Getter;
 import me.wakka.valeriaonline.ValeriaOnline;
+import me.wakka.valeriaonline.framework.features.Feature;
 import me.wakka.valeriaonline.utils.Utils;
 import me.wakka.valeriaonline.utils.WorldGuardUtils;
 import org.bukkit.Location;
@@ -10,7 +11,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -19,11 +19,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-public class Altars implements Listener {
+public class Altars extends Feature implements Listener {
 	@Getter
 	public static List<Altar> altars = new ArrayList<>();
 
-	public Altars() {
+	@Override
+	public void startup() {
+
 		ValeriaOnline.registerListener(this);
 
 		Altar desert = new Altar("world", "altar_desert");
@@ -91,7 +93,7 @@ public class Altars implements Listener {
 
 	@EventHandler
 	public void onItemTeleport(PlayerInteractEvent event) {
-		if (!event.getAction().equals(Action.RIGHT_CLICK_AIR) && !event.getAction().equals(Action.RIGHT_CLICK_BLOCK))
+		if (!Utils.ActionGroup.CLICK_AIR.applies(event))
 			return;
 
 		ItemStack item = Utils.getTool(event.getPlayer());

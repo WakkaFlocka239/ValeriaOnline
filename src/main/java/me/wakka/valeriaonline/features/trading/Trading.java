@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.SneakyThrows;
 import me.wakka.valeriaonline.features.trading.models.Profession;
 import me.wakka.valeriaonline.features.trading.models.Trade;
+import me.wakka.valeriaonline.framework.features.Feature;
 import me.wakka.valeriaonline.utils.ConfigUtils;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
@@ -16,12 +17,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class Trading {
+public class Trading extends Feature {
 	private static File configFile;
 	@Getter
 	private static YamlConfiguration config;
 
-	public Trading() {
+	@Override
+	public void startup() {
+
 		registerSerializables();
 		configFile = ConfigUtils.getFile("trading.yml");
 		config = ConfigUtils.getConfig(configFile);

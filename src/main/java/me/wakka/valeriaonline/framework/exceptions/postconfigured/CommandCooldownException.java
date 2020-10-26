@@ -1,11 +1,11 @@
-package me.wakka.valeriaonline.framework.exceptions;
+package me.wakka.valeriaonline.framework.exceptions.postconfigured;
 
 import me.wakka.valeriaonline.features.cooldown.Cooldowns;
 import org.bukkit.OfflinePlayer;
 
 import java.util.UUID;
 
-public class CommandCooldownException extends CustomException{
+public class CommandCooldownException extends PostConfiguredException {
 	public CommandCooldownException(OfflinePlayer player, String type) {
 		this(player.getUniqueId(), type);
 	}

@@ -7,7 +7,7 @@ import me.wakka.valeriaonline.framework.commands.models.annotations.Aliases;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Path;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Redirects;
 import me.wakka.valeriaonline.framework.commands.models.events.CommandEvent;
-import me.wakka.valeriaonline.framework.exceptions.PlayerNotOnlineException;
+import me.wakka.valeriaonline.framework.exceptions.postconfigured.PlayerNotOnlineException;
 import me.wakka.valeriaonline.utils.ConfigUtils;
 import me.wakka.valeriaonline.utils.MenuUtils;
 import me.wakka.valeriaonline.utils.StringUtils;

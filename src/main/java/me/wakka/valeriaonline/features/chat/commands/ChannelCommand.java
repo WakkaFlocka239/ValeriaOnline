@@ -10,7 +10,7 @@ import me.wakka.valeriaonline.framework.commands.models.annotations.Path;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Redirects;
 import me.wakka.valeriaonline.framework.commands.models.annotations.TabCompleterFor;
 import me.wakka.valeriaonline.framework.commands.models.events.CommandEvent;
-import me.wakka.valeriaonline.framework.exceptions.PlayerNotOnlineException;
+import me.wakka.valeriaonline.framework.exceptions.postconfigured.PlayerNotOnlineException;
 import me.wakka.valeriaonline.models.chat.Channel;
 import me.wakka.valeriaonline.models.chat.ChatService;
 import me.wakka.valeriaonline.models.chat.Chatter;

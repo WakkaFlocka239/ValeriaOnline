@@ -5,8 +5,8 @@ import lombok.Setter;
 import me.wakka.valeriaonline.ValeriaOnline;
 import me.wakka.valeriaonline.features.chat.events.PrivateChatEvent;
 import me.wakka.valeriaonline.features.chat.events.PublicChatEvent;
-import me.wakka.valeriaonline.framework.exceptions.InvalidInputException;
-import me.wakka.valeriaonline.framework.exceptions.PlayerNotOnlineException;
+import me.wakka.valeriaonline.framework.exceptions.postconfigured.InvalidInputException;
+import me.wakka.valeriaonline.framework.exceptions.postconfigured.PlayerNotOnlineException;
 import me.wakka.valeriaonline.models.chat.Channel;
 import me.wakka.valeriaonline.models.chat.Chatter;
 import me.wakka.valeriaonline.models.chat.PrivateChannel;
@@ -87,7 +87,7 @@ public class ChatManager {
 
 
 		event.getRecipients().forEach(recipient -> recipient.send(json));
-		ValeriaOnline.discordSRV.getMainTextChannel().sendMessage(discordJson).submit();
+		ValeriaOnline.getDiscordSRV().getMainTextChannel().sendMessage(discordJson).submit();
 
 		Bukkit.getConsoleSender().sendMessage(stripColor(json.toString()));
 	}

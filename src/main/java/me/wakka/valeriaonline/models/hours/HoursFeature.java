@@ -1,15 +1,18 @@
 package me.wakka.valeriaonline.models.hours;
 
 import me.wakka.valeriaonline.ValeriaOnline;
+import me.wakka.valeriaonline.framework.features.Feature;
 import me.wakka.valeriaonline.utils.Tasks;
 import me.wakka.valeriaonline.utils.Time;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-public class HoursFeature {
+public class HoursFeature extends Feature {
 	final int INTERVAL = 5;
 
-	public HoursFeature() {
+	@Override
+	public void startup() {
+
 		scheduler();
 
 		ValeriaOnline.getCron().schedule("00 00 * * *", () -> new HoursService().endOfDay());

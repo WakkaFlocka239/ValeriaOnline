@@ -1,6 +1,5 @@
 package me.wakka.valeriaonline.features.commands.staff;
 
-
 import io.lumine.xikage.mythicmobs.adapters.bukkit.BukkitAdapter;
 import io.lumine.xikage.mythicmobs.items.MythicItem;
 import me.wakka.valeriaonline.ValeriaOnline;
@@ -66,8 +65,8 @@ public class TestCommand extends CustomCommand {
 
 	@Path("discord")
 	void discord() {
-		ValeriaOnline.discordSRV.getMainTextChannel().sendMessage("Test Message").submit();
-		Map<String, String> channels = ValeriaOnline.discordSRV.getChannels();
+		ValeriaOnline.getDiscordSRV().getMainTextChannel().sendMessage("Test Message").submit();
+		Map<String, String> channels = ValeriaOnline.getDiscordSRV().getChannels();
 		Utils.wakka(String.valueOf(channels));
 	}
 
@@ -91,5 +90,17 @@ public class TestCommand extends CustomCommand {
 
 		send(json("Click to copy: ").group().next(uuid).suggest(uuid));
 	}
+
+//	@Path("setSkin")
+//	void setSkin(){
+//		PlayerProfile profile = player().getPlayerProfile();
+//		profile.setProperty(new ProfileProperty(
+//				"textures",
+//				"ewogICJ0aW1lc3RhbXAiIDogMTYwMzY3NjAyMTg4MiwKICAicHJvZmlsZUlkIiA6ICJhYTZhNDA5NjU4YTk0MDIwYmU3OGQwN2JkMzVlNTg5MyIsCiAgInByb2ZpbGVOYW1lIiA6ICJiejE0IiwKICAic2lnbmF0dXJlUmVxdWlyZWQiIDogdHJ1ZSwKICAidGV4dHVyZXMiIDogewogICAgIlNLSU4iIDogewogICAgICAidXJsIiA6ICJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlL2NlNjY2OTdmMzFmMGNiZGE0YzZmYTE4NGNmOTgyOGQ1ZTg5YmRmYTQ3MGRlODQ3NWUxMWIwMTU5Yzg4MGRhYTgiLAogICAgICAibWV0YWRhdGEiIDogewogICAgICAgICJtb2RlbCIgOiAic2xpbSIKICAgICAgfQogICAgfQogIH0KfQ",
+//				"hR+PlD1orh1qLAJTRoh2hFlZ11s5GxkwgIMqAU95c/9T1Tk8Io8+k5df+I6NcLyfazbpraXpss+aNM8iKgUYK/pPCxGa3AaERbbnSjcnlZFXGgPmprzUMBt/anWyeVXJLQT9UKL0qOMXaHnPQkPralPdSmNhich836cggDgfU4qxPaFiQrrHdQ8KLzjK5dYxZq2NLjVZbsGYyIjwQw/r+pAdoxrxVk/4whE7loTnAH2mSlq+FEf3pOVfwGnIvpofeGmQSTcVjJcp8nRpryKizN3jR2iNgg3dxWbS91DAxihxGP1sZMamohohyY4oh6nmqWQecLZMvoDC7RlYNT/pKJdtt3PdFeHxfMI9zYYI6D4xGwdvMueKvHqDWlfzPdn6epctmpf2E7JkOBdDbd3MWWeXShc/aVSVjET2SSmh9e0RF1hnE08CR6CwEjTwi10eH3f8FEbnJh4vr1QYVpgsjUUv/NIng1yIQFEeYj4Uu94AOZ7ReSj3t3cPBhQP3ExiMFD6kzQIX8QcGMVLDHTmQYH7NV4y+Rb4m8he/ULoGtvAX6C0iZWcKC4xleKiu0yvGsUqlybHC+Q5eCg2EqAE0tLLFbM5g1n6+fgELANc3dfAA0JRvfkOCbQwmlICE8LfipSNl1GI/NAoSLySg7QxN7NxgBkHvYGwKMDleFMPQdY="));
+//		profile.complete(true, true);
+//		player().setPlayerProfile(profile);
+//
+//	}
 
 }

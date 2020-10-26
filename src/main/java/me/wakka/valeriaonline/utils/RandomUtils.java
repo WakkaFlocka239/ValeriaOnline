@@ -1,7 +1,7 @@
 package me.wakka.valeriaonline.utils;
 
 import lombok.Getter;
-import me.wakka.valeriaonline.framework.exceptions.InvalidInputException;
+import me.wakka.valeriaonline.framework.exceptions.postconfigured.InvalidInputException;
 import org.bukkit.Material;
 import org.bukkit.util.Vector;
 

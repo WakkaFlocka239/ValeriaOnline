@@ -8,7 +8,7 @@ import me.wakka.valeriaonline.framework.commands.models.annotations.Path;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Permission;
 import me.wakka.valeriaonline.framework.commands.models.annotations.TabCompleteIgnore;
 import me.wakka.valeriaonline.framework.commands.models.events.CommandEvent;
-import me.wakka.valeriaonline.framework.exceptions.InvalidInputException;
+import me.wakka.valeriaonline.framework.exceptions.postconfigured.InvalidInputException;
 import me.wakka.valeriaonline.utils.StringUtils;
 import me.wakka.valeriaonline.utils.WorldGuardUtils;
 import org.bukkit.Bukkit;

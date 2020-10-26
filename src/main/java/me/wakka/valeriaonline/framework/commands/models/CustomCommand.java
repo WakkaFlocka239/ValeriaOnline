@@ -14,13 +14,13 @@ import me.wakka.valeriaonline.framework.commands.models.annotations.HideFromHelp
 import me.wakka.valeriaonline.framework.commands.models.annotations.Path;
 import me.wakka.valeriaonline.framework.commands.models.annotations.TabCompleterFor;
 import me.wakka.valeriaonline.framework.commands.models.events.CommandEvent;
-import me.wakka.valeriaonline.framework.exceptions.InvalidInputException;
 import me.wakka.valeriaonline.framework.exceptions.MustBeCommandBlockException;
 import me.wakka.valeriaonline.framework.exceptions.MustBeConsoleException;
 import me.wakka.valeriaonline.framework.exceptions.MustBeIngameException;
 import me.wakka.valeriaonline.framework.exceptions.NoPermissionException;
-import me.wakka.valeriaonline.framework.exceptions.PlayerNotFoundException;
-import me.wakka.valeriaonline.framework.exceptions.PlayerNotOnlineException;
+import me.wakka.valeriaonline.framework.exceptions.postconfigured.InvalidInputException;
+import me.wakka.valeriaonline.framework.exceptions.postconfigured.PlayerNotFoundException;
+import me.wakka.valeriaonline.framework.exceptions.postconfigured.PlayerNotOnlineException;
 import me.wakka.valeriaonline.utils.JsonBuilder;
 import me.wakka.valeriaonline.utils.StringUtils;
 import me.wakka.valeriaonline.utils.Tasks;

@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import me.wakka.valeriaonline.ValeriaOnline;
 import me.wakka.valeriaonline.features.chat.Chat;
 import me.wakka.valeriaonline.features.chat.ChatManager;
-import me.wakka.valeriaonline.framework.exceptions.InvalidInputException;
+import me.wakka.valeriaonline.framework.exceptions.postconfigured.InvalidInputException;
 import me.wakka.valeriaonline.utils.JsonBuilder;
 import me.wakka.valeriaonline.utils.SoundUtils;
 import me.wakka.valeriaonline.utils.Tasks;

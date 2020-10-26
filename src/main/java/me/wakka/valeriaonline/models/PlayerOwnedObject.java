@@ -1,6 +1,6 @@
 package me.wakka.valeriaonline.models;
 
-import me.wakka.valeriaonline.framework.exceptions.PlayerNotOnlineException;
+import me.wakka.valeriaonline.framework.exceptions.postconfigured.PlayerNotOnlineException;
 import me.wakka.valeriaonline.utils.JsonBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;

@@ -18,7 +18,6 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -91,7 +90,7 @@ public class TeleportScrolls implements Listener {
 
 	@EventHandler
 	public void onUseScroll(PlayerInteractEvent event) {
-		if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && !event.getAction().equals(Action.RIGHT_CLICK_AIR))
+		if (!Utils.ActionGroup.CLICK_AIR.applies(event))
 			return;
 
 		Player player = event.getPlayer();

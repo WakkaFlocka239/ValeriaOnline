@@ -1,4 +1,4 @@
-package me.wakka.valeriaonline.features.listeners;
+package me.wakka.valeriaonline.features.misc;
 
 import me.wakka.valeriaonline.features.altars.Altars;
 import me.wakka.valeriaonline.features.dungeons.Dungeons;

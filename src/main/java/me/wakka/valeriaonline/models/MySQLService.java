@@ -3,7 +3,7 @@ package me.wakka.valeriaonline.models;
 import com.dieselpoint.norm.Database;
 import com.google.common.base.Strings;
 import me.wakka.valeriaonline.ValeriaOnline;
-import me.wakka.valeriaonline.framework.exceptions.InvalidInputException;
+import me.wakka.valeriaonline.framework.exceptions.postconfigured.InvalidInputException;
 import me.wakka.valeriaonline.framework.persistence.MySQLDatabase;
 import me.wakka.valeriaonline.framework.persistence.MySQLPersistence;
 

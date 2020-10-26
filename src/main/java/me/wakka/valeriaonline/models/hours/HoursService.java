@@ -1,6 +1,6 @@
 package me.wakka.valeriaonline.models.hours;
 
-import me.wakka.valeriaonline.framework.exceptions.InvalidInputException;
+import me.wakka.valeriaonline.framework.exceptions.postconfigured.InvalidInputException;
 import me.wakka.valeriaonline.models.MySQLService;
 import me.wakka.valeriaonline.utils.Time;
 import org.bukkit.OfflinePlayer;

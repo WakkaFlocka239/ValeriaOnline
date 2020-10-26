@@ -2,6 +2,7 @@ package me.wakka.valeriaonline.features.prefixtags;
 
 import lombok.Getter;
 import me.wakka.valeriaonline.ValeriaOnline;
+import me.wakka.valeriaonline.framework.features.Feature;
 import me.wakka.valeriaonline.models.fame.Fame;
 import me.wakka.valeriaonline.models.fame.FameService;
 import me.wakka.valeriaonline.models.fame.PrefixTag;
@@ -20,7 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class PrefixTags {
+public class PrefixTags extends Feature {
 	public static String PREFIX = StringUtils.getPrefix("Tags");
 	@Getter
 	public static List<PrefixTag> activeTags = new ArrayList<>();
@@ -29,7 +30,9 @@ public class PrefixTags {
 	@Getter
 	private static YamlConfiguration config;
 
-	public PrefixTags() {
+	@Override
+	public void startup() {
+
 		configFile = ConfigUtils.getFile("prefixtags.yml");
 		config = ConfigUtils.getConfig(configFile);
 

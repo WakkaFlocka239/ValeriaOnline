@@ -1,8 +1,13 @@
 package me.wakka.valeriaonline.features.misc;
 
-public class MiscFeatures {
-	public MiscFeatures() {
+import me.wakka.valeriaonline.framework.features.Feature;
+
+public class MiscFeatures extends Feature {
+	@Override
+	public void startup() {
+
 		new KingdomCompass();
 		new ArmorStandStalker();
+		new AmbientSounds();
 	}
 }

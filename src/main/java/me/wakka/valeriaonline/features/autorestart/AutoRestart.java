@@ -3,6 +3,7 @@ package me.wakka.valeriaonline.features.autorestart;
 import com.google.common.base.Strings;
 import lombok.Getter;
 import me.wakka.valeriaonline.ValeriaOnline;
+import me.wakka.valeriaonline.framework.features.Feature;
 import me.wakka.valeriaonline.utils.ConfigUtils;
 import me.wakka.valeriaonline.utils.StringUtils;
 import me.wakka.valeriaonline.utils.Tasks;
@@ -26,14 +27,14 @@ import java.util.TimerTask;
 
 import static me.wakka.valeriaonline.utils.StringUtils.colorize;
 
-public class AutoRestart {
-	private final List<Double> warnTimes = ConfigUtils.getSettings().getDoubleList("autorestart.warnTimes");     // minutes till restart warning times
-	private final String PREFIX = ConfigUtils.getSettings().getString("autorestart.prefix");
-	private final String warningMessage = ConfigUtils.getSettings().getString("autorestart.warnMsg");
-	private final String restartMessage = ConfigUtils.getSettings().getString("autorestart.restartMsg");
-	private final int restartInterval = ConfigUtils.getSettings().getInt("autorestart.interval");                // hours
-	private int restartTime = ConfigUtils.getSettings().getInt("autorestart.startTime");                   // time to start at, Ex: 6 == 0600
-	private final double cancelTime = ConfigUtils.getSettings().getDouble("autorestart.cancelTime");             // minutes
+public class AutoRestart extends Feature {
+	private static final List<Double> warnTimes = ConfigUtils.getSettings().getDoubleList("autorestart.warnTimes");    // minutes till restart warning times
+	private static final String PREFIX = ConfigUtils.getSettings().getString("autorestart.prefix");
+	private static final String warningMessage = ConfigUtils.getSettings().getString("autorestart.warnMsg");
+	private static final String restartMessage = ConfigUtils.getSettings().getString("autorestart.restartMsg");
+	private static final int restartInterval = ConfigUtils.getSettings().getInt("autorestart.interval");            // hours
+	private static int restartTime = ConfigUtils.getSettings().getInt("autorestart.startTime");                    // time to start at, Ex: 6 == 0600
+	private static final double cancelTime = ConfigUtils.getSettings().getDouble("autorestart.cancelTime");           // minutes
 	private static final String timezone = ConfigUtils.getSettings().getString("autorestart.timezone");
 	//
 	private static final List<Timer> warningTimers = new ArrayList<>();
@@ -49,14 +50,17 @@ public class AutoRestart {
 	public final static Location closeDungeons = new Location(Bukkit.getWorld("events"), 46, 11, -40);
 	public final static Location openDungeons = new Location(Bukkit.getWorld("events"), 43, 13, -38);
 
-	public AutoRestart() {
+	@Override
+	public void startup() {
+
 		scheduleRestart();
 
 		closeDungeons.getBlock().setType(Material.AIR);
 		Tasks.wait(Time.SECOND.x(1), () -> openDungeons.getBlock().setType(Material.AIR));
 	}
 
-	public static void shutdown() {
+	@Override
+	public void shutdown() {
 		cancelTasks();
 	}
 
@@ -66,7 +70,7 @@ public class AutoRestart {
 
 		warningTimers.clear();
 
-		if(rebootTimer != null)
+		if (rebootTimer != null)
 			rebootTimer.cancel();
 
 		rebootTimer = new Timer();

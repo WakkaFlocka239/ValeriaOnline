@@ -3,6 +3,7 @@ package me.wakka.valeriaonline.features.dungeons;
 import com.destroystokyo.paper.Title;
 import lombok.Getter;
 import me.wakka.valeriaonline.ValeriaOnline;
+import me.wakka.valeriaonline.framework.features.Feature;
 import me.wakka.valeriaonline.utils.CitizensUtils;
 import me.wakka.valeriaonline.utils.StringUtils;
 import me.wakka.valeriaonline.utils.Tasks;
@@ -17,7 +18,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
@@ -35,7 +35,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class Dungeons implements Listener {
+public class Dungeons extends Feature implements Listener {
 	@Getter
 	public static List<Dungeon> dungeons = new ArrayList<>();
 	public static final World world = Bukkit.getWorld("events");
@@ -48,7 +48,9 @@ public class Dungeons implements Listener {
 
 	public static final String ERROR = "&cYou can't do that here.";
 
-	public Dungeons() {
+	@Override
+	public void startup() {
+
 		ValeriaOnline.registerListener(this);
 
 		Dungeon crypt = new Dungeon("dungeon_crypt", "Green");
@@ -126,7 +128,7 @@ public class Dungeons implements Listener {
 
 	@EventHandler
 	public void onItemTeleport(PlayerInteractEvent event) {
-		if (!event.getAction().equals(Action.RIGHT_CLICK_AIR) && !event.getAction().equals(Action.RIGHT_CLICK_BLOCK))
+		if (!Utils.ActionGroup.CLICK_AIR.applies(event))
 			return;
 
 		ItemStack item = Utils.getTool(event.getPlayer());

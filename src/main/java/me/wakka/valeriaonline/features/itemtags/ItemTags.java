@@ -2,6 +2,7 @@ package me.wakka.valeriaonline.features.itemtags;
 
 import de.tr7zw.nbtapi.NBTItem;
 import lombok.SneakyThrows;
+import me.wakka.valeriaonline.framework.features.Feature;
 import me.wakka.valeriaonline.utils.ConfigUtils;
 import me.wakka.valeriaonline.utils.StringUtils;
 import org.bukkit.Material;
@@ -17,15 +18,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ItemTags {
+public class ItemTags extends Feature {
 	private static final Map<Enchantment, List<Level>> enchantsConfigMap = new HashMap<>();
 	private static final Map<Enchantment, Integer> customEnchantsConfigMap = new HashMap<>();
 	private static final Map<String, Integer> armorConfigMap = new HashMap<>();
 	private static final Map<String, Integer> toolConfigMap = new HashMap<>();
-	private final YamlConfiguration config;
-	private final File configFile;
+	private YamlConfiguration config;
+	private File configFile;
 
-	public ItemTags() {
+	@Override
+	public void startup() {
+
 		configFile = ConfigUtils.getFile("itemtags.yml");
 		config = ConfigUtils.getConfig(configFile);
 

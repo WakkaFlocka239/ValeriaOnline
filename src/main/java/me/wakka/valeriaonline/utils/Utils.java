@@ -11,8 +11,10 @@ import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.experimental.Accessors;
 import me.wakka.valeriaonline.ValeriaOnline;
-import me.wakka.valeriaonline.framework.exceptions.InvalidInputException;
-import me.wakka.valeriaonline.framework.exceptions.PlayerNotFoundException;
+import me.wakka.valeriaonline.framework.annotations.Environments;
+import me.wakka.valeriaonline.framework.commands.models.annotations.Disabled;
+import me.wakka.valeriaonline.framework.exceptions.postconfigured.InvalidInputException;
+import me.wakka.valeriaonline.framework.exceptions.postconfigured.PlayerNotFoundException;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -31,7 +33,11 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -46,6 +52,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.nio.file.Paths;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -62,9 +69,12 @@ import java.util.UUID;
 import java.util.function.BooleanSupplier;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static me.wakka.valeriaonline.utils.StringUtils.camelCase;
 import static me.wakka.valeriaonline.utils.StringUtils.colorize;
+import static org.reflections.ReflectionUtils.getAllMethods;
+import static org.reflections.ReflectionUtils.withAnnotation;
 
 public class Utils {
 
@@ -395,6 +405,35 @@ public class Utils {
 		}
 	}
 
+	public static boolean canEnable(Class<?> clazz) {
+		if (clazz.getSimpleName().startsWith("_"))
+			return false;
+		if (Modifier.isAbstract(clazz.getModifiers()))
+			return false;
+		if (clazz.getAnnotation(Disabled.class) != null)
+			return false;
+		if (clazz.getAnnotation(Environments.class) != null && !Env.applies(clazz.getAnnotation(Environments.class).value()))
+			return false;
+
+		return true;
+	}
+
+	public static void tryRegisterListener(Object object) {
+		try {
+			boolean hasNoArgsConstructor = Stream.of(object.getClass().getConstructors()).anyMatch((c) -> c.getParameterCount() == 0);
+			if (object instanceof Listener) {
+				if (!hasNoArgsConstructor)
+					ValeriaOnline.warn("Cannot register listener on command " + object.getClass().getSimpleName() + ", needs @NoArgsConstructor");
+				else
+					ValeriaOnline.registerListener((Listener) object.getClass().newInstance());
+			} else if (new ArrayList<>(getAllMethods(object.getClass(), withAnnotation(EventHandler.class))).size() > 0)
+				ValeriaOnline.warn("Found @EventHandlers in " + object.getClass().getSimpleName() + " which does not implement Listener"
+						+ (hasNoArgsConstructor ? "" : " or have a @NoArgsConstructor"));
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+
 	public static boolean isNullOrEmpty(Collection<?> collection) {
 		return collection == null || collection.isEmpty();
 	}
@@ -598,6 +637,25 @@ public class Utils {
 		}
 	}
 
+	public enum ActionGroup {
+		CLICK_BLOCK(Action.RIGHT_CLICK_BLOCK, Action.LEFT_CLICK_BLOCK),
+		CLICK_AIR(Action.RIGHT_CLICK_AIR, Action.LEFT_CLICK_AIR),
+		RIGHT_CLICK(Action.RIGHT_CLICK_BLOCK, Action.RIGHT_CLICK_AIR),
+		LEFT_CLICK(Action.LEFT_CLICK_BLOCK, Action.LEFT_CLICK_AIR),
+		CLICK(Action.RIGHT_CLICK_BLOCK, Action.RIGHT_CLICK_AIR, Action.LEFT_CLICK_BLOCK, Action.LEFT_CLICK_AIR),
+		PHYSICAL(Action.PHYSICAL);
+
+		final List<Action> actions;
+
+		ActionGroup(Action... actions) {
+			this.actions = Arrays.asList(actions);
+		}
+
+		public boolean applies(PlayerInteractEvent event) {
+			return actions.contains(event.getAction());
+		}
+	}
+
 	public static ItemStack addGlowing(ItemStack itemStack) {
 		itemStack.addUnsafeEnchantment(Enchantment.ARROW_INFINITE, 1);
 		ItemMeta meta = itemStack.getItemMeta();
@@ -758,6 +816,10 @@ public class Utils {
 			T[] values = clazz.getEnumConstants();
 			int previous = ordinal - 1 % values.length;
 			return previous < 0 ? values[values.length - 1] : values[previous];
+		}
+
+		public static <T> List<String> valueNameList(Class<? extends T> clazz) {
+			return Arrays.stream(Env.values()).map(Env::name).collect(Collectors.toList());
 		}
 
 		public static String prettyName(String name) {

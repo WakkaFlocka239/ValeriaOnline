@@ -1,6 +1,6 @@
 package me.wakka.valeriaonline.utils;
 
-import me.wakka.valeriaonline.framework.exceptions.InvalidInputException;
+import me.wakka.valeriaonline.framework.exceptions.postconfigured.InvalidInputException;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.FireworkEffect;
@@ -221,14 +221,13 @@ public class ItemBuilder implements Cloneable {
 	}
 
 	public ItemBuilder symbolBanner(char character, DyeColor patternDye) {
-		return symbolBanner(SymbolBanner.getSymbol(character), patternDye);
+		return symbolBanner(SymbolBanner.Symbol.of(character), patternDye);
 	}
 
 	public ItemBuilder symbolBanner(SymbolBanner.Symbol symbol, DyeColor patternDye) {
-		ItemBuilder symbolBanner = SymbolBanner.get(this, symbol, ColorType.of(itemStack.getType()).getDyeColor(), patternDye);
-		if (symbolBanner != null)
-			return symbolBanner;
-		return this;
+		if (symbol == null)
+			return this;
+		return symbol.get(this, ColorType.of(itemStack.getType()).getDyeColor(), patternDye);
 	}
 
 	// Shulker Boxes

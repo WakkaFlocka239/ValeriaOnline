@@ -17,7 +17,6 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.CompassMeta;
@@ -58,7 +57,7 @@ public class KingdomCompass implements Listener {
 
 	@EventHandler
 	public void onClickCompass(PlayerInteractEvent event) {
-		if (!event.getAction().equals(Action.LEFT_CLICK_BLOCK) && !event.getAction().equals(Action.LEFT_CLICK_AIR))
+		if (!Utils.ActionGroup.LEFT_CLICK.applies(event))
 			return;
 
 		Player player = event.getPlayer();
