@@ -6,9 +6,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import me.wakka.valeriaonline.framework.persistence.serializer.LocationSerializer;
+import me.wakka.valeriaonline.framework.persistence.serializer.mysql.LocationSerializer;
 import me.wakka.valeriaonline.utils.Utils;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -28,6 +29,10 @@ public class Setting {
 
 	public Setting(Player player, String type, String value) {
 		this(player.getUniqueId().toString(), type, value);
+	}
+
+	public OfflinePlayer getOfflinePlayer() {
+		return Utils.getPlayer(id);
 	}
 
 	public boolean getBoolean() {

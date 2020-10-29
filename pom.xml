@@ -109,6 +109,13 @@
         </repository>
     </repositories>
     <dependencies>
+        <!--        &lt;!&ndash; NMS 1.16 &ndash;&gt;-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.spigotmc</groupId>-->
+        <!--            <artifactId>spigot</artifactId>-->
+        <!--            <version>1.16.1-R0.1-SNAPSHOT</version>-->
+        <!--            <scope>provided</scope>-->
+        <!--        </dependency>-->
         <!-- Paper API -->
         <dependency>
             <groupId>com.destroystokyo.paper</groupId>
@@ -153,6 +160,12 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.16</version>
+        </dependency>
+        <!-- Morphia -->
+        <dependency>
+            <groupId>dev.morphia.morphia</groupId>
+            <artifactId>core</artifactId>
+            <version>1.5.8</version>
         </dependency>
         <!-- cron4j -->
         <dependency>

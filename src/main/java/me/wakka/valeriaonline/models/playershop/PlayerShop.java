@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import me.wakka.valeriaonline.framework.persistence.serializer.LocationSerializer;
+import me.wakka.valeriaonline.framework.persistence.serializer.mysql.LocationSerializer;
 import me.wakka.valeriaonline.utils.Utils;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;

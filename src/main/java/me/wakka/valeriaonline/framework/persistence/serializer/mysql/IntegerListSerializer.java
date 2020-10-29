@@ -1,4 +1,4 @@
-package me.wakka.valeriaonline.framework.persistence.serializer;
+package me.wakka.valeriaonline.framework.persistence.serializer.mysql;
 
 import com.dieselpoint.norm.serialize.DbSerializable;
 import com.google.common.base.Strings;

@@ -4,7 +4,7 @@ import com.dieselpoint.norm.serialize.DbSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import me.wakka.valeriaonline.framework.persistence.serializer.LocationSerializer;
+import me.wakka.valeriaonline.framework.persistence.serializer.mysql.LocationSerializer;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;

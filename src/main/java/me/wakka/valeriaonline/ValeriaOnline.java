@@ -11,6 +11,7 @@ import me.wakka.valeriaonline.features.chat.Chat;
 import me.wakka.valeriaonline.features.placeholders.Placeholders;
 import me.wakka.valeriaonline.framework.commands.Commands;
 import me.wakka.valeriaonline.framework.features.Features;
+import me.wakka.valeriaonline.framework.persistence.MongoDBPersistence;
 import me.wakka.valeriaonline.framework.persistence.MySQLPersistence;
 import me.wakka.valeriaonline.utils.ConfigUtils;
 import me.wakka.valeriaonline.utils.Env;
@@ -110,7 +111,7 @@ public class ValeriaOnline extends JavaPlugin {
 		try { features.unregisterExcept(Chat.class);				} catch (Throwable ex) { ex.printStackTrace(); }
 		try { features.unregister(Chat.class);						} catch (Throwable ex) { ex.printStackTrace(); }
 		try { MySQLPersistence.shutdown(); 							} catch (Throwable ex) { ex.printStackTrace(); }
-//		try { MongoDBPersistence.shutdown();							} catch (Throwable ex) { ex.printStackTrace(); }
+		try { MongoDBPersistence.shutdown();							} catch (Throwable ex) { ex.printStackTrace(); }
 
 		log("Disabled.");
 	}

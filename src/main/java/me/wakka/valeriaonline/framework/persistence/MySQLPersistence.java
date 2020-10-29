@@ -13,29 +13,29 @@ public class MySQLPersistence {
 	public static DatabaseConfig config;
 
 	@SneakyThrows
-	private static void openConnection(MySQLDatabase dbType) {
+	private static void openConnection(MySQLDatabase vodb) {
 		Class.forName("com.mysql.jdbc.Driver");
 
 		config = new DatabaseConfig("mysql");
 		Database database = new Database();
 		database.setJdbcUrl("jdbc:mysql://" + config.getHost() + ":" + config.getPort() + "/"
-				+ config.getPrefix() + dbType.getDatabase() + "?useSSL=false&relaxAutoCommit=true&characterEncoding=UTF-8");
+				+ config.getPrefix() + vodb.getDatabase() + "?useSSL=false&relaxAutoCommit=true&characterEncoding=UTF-8");
 		database.setUser(config.getUsername());
 		database.setPassword(config.getPassword());
 		database.setSqlMaker(new MySqlMaker());
 		database.setMaxPoolSize(3);
-		databases.put(dbType, database);
+		databases.put(vodb, database);
 	}
 
-	public static Database getConnection(MySQLDatabase dbType) {
+	public static Database getConnection(MySQLDatabase vodb) {
 		try {
-			if (databases.get(dbType) == null)
-				openConnection(dbType);
+			if (databases.get(vodb) == null)
+				openConnection(vodb);
 
-			ValeriaOnline.log("Established connection to the MySQL \"" + dbType.getDatabase() + "\" database");
-			return databases.get(dbType);
+			ValeriaOnline.log("Established connection to the MySQL \"" + vodb.getDatabase() + "\" database");
+			return databases.get(vodb);
 		} catch (Exception ex) {
-			ValeriaOnline.severe("Could not establish connection to the MySQL \"" + dbType.getDatabase() + "\" database: " + ex.getMessage());
+			ValeriaOnline.severe("Could not establish connection to the MySQL \"" + vodb.getDatabase() + "\" database: " + ex.getMessage());
 			return null;
 		}
 	}
