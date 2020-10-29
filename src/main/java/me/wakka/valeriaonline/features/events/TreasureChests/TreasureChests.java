@@ -41,7 +41,7 @@ public class TreasureChests implements Listener {
 	private static final String activeRegion = "valeria";
 	private static final int total = 15;
 	private static final String skullOwner = "4bb7ea44-a33a-4023-91d7-d44d28ae5aac";
-	private static final String PREFIX = Commands.VO_PREFIX + "&r";
+	private static final String PREFIX = Commands.VO_PREFIX + "&f";
 	private static String foundOne = PREFIX + "&aYou found a secret treasure chest! There are still more to find.";
 	private static String duplicate = PREFIX + "&cYou already found this one.";
 	private static String foundAll = PREFIX + "&6You've found the final treasure chest!";

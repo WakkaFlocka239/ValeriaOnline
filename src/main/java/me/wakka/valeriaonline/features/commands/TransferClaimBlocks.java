@@ -34,17 +34,20 @@ public class TransferClaimBlocks extends CustomCommand {
 		DataStore dataStore = griefPrevention.dataStore;
 
 		PlayerData fromPlayerData = dataStore.getPlayerData(fromPlayer.getUniqueId());
-		int fromTotal = fromPlayerData.getRemainingClaimBlocks();
-		if (fromTotal <= griefPrevention.config_claims_initialBlocks || (fromTotal - amount) <= griefPrevention.config_claims_initialBlocks)
+		int from_Remaining = fromPlayerData.getRemainingClaimBlocks();
+		int minimum = griefPrevention.config_claims_initialBlocks;
+		if (from_Remaining <= minimum || (from_Remaining - amount) <= minimum)
 			error("You don't have enough claim blocks to transfer, minimum: " + griefPrevention.config_claims_initialBlocks);
 
 		PlayerData toPlayerData = dataStore.getPlayerData(toPlayer.getUniqueId());
-		int toTotal = toPlayerData.getRemainingClaimBlocks();
+		int toTotal = toPlayerData.getAccruedClaimBlocks()
+				+ toPlayerData.getBonusClaimBlocks()
+				+ GriefPrevention.instance.dataStore.getGroupBonusBlocks(toPlayer.getUniqueId());
 
-		int limit = toPlayerData.getRemainingClaimBlocks();
+		int maximum = griefPrevention.config_claims_maxAccruedBlocks_default;
 
-		if (toTotal + amount > limit)
-			error("Cannot transfer, " + toPlayer.getName() + " will hit their limit of " + limit);
+		if (toTotal + amount > maximum)
+			error("Cannot transfer, " + toPlayer.getName() + " will hit the limit of " + maximum);
 
 		fromPlayerData.setAccruedClaimBlocks(fromPlayerData.getAccruedClaimBlocks() - amount);
 		send(fromPlayer, PREFIX + "You transferred " + amount + " claim blocks to " + toPlayer.getName());

@@ -31,7 +31,7 @@ public class MainProvider extends MenuUtils implements InventoryProvider {
 		ItemStack guildFameItem = new ItemBuilder(Material.PAPER).name("&dGuild Fame").lore("&7You have: &a" + guildFame + " &7Guild Fame").build();
 
 		PrefixTag prefixTag = PrefixTags.parseTag(fame.getActiveTag());
-		String currentTag = "&7Current Tag: &r";
+		String currentTag = "&7Current Tag: &f";
 		if (prefixTag == null)
 			currentTag = "&cYou don't have an active tag";
 		else

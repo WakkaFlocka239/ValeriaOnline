@@ -25,11 +25,11 @@ public class WelcomeCommand extends CustomCommand {
 	private static String lastMessage = null;
 
 	List<String> messages = new ArrayList<String>() {{
-		add("Welcome to the server [player]! Make sure to read the &e&l/rules&r and feel free to ask questions.");
-		add("Welcome to &bValeria Online&r [player]! Please take a moment to read the &e&l/rules and feel free to ask any questions you have.");
-		add("Hi [player], welcome to &bValeria Online&r :) Please read the &e&l/rules&r and ask if you have any questions.");
-		add("Hey [player]! Welcome to &bValeria Online&r. Be sure to read the &e&l/rules&r and don't be afraid to ask questions ^^");
-		add("Hi there [player] :) Welcome to &bValeria Online&r. Make sure to read the&e&l /rules&r and feel free to ask questions.");
+		add("Welcome to the server [player]! Make sure to read the &e&l/rules&f and feel free to ask questions.");
+		add("Welcome to &bValeria Online&f [player]! Please take a moment to read the &e&l/rules&f and feel free to ask any questions you have.");
+		add("Hi [player], welcome to &bValeria Online&f :) Please read the &e&l/rules&f and ask if you have any questions.");
+		add("Hey [player]! Welcome to &bValeria Online&f. Be sure to read the &e&l/rules&f and don't be afraid to ask questions ^^");
+		add("Hi there [player] :) Welcome to &bValeria Online&f. Make sure to read the &e&l/rules&f and feel free to ask questions.");
 	}};
 
 	public WelcomeCommand(@NonNull CommandEvent event) {

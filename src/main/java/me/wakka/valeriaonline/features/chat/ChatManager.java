@@ -87,7 +87,10 @@ public class ChatManager {
 
 
 		event.getRecipients().forEach(recipient -> recipient.send(json));
-		ValeriaOnline.getDiscordSRV().getMainTextChannel().sendMessage(discordJson).submit();
+		try {
+			ValeriaOnline.getDiscordSRV().getMainTextChannel().sendMessage(discordJson).submit();
+		} catch (Exception ignored) {
+		}
 
 		Bukkit.getConsoleSender().sendMessage(stripColor(json.toString()));
 	}
