@@ -9,3 +9,35 @@ TODO:
 
 - MultiLine API - playername + prefix + (powerlevel/held item level)
     => Spams errors in console, bug is reported
+
+
+
+MountType Enum:
+	- EntityType
+	- DisplayItem
+	- Permission
+
+Mount
+	- MountType
+	- Entity
+	- Common Data & Methods
+
+SpecificEntityMount extends Mount
+	- Specific Entity
+	- Specific Data & Methods
+
+Permissions:
+	- Open Menu
+	- Per Mount Permission
+
+On open menu:
+	loop through mount permissions:
+		if player has permission to mount permission:
+			load mount type display item into menu, on click item:
+				Mount mount = loadPlayerMount(mountType, player)
+				OpenMountMenu(mount, player)
+
+
+OpenMountMenu(Mount mount, Player player){
+	...
+}

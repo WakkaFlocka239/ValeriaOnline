@@ -11,8 +11,8 @@ import me.wakka.valeriaonline.utils.ColorType;
 import me.wakka.valeriaonline.utils.JsonBuilder;
 import me.wakka.valeriaonline.utils.StringUtils;
 import me.wakka.valeriaonline.utils.Time;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 
 import java.util.HashMap;
 
@@ -49,7 +49,7 @@ public class Chat extends Feature {
 		GLOBAL(PublicChannel.builder()
 				.name("Global")
 				.nickname("G")
-				.color(ChatColor.DARK_GREEN)
+				.color(ColorType.GREEN.getChatColor())
 				.local(false)
 				.crossWorld(true)
 				.build()),
@@ -66,6 +66,16 @@ public class Chat extends Feature {
 				.permission("group.staff")
 				.color(ColorType.LIGHT_BLUE.getChatColor())
 				.messageColor(ColorType.LIGHT_BLUE.getChatColor())
+				.censor(false)
+				.local(false)
+				.crossWorld(true)
+				.build()),
+		ADMIN(PublicChannel.builder()
+				.name("Admin")
+				.nickname("A")
+				.permission("group.admin")
+				.color(ChatColor.of("#fc8003"))
+				.messageColor(ChatColor.of("#fc8003"))
 				.censor(false)
 				.local(false)
 				.crossWorld(true)

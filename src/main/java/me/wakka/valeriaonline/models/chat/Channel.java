@@ -1,6 +1,6 @@
 package me.wakka.valeriaonline.models.chat;
 
-import org.bukkit.ChatColor;
+import net.md_5.bungee.api.ChatColor;
 
 import java.util.Set;
 

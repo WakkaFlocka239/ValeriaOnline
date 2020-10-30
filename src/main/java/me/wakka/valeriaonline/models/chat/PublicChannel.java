@@ -5,8 +5,8 @@ import lombok.Data;
 import me.wakka.valeriaonline.features.chat.Chat;
 import me.wakka.valeriaonline.features.prefixtags.PrefixTags;
 import me.wakka.valeriaonline.utils.JsonBuilder;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;

@@ -3,7 +3,7 @@ package me.wakka.valeriaonline.features.itemtags;
 import lombok.Getter;
 import me.wakka.valeriaonline.utils.ColorType;
 import me.wakka.valeriaonline.utils.StringUtils;
-import org.bukkit.ChatColor;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;

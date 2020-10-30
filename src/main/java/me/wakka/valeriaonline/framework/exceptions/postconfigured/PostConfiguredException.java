@@ -1,7 +1,7 @@
 package me.wakka.valeriaonline.framework.exceptions.postconfigured;
 
 import me.wakka.valeriaonline.framework.exceptions.CustomException;
-import org.bukkit.ChatColor;
+import net.md_5.bungee.api.ChatColor;
 
 public class PostConfiguredException extends CustomException {
 

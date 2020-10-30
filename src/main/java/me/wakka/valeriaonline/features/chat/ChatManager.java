@@ -39,7 +39,7 @@ public class ChatManager {
 		if (!channel.isPresent())
 			channel = channels.stream().filter(_channel -> _channel.getName().toLowerCase().startsWith(id.toLowerCase())).findFirst();
 
-		return channel.orElseThrow(() -> new InvalidInputException("Channel not found"));
+		return channel.orElseThrow(() -> new InvalidInputException("Channel " + id + " not found"));
 	}
 
 	public static void addChannel(PublicChannel channel) {

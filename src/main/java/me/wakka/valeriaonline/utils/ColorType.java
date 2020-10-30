@@ -1,7 +1,7 @@
 package me.wakka.valeriaonline.utils;
 
 import lombok.Getter;
-import org.bukkit.ChatColor;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;

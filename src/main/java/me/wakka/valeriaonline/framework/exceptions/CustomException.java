@@ -1,6 +1,6 @@
 package me.wakka.valeriaonline.framework.exceptions;
 
-import org.bukkit.ChatColor;
+import net.md_5.bungee.api.ChatColor;
 
 public class CustomException extends RuntimeException{
 	public CustomException(String message) {

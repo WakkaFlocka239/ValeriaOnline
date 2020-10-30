@@ -12,11 +12,10 @@ public class ListCommand extends CustomCommand {
 		super(event);
 	}
 
+	// Prevents Multicraft spam
 	@Path()
 	void list() {
-		if (isConsole())
-			runCommandAsConsole("minecraft:list");
-		else
+		if (!isConsole())
 			fallback();
 	}
 }

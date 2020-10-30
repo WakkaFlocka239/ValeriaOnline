@@ -150,7 +150,13 @@ public class PrefixTags extends Feature {
 
 	public static String getGroupFormat(Player player, boolean colorize) {
 		String group = ValeriaOnline.getPerms().getPrimaryGroup(player);
-		String format = groupFormats.getOrDefault(group.toUpperCase(), null);
+
+		String format;
+		try {
+			format = groupFormats.getOrDefault(group.toUpperCase(), null);
+		} catch (Exception ignored) {
+			return null;
+		}
 		if (format == null)
 			return null;
 
