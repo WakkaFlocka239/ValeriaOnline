@@ -1,12 +1,12 @@
 package me.wakka.valeriaonline.features.events.TreasureChests;
 
+import me.wakka.valeriaonline.features.menus.MenuUtils;
 import me.wakka.valeriaonline.framework.commands.models.CustomCommand;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Path;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Permission;
 import me.wakka.valeriaonline.framework.commands.models.events.CommandEvent;
 import me.wakka.valeriaonline.models.setting.Setting;
 import me.wakka.valeriaonline.models.setting.SettingService;
-import me.wakka.valeriaonline.utils.MenuUtils;
 import me.wakka.valeriaonline.utils.Utils;
 
 @Permission("group.dev")

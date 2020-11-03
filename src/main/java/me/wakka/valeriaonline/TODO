@@ -1,4 +1,5 @@
 TODO:
+- minimum blocks is 501, should be just 500
 - party teleport charge 50
 - mcmmo prestiege
 - make tutorial shop it's own thing not owned by a player, and always make it the first shop on the list
@@ -9,8 +10,6 @@ TODO:
 
 - MultiLine API - playername + prefix + (powerlevel/held item level)
     => Spams errors in console, bug is reported
-
-
 
 MountType Enum:
 	- EntityType

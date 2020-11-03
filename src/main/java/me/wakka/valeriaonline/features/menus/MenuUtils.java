@@ -1,4 +1,4 @@
-package me.wakka.valeriaonline.utils;
+package me.wakka.valeriaonline.features.menus;
 
 import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.ItemClickData;
@@ -10,6 +10,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
 import me.wakka.valeriaonline.framework.exceptions.postconfigured.InvalidInputException;
+import me.wakka.valeriaonline.utils.ItemBuilder;
+import me.wakka.valeriaonline.utils.StringUtils;
+import me.wakka.valeriaonline.utils.Utils;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;

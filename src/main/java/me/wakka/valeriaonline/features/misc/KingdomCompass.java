@@ -2,11 +2,14 @@ package me.wakka.valeriaonline.features.misc;
 
 import me.wakka.valeriaonline.ValeriaOnline;
 import me.wakka.valeriaonline.features.cooldown.Cooldowns;
+import me.wakka.valeriaonline.models.compass.Compass;
+import me.wakka.valeriaonline.models.compass.CompassService;
 import me.wakka.valeriaonline.utils.ActionBarUtils;
 import me.wakka.valeriaonline.utils.ConfigUtils;
 import me.wakka.valeriaonline.utils.ItemBuilder;
 import me.wakka.valeriaonline.utils.SoundUtils;
 import me.wakka.valeriaonline.utils.StringUtils;
+import me.wakka.valeriaonline.utils.Tasks;
 import me.wakka.valeriaonline.utils.Time;
 import me.wakka.valeriaonline.utils.Utils;
 import org.bukkit.Bukkit;
@@ -21,14 +24,18 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.CompassMeta;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.UUID;
 
 public class KingdomCompass implements Listener {
-	private static final LinkedHashMap<String, Location> locationMap = new LinkedHashMap<>();
+	private static final HashMap<UUID, Location> playerMap = new HashMap<>();
+	public static final LinkedHashMap<String, Location> locationMap = new LinkedHashMap<>();
 	private static final ItemBuilder item = new ItemBuilder(Material.COMPASS)
 			.name("Kingdom Compass")
 			.lore("&dTarget: &7Elven Kingdom", "&f", "&7[Left-Click: Switch Target]");
+	CompassService service = new CompassService();
 
 	public KingdomCompass() {
 		ValeriaOnline.registerListener(this);
@@ -41,18 +48,88 @@ public class KingdomCompass implements Listener {
 			int x = Integer.parseInt(stringSplit[1]);
 			int z = Integer.parseInt(stringSplit[2]);
 			World world = Bukkit.getWorld("world");
+			Location loc = new Location(world, x, 0, z);
 
-			locationMap.put(name, new Location(world, x, 0, z));
+			locationMap.put(name, loc);
 		}
+
+		Tasks.repeat(Time.SECOND.x(5), Time.SECOND, () -> {
+			for (Player player : Bukkit.getOnlinePlayers()) {
+				Compass compass = service.get(player);
+				boolean enabled = false;
+				if (compass.isEnabled() && compass.isKingdom())
+					enabled = true;
+
+				boolean hasCompass = false;
+				for (ItemStack itemStack : player.getInventory()) {
+					if (isKingdomCompass(itemStack)) {
+						hasCompass = true;
+						break;
+					}
+				}
+
+				if (hasCompass && !enabled) {
+					compass.setEnabled(true);
+					compass.setKingdom(true);
+					service.save(compass);
+					setPlayerLocation(player, false);
+					compass.start();
+				} else if (!hasCompass && enabled) {
+					compass.setEnabled(false);
+					compass.setKingdom(false);
+					service.save(compass);
+					setPlayerLocation(player, true);
+					compass.stop();
+				}
+			}
+		});
+	}
+
+	private void setPlayerLocation(Player player, boolean delete) {
+		if (delete)
+			playerMap.remove(player.getUniqueId());
+		else {
+			Location loc = getKingdomLocation(player);
+			if (loc != null)
+				playerMap.put(player.getUniqueId(), loc);
+		}
+	}
+
+	private Location getKingdomLocation(Player player) {
+		for (ItemStack itemStack : player.getInventory()) {
+			if (isKingdomCompass(itemStack)) {
+				List<String> lore = itemStack.getLore();
+				if (lore == null || lore.size() == 0) return null;
+
+				for (String line : lore) {
+					if (line.contains("Target:")) {
+						String kingdom = StringUtils.camelCase(
+								StringUtils.stripColor(line)
+										.toLowerCase()
+										.replaceAll("target:", "")
+										.replaceAll("kingdom", "")
+										.trim());
+
+						return locationMap.getOrDefault(kingdom, null);
+					}
+				}
+			}
+		}
+
+		return null;
 	}
 
 	public static ItemStack getItem() {
 		ItemStack compass = item.build();
 		CompassMeta compassMeta = (CompassMeta) compass.getItemMeta();
-		compassMeta.setLodestone(locationMap.get("Elven"));
+		compassMeta.setLodestone(locationMap.get("Elven").clone());
 		compassMeta.setLodestoneTracked(false);
 		compass.setItemMeta(compassMeta);
 		return compass;
+	}
+
+	public static Location getTarget(Player player) {
+		return playerMap.getOrDefault(player.getUniqueId(), null);
 	}
 
 	@EventHandler
@@ -67,13 +144,7 @@ public class KingdomCompass implements Listener {
 		List<String> lore = compass.getLore();
 		if (lore == null || lore.size() == 0) return;
 
-		boolean hasTarget = false;
-		for (String line : lore) {
-			if (StringUtils.stripColor(line).contains("Target:"))
-				hasTarget = true;
-		}
-
-		if (!hasTarget)
+		if (!isKingdomCompass(compass))
 			return;
 
 		// If you're on cooldown
@@ -89,8 +160,11 @@ public class KingdomCompass implements Listener {
 				compass.setLore(lore);
 
 				if (target != null) {
+					Location targetLoc = locationMap.get(target).clone();
+					playerMap.put(player.getUniqueId(), targetLoc);
+
 					CompassMeta compassMeta = (CompassMeta) compass.getItemMeta();
-					compassMeta.setLodestone(locationMap.get(target));
+					compassMeta.setLodestone(targetLoc);
 					compassMeta.setLodestoneTracked(false);
 					compass.setItemMeta(compassMeta);
 
@@ -128,6 +202,21 @@ public class KingdomCompass implements Listener {
 		}
 
 		return next;
+	}
+
+	private boolean isKingdomCompass(ItemStack compass) {
+		if (Utils.isNullOrAir(compass) || !compass.getType().equals(Material.COMPASS)) return false;
+
+		List<String> lore = compass.getLore();
+		if (lore == null || lore.size() == 0) return false;
+
+		boolean hasTarget = false;
+		for (String line : lore) {
+			if (StringUtils.stripColor(line).contains("Target:"))
+				hasTarget = true;
+		}
+
+		return hasTarget;
 	}
 
 

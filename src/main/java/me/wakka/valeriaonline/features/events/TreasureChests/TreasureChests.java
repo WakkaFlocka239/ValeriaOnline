@@ -37,7 +37,7 @@ import static me.wakka.valeriaonline.features.itemtags.ItemTagUtils.updateItem;
 public class TreasureChests implements Listener {
 	// Settings
 	public static final String setting = "treasureChestLocs";
-	private static final boolean active = true;
+	private static final boolean active = false;
 	private static final String activeRegion = "valeria";
 	private static final int total = 15;
 	private static final String skullOwner = "4bb7ea44-a33a-4023-91d7-d44d28ae5aac";
@@ -91,13 +91,13 @@ public class TreasureChests implements Listener {
 
 		// Skull Particles Task
 		Tasks.repeat(0, Time.SECOND.x(3), () -> {
+			if (!testing && !active)
+				return;
+
 			if (Utils.isNullOrEmpty(locations))
 				return;
 
 			Bukkit.getOnlinePlayers().forEach(player -> {
-				if (!player.equals(Utils.wakka()))
-					return;
-
 				if (!player.getWorld().equals(world))
 					return;
 
@@ -134,9 +134,6 @@ public class TreasureChests implements Listener {
 	@EventHandler
 	public void onRightClickSkull(PlayerInteractEvent event) {
 		if (!testing && !active)
-			return;
-
-		if (!event.getPlayer().equals(Utils.wakka()))
 			return;
 
 		Block block = event.getClickedBlock();

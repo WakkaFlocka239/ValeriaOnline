@@ -4,9 +4,9 @@ import fr.minuskube.inv.SmartInventory;
 import me.wakka.valeriaonline.features.fame.menu.providers.FameLeaderboardProvider;
 import me.wakka.valeriaonline.features.fame.menu.providers.MainProvider;
 import me.wakka.valeriaonline.features.fame.menu.providers.TagsProvider;
+import me.wakka.valeriaonline.features.menus.MenuUtils;
 import me.wakka.valeriaonline.features.prefixtags.PrefixTags;
 import me.wakka.valeriaonline.models.fame.FameService;
-import me.wakka.valeriaonline.utils.MenuUtils;
 import me.wakka.valeriaonline.utils.StringUtils;
 import org.bukkit.entity.Player;
 

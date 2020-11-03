@@ -4,6 +4,7 @@ import lombok.NonNull;
 import me.ryanhamshire.GriefPrevention.DataStore;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import me.ryanhamshire.GriefPrevention.PlayerData;
+import me.wakka.valeriaonline.ValeriaOnline;
 import me.wakka.valeriaonline.framework.commands.models.CustomCommand;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Path;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Permission;
@@ -30,7 +31,7 @@ public class TransferClaimBlocks extends CustomCommand {
 		if (toPlayer.equals(fromPlayer))
 			error("Cannot transfer claim blocks to yourself");
 
-		GriefPrevention griefPrevention = GriefPrevention.instance;
+		GriefPrevention griefPrevention = ValeriaOnline.getGriefPrevention();
 		DataStore dataStore = griefPrevention.dataStore;
 
 		PlayerData fromPlayerData = dataStore.getPlayerData(fromPlayer.getUniqueId());
@@ -42,7 +43,7 @@ public class TransferClaimBlocks extends CustomCommand {
 		PlayerData toPlayerData = dataStore.getPlayerData(toPlayer.getUniqueId());
 		int toTotal = toPlayerData.getAccruedClaimBlocks()
 				+ toPlayerData.getBonusClaimBlocks()
-				+ GriefPrevention.instance.dataStore.getGroupBonusBlocks(toPlayer.getUniqueId());
+				+ griefPrevention.dataStore.getGroupBonusBlocks(toPlayer.getUniqueId());
 
 		int maximum = griefPrevention.config_claims_maxAccruedBlocks_default;
 

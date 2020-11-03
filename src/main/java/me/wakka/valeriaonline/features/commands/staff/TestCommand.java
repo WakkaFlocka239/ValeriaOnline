@@ -3,12 +3,14 @@ package me.wakka.valeriaonline.features.commands.staff;
 import io.lumine.xikage.mythicmobs.adapters.bukkit.BukkitAdapter;
 import io.lumine.xikage.mythicmobs.items.MythicItem;
 import me.wakka.valeriaonline.ValeriaOnline;
+import me.wakka.valeriaonline.features.misc.KingdomCompass;
 import me.wakka.valeriaonline.framework.commands.models.CustomCommand;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Path;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Permission;
 import me.wakka.valeriaonline.framework.commands.models.events.CommandEvent;
 import me.wakka.valeriaonline.utils.StringUtils;
 import me.wakka.valeriaonline.utils.Utils;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -89,6 +91,12 @@ public class TestCommand extends CustomCommand {
 		String uuid = skullMeta.getPlayerProfile().getId().toString();
 
 		send(json("Click to copy: ").group().next(uuid).suggest(uuid));
+	}
+
+	@Path("compass")
+	void compass() {
+		Location target = KingdomCompass.locationMap.get("Human").clone();
+		send(StringUtils.compassTarget(player(), 14, 6, target));
 	}
 
 //	@Path("setSkin")

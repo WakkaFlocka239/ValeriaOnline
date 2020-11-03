@@ -1,6 +1,7 @@
 package me.wakka.valeriaonline.features.playershops;
 
 import me.wakka.valeriaonline.ValeriaOnline;
+import me.wakka.valeriaonline.features.menus.MenuUtils;
 import me.wakka.valeriaonline.features.playershops.menu.PlayerShopsMenu;
 import me.wakka.valeriaonline.framework.commands.models.CustomCommand;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Aliases;
@@ -10,7 +11,6 @@ import me.wakka.valeriaonline.framework.commands.models.annotations.Permission;
 import me.wakka.valeriaonline.framework.commands.models.events.CommandEvent;
 import me.wakka.valeriaonline.models.playershop.PlayerShop;
 import me.wakka.valeriaonline.models.playershop.PlayerShopService;
-import me.wakka.valeriaonline.utils.MenuUtils;
 import me.wakka.valeriaonline.utils.Utils;
 import org.bukkit.OfflinePlayer;
 

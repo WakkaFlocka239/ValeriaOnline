@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nonnull;
 import java.util.Collection;
 
-//@SuppressWarnings({"ConstantConditions", "UnusedAssignment"})
+@SuppressWarnings({"ConstantConditions", "UnusedAssignment"})
 public class SoundUtils {
 
 	public static void playSoundAll(Sound sound, float volume, float pitch) {
@@ -51,33 +51,78 @@ public class SoundUtils {
 			}
 		},
 
-		RANKUP {
+		Test {
 			@Override
 			public void play(Player player) {
 				int wait = 0;
+
+			}
+		},
+
+		ADVANCEMENT {
+			@Override
+			public void play(Player player) {
+				int wait = 0;
+				Sound flute = Sound.BLOCK_NOTE_BLOCK_FLUTE;
+				Sound chime = Sound.BLOCK_NOTE_BLOCK_CHIME;
+				Sound bass = Sound.BLOCK_NOTE_BLOCK_BASS;
+
 				Tasks.wait(wait += 0, () -> {
-					player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HARP, SoundCategory.RECORDS, 1, 0.749154F);
-					player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BELL, SoundCategory.RECORDS, 1, 0.749154F);
+					play(player, flute, 8);
+					play(player, chime, 8);
+					play(player, bass, 8);
 				});
+
+				Tasks.wait(wait += 8, () -> {
+					play(player, flute, 8);
+					play(player, chime, 8);
+					play(player, bass, 8);
+				});
+
 				Tasks.wait(wait += 4, () -> {
-					player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HARP, SoundCategory.RECORDS, 1, 0.561231F);
-					player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BELL, SoundCategory.RECORDS, 1, 0.561231F);
+					play(player, flute, 16);
+					play(player, chime, 16);
+					play(player, bass, 6);
 				});
+
 				Tasks.wait(wait += 4, () -> {
-					player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HARP, SoundCategory.RECORDS, 1, 0.629961F);
-					player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BELL, SoundCategory.RECORDS, 1, 0.629961F);
+					play(player, flute, 15);
+					play(player, chime, 15);
+					play(player, bass, 8);
 				});
-				Tasks.wait(wait += 2, () -> {
-					player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HARP, SoundCategory.RECORDS, 1, 0.707107F);
-					player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BELL, SoundCategory.RECORDS, 1, 0.707107F);
+
+				Tasks.wait(wait += 8, () -> {
+					play(player, flute, 13);
+					play(player, chime, 13);
+					play(player, bass, 8);
 				});
-				Tasks.wait(wait += 2, () -> {
-					player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HARP, SoundCategory.RECORDS, 1, 0.840896F);
-					player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BELL, SoundCategory.RECORDS, 1, 0.840896F);
+
+				// Bass Branch
+				int bassWait = wait;
+				Tasks.wait(bassWait += 4, () -> play(player, bass, 6));
+				Tasks.wait(bassWait += 4, () -> play(player, bass, 8));
+				Tasks.wait(bassWait += 8, () -> play(player, bass, 7));
+				Tasks.wait(bassWait += 8, () -> play(player, bass, 8));
+
+				// Flute/Chime Branch
+				Tasks.wait(wait += 8, () -> {
+					play(player, flute, 11);
+					play(player, chime, 11);
 				});
-				Tasks.wait(wait += 2, () -> {
-					player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_FLUTE, SoundCategory.RECORDS, 1, 1.122462F);
-					player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BELL, SoundCategory.RECORDS, 1, 1.122462F);
+
+				Tasks.wait(wait += 8, () -> {
+					play(player, flute, 13);
+					play(player, chime, 13);
+				});
+
+				Tasks.wait(wait += 4, () -> {
+					play(player, flute, 7);
+					play(player, chime, 7);
+				});
+
+				Tasks.wait(wait += 4, () -> {
+					play(player, flute, 8);
+					play(player, chime, 8);
 				});
 			}
 		},
@@ -136,6 +181,18 @@ public class SoundUtils {
 		public void playAll() {
 			play(Bukkit.getOnlinePlayers());
 		}
+
+		void play(Player player, Sound intrument, int step) {
+			play(player, intrument, getPitch(step));
+		}
+
+		void play(Player player, Sound intrument, float pitch) {
+			playSound(player, intrument, SoundCategory.RECORDS, 1, pitch);
+		}
+	}
+
+	public static float getPitch(int step) {
+		return (float) Math.pow(2, ((-12 + step) / 12.0));
 	}
 
 	@Data

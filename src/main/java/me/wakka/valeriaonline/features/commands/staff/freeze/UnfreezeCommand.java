@@ -41,7 +41,7 @@ public class UnfreezeCommand extends CustomCommand {
 					player.getVehicle().remove();
 
 				send(player, "&cYou have been unfrozen.");
-				Chat.broadcast(PREFIX + "&e" + player().getName() + " &3has unfrozen &e" + player.getName(), StaticChannel.STAFF);
+				Chat.broadcast(PREFIX + "&d" + player().getName() + " &7has unfrozen &d" + player.getName(), StaticChannel.STAFF);
 			} catch (Exception ex) {
 				event.handleException(ex);
 			}

@@ -48,7 +48,7 @@ public class FreezeCommand extends CustomCommand implements Listener {
 
 	@Path("cleanup")
 	void prune() {
-		send(PREFIX + "Removed &e" + cleanup(player().getWorld()) + " &3freeze stands.");
+		send(PREFIX + "Removed &d" + cleanup(player().getWorld()) + " &7freeze stands.");
 	}
 
 	public static int cleanup(World world) {
@@ -80,7 +80,7 @@ public class FreezeCommand extends CustomCommand implements Listener {
 				service.save(freeze);
 				freezePlayer(player);
 
-				Chat.broadcast(PREFIX + "&e" + player().getName() + " &3has frozen &e" + player.getName(), StaticChannel.STAFF);
+				Chat.broadcast(PREFIX + "&d" + player().getName() + " &7has frozen &d" + player.getName(), StaticChannel.STAFF);
 				send(player, "&cYou have been frozen! This likely means you are breaking a rule; please pay attention to staff in chat");
 			} catch (Exception ex) {
 				event.handleException(ex);
@@ -107,14 +107,14 @@ public class FreezeCommand extends CustomCommand implements Listener {
 		Player player = event.getPlayer();
 		if (player.getVehicle() != null)
 			player.getVehicle().remove();
-		Chat.broadcast(PREFIX + "&e" + player.getName() + " &3has logged out while frozen.", StaticChannel.STAFF);
+		Chat.broadcast(PREFIX + "&d" + player.getName() + " &7has logged out while frozen.", StaticChannel.STAFF);
 	}
 
 	@EventHandler
 	public void onJoin(PlayerJoinEvent event) {
 		if (!isFrozen(event.getPlayer())) return;
 		Tasks.wait(5, () -> freezePlayer(event.getPlayer()));
-		Chat.broadcast(PREFIX + "&e" + event.getPlayer().getName() + " &3has logged in while frozen.", StaticChannel.STAFF);
+		Chat.broadcast(PREFIX + "&d" + event.getPlayer().getName() + " &7has logged in while frozen.", StaticChannel.STAFF);
 	}
 
 	@EventHandler

@@ -2,6 +2,7 @@ package me.wakka.valeriaonline.features.teleportrequests;
 
 import lombok.NoArgsConstructor;
 import me.wakka.valeriaonline.ValeriaOnline;
+import me.wakka.valeriaonline.features.menus.MenuUtils;
 import me.wakka.valeriaonline.framework.commands.models.CustomCommand;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Aliases;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Path;
@@ -9,7 +10,6 @@ import me.wakka.valeriaonline.framework.commands.models.annotations.Redirects;
 import me.wakka.valeriaonline.framework.commands.models.events.CommandEvent;
 import me.wakka.valeriaonline.framework.exceptions.postconfigured.PlayerNotOnlineException;
 import me.wakka.valeriaonline.utils.ConfigUtils;
-import me.wakka.valeriaonline.utils.MenuUtils;
 import me.wakka.valeriaonline.utils.StringUtils;
 import me.wakka.valeriaonline.utils.Utils;
 import org.bukkit.OfflinePlayer;

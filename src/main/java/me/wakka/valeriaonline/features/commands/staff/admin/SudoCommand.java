@@ -18,7 +18,7 @@ public class SudoCommand extends CustomCommand {
 	@Path("<player> <command...>")
 	void run(Player player, String command) {
 		Utils.runCommandAsOp(player, command);
-		send("&3Made &e" + player.getName() + " &3run &e/" + command);
+		send("&7Made &d" + player.getName() + " &7run &d/" + command);
 	}
 
 }

@@ -6,8 +6,10 @@ import github.scarsz.discordsrv.DiscordSRV;
 import io.lumine.xikage.mythicmobs.MythicMobs;
 import it.sauronsoftware.cron4j.Scheduler;
 import lombok.Getter;
+import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import me.wakka.valeriaonline.features.autorestart.AutoRestart;
 import me.wakka.valeriaonline.features.chat.Chat;
+import me.wakka.valeriaonline.features.menus.SignMenuFactory;
 import me.wakka.valeriaonline.features.placeholders.Placeholders;
 import me.wakka.valeriaonline.framework.commands.Commands;
 import me.wakka.valeriaonline.framework.features.Features;
@@ -15,7 +17,6 @@ import me.wakka.valeriaonline.framework.persistence.MongoDBPersistence;
 import me.wakka.valeriaonline.framework.persistence.MySQLPersistence;
 import me.wakka.valeriaonline.utils.ConfigUtils;
 import me.wakka.valeriaonline.utils.Env;
-import me.wakka.valeriaonline.utils.SignMenuFactory;
 import me.wakka.valeriaonline.utils.Time;
 import me.wakka.valeriaonline.utils.Utils;
 import me.wakka.valeriaonline.utils.WorldGuardFlagUtils;
@@ -145,6 +146,8 @@ public class ValeriaOnline extends JavaPlugin {
 	private static Economy econ = null;
 	@Getter
 	private static Permission perms = null;
+	@Getter
+	private static GriefPrevention griefPrevention = GriefPrevention.instance;
 
 	@Getter
 	// http://www.sauronsoftware.it/projects/cron4j/manual.php

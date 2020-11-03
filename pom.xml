@@ -180,6 +180,12 @@
             <version>1.7</version>
             <scope>provided</scope>
         </dependency>
+        <!-- Apache Commons TODO: Remove when add discord back, it's included in JDA -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+            <version>4.1</version>
+        </dependency>
         <!-- McMMO -->
         <dependency>
             <groupId>com.github.mcMMO-Dev</groupId>
@@ -274,6 +280,25 @@
             <version>5.6.2</version>
             <scope>provided</scope>
         </dependency>
+        <!-- JDA -->
+        <!--        <dependency>-->
+        <!--            <groupId>net.dv8tion</groupId>-->
+        <!--            <artifactId>JDA</artifactId>-->
+        <!--            <version>4.2.0_175</version>-->
+        <!--            <exclusions>-->
+        <!--                <exclusion>-->
+        <!--                    <groupId>club.minnced</groupId>-->
+        <!--                    <artifactId>opus-java</artifactId>-->
+        <!--                </exclusion>-->
+        <!--            </exclusions>-->
+        <!--        </dependency>-->
+        <!-- JDA-Utilities -->
+        <!--        <dependency>-->
+        <!--            <groupId>com.jagrosh</groupId>-->
+        <!--            <artifactId>jda-utilities-command</artifactId>-->
+        <!--            <version>3.0.2</version>-->
+        <!--            <scope>compile</scope>-->
+        <!--        </dependency>-->
         <!-- BeautyQuests -->
         <!--        <dependency>-->
         <!--            <groupId>fr.skytasul</groupId>-->

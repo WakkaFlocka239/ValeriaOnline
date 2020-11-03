@@ -4,11 +4,11 @@ import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import lombok.AllArgsConstructor;
+import me.wakka.valeriaonline.features.menus.MenuUtils;
 import me.wakka.valeriaonline.features.trading.menu.TradeEditorMenus;
 import me.wakka.valeriaonline.features.trading.models.Profession;
 import me.wakka.valeriaonline.features.trading.models.Type;
 import me.wakka.valeriaonline.utils.ItemBuilder;
-import me.wakka.valeriaonline.utils.MenuUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 

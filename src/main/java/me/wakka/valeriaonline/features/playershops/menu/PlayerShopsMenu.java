@@ -1,7 +1,7 @@
 package me.wakka.valeriaonline.features.playershops.menu;
 
 import fr.minuskube.inv.SmartInventory;
-import me.wakka.valeriaonline.utils.MenuUtils;
+import me.wakka.valeriaonline.features.menus.MenuUtils;
 
 public class PlayerShopsMenu {
 

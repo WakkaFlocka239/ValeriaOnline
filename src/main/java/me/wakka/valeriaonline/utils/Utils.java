@@ -297,7 +297,7 @@ public class Utils {
 		player.teleport(changed);
 	}
 
-	private static float toDegree(double angle) {
+	public static float toDegree(double angle) {
 		return (float) Math.toDegrees(angle);
 	}
 

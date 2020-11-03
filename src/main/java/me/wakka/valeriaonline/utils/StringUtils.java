@@ -5,6 +5,7 @@ import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -19,6 +20,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
+import static me.wakka.valeriaonline.utils.Utils.toDegree;
 
 public class StringUtils {
 	@Getter
@@ -305,6 +308,44 @@ public class StringUtils {
 		else
 			instance = compass.substring(center - extra, center + extra + 1);
 
+		instance = instance.replaceAll("\\[", "&2[&f");
+		instance = instance.replaceAll("]", "&2]&f");
+		return colorize(instance);
+	}
+
+	public static String compassTarget(Player player, int extra, int separators, Location target) {
+		Vector direction = player.getEyeLocation().toVector().subtract(target.clone().add(0.5, 0.5, 0.5).toVector()).normalize();
+		double heading = 180 - toDegree(Math.atan2(direction.getX(), direction.getZ()));
+		char arrow = '▲';
+
+		String compass = "";
+		for (String compassPart : compassParts)
+			compass += compassPart + " " + String.join("", Collections.nCopies(separators, "-")) + " ";
+
+		float yaw = Location.normalizeYaw(player.getLocation().getYaw());
+		if (yaw < 0) yaw = 360 + yaw;
+
+		int center = (int) Math.round(yaw / (360D / compass.length())) + 1;
+		int head = (int) Math.round(heading / (360D / compass.length())) + 1;
+
+		StringBuilder compassBuilder = new StringBuilder(compass);
+		try {
+			compassBuilder.setCharAt(head, arrow);
+		} catch (Exception ignored) {
+		}
+		compass = compassBuilder.toString();
+
+		String instance;
+		if (center - extra < 0) {
+			center += compass.length();
+			instance = (compass + compass).substring(center - extra, center + extra + 1);
+		} else if (center + extra + 1 > compass.length()) {
+			instance = (compass + compass).substring(center - extra, center + extra + 1);
+		} else {
+			instance = compass.substring(center - extra, center + extra + 1);
+		}
+
+		instance = instance.replaceAll("▲", "&d▲&f");
 		instance = instance.replaceAll("\\[", "&2[&f");
 		instance = instance.replaceAll("]", "&2]&f");
 		return colorize(instance);
