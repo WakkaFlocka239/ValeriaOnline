@@ -37,12 +37,12 @@ import static me.wakka.valeriaonline.features.itemtags.ItemTagUtils.updateItem;
 public class TreasureChests implements Listener {
 	// Settings
 	public static final String setting = "treasureChestLocs";
-	private static final boolean active = false;
+	private static final boolean active = true;
 	private static final String activeRegion = "valeria";
 	private static final int total = 15;
 	private static final String skullOwner = "4bb7ea44-a33a-4023-91d7-d44d28ae5aac";
 	private static final String PREFIX = Commands.VO_PREFIX + "&f";
-	private static String foundOne = PREFIX + "&aYou found a secret treasure chest! There are still more to find.";
+	private static String foundOne = PREFIX + "&aYou found a secret treasure chest! (#/" + total + ")";
 	private static String duplicate = PREFIX + "&cYou already found this one.";
 	private static String foundAll = PREFIX + "&6You've found the final treasure chest!";
 	//
@@ -175,7 +175,7 @@ public class TreasureChests implements Listener {
 			player.playSound(playerLoc, Sound.UI_TOAST_CHALLENGE_COMPLETE, 2F, 1F);
 
 		} else {
-			Utils.send(player, foundOne);
+			Utils.send(player, foundOne.replaceAll("#", String.valueOf(foundLocs.size())));
 			player.playSound(playerLoc, Sound.BLOCK_ENCHANTMENT_TABLE_USE, 2F, 2F);
 			player.playSound(playerLoc, Sound.BLOCK_BEACON_POWER_SELECT, 2F, 2F);
 

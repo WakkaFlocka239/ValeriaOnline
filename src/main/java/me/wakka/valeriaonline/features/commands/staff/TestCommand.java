@@ -2,6 +2,7 @@ package me.wakka.valeriaonline.features.commands.staff;
 
 import io.lumine.xikage.mythicmobs.adapters.bukkit.BukkitAdapter;
 import io.lumine.xikage.mythicmobs.items.MythicItem;
+import io.lumine.xikage.mythicmobs.mobs.ActiveMob;
 import me.wakka.valeriaonline.ValeriaOnline;
 import me.wakka.valeriaonline.features.misc.KingdomCompass;
 import me.wakka.valeriaonline.framework.commands.models.CustomCommand;
@@ -18,7 +19,6 @@ import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Permission("group.dev")
@@ -28,15 +28,13 @@ public class TestCommand extends CustomCommand {
 		super(event);
 	}
 
-//	@Path("resetDungeon")
-//	void resetDungeon() {
-//		AutoRestart.closeDungeons.getBlock().setType(Material.REDSTONE_BLOCK);
-//
-//		Tasks.wait(Time.SECOND.x(5), () -> {
-//			AutoRestart.closeDungeons.getBlock().setType(Material.AIR);
-//			Tasks.wait(Time.SECOND.x(1), () -> AutoRestart.openDungeons.getBlock().setType(Material.AIR));
-//		});
-//	}
+	@Path("mmmobs")
+	void activeMobs() {
+		send("All active mobs: ");
+		for (ActiveMob activeMob : ValeriaOnline.getMythicMobs().getMobManager().getActiveMobs()) {
+			send("World: " + activeMob.getLocation().getWorld() + " | Type: " + activeMob.getType() + " | Name: " + activeMob.getDisplayName());
+		}
+	}
 
 	@Path("mmitem <string>")
 	void getMMItem(String string) {
@@ -65,12 +63,12 @@ public class TestCommand extends CustomCommand {
 		player().chat(StringUtils.colorize(string));
 	}
 
-	@Path("discord")
-	void discord() {
-		ValeriaOnline.getDiscordSRV().getMainTextChannel().sendMessage("Test Message").submit();
-		Map<String, String> channels = ValeriaOnline.getDiscordSRV().getChannels();
-		Utils.wakka(String.valueOf(channels));
-	}
+//	@Path("discord")
+//	void discord() {
+//		ValeriaOnline.getDiscordSRV().getMainTextChannel().sendMessage("Test Message").submit();
+//		Map<String, String> channels = ValeriaOnline.getDiscordSRV().getChannels();
+//		Utils.wakka(String.valueOf(channels));
+//	}
 
 	@Path("getSkullOwner")
 	void skullOwner() {

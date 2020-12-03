@@ -10,6 +10,7 @@ import me.wakka.valeriaonline.utils.Tasks;
 import me.wakka.valeriaonline.utils.Time;
 import me.wakka.valeriaonline.utils.Utils;
 import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -55,8 +56,11 @@ public class AutoRestart extends Feature {
 
 		scheduleRestart();
 
-		closeDungeons.getBlock().setType(Material.AIR);
-		Tasks.wait(Time.SECOND.x(1), () -> openDungeons.getBlock().setType(Material.AIR));
+		Tasks.wait(Time.SECOND.x(5), () -> {
+			setBlock(Material.AIR, "CLOSE");
+			Tasks.wait(Time.SECOND.x(1), () -> setBlock(Material.AIR, "OPEN"));
+		});
+
 	}
 
 	@Override
@@ -95,7 +99,7 @@ public class AutoRestart extends Feature {
 		int cancelSeconds = Math.max((int) (((restartIn * 60.0) - cancelTime) * 60), 0);
 		Tasks.wait(Time.SECOND.x(cancelSeconds), () -> {
 			restartSoon = true;
-			closeDungeons.getBlock().setType(Material.REDSTONE_BLOCK);
+			setBlock(Material.REDSTONE_BLOCK, "CLOSE");
 		});
 
 		temp = LocalDateTime.now(zone);
@@ -115,9 +119,11 @@ public class AutoRestart extends Feature {
 			warnTimer.schedule(new TimerTask() {
 				@Override
 				public void run() {
-					String warnMsg = warningMessage.replaceAll("<minutes>", "" + warnTime);
-					Utils.broadcast(PREFIX + warnMsg);
-					ValeriaOnline.log(warnMsg);
+					if (warningMessage != null) {
+						String warnMsg = warningMessage.replaceAll("<minutes>", "" + warnTime);
+						Utils.broadcast(PREFIX + warnMsg);
+						ValeriaOnline.log(warnMsg);
+					}
 				}
 			}, (long) (timeUntilWarn * (60.0 * 1000.0))); // milliseconds
 
@@ -182,5 +188,24 @@ public class AutoRestart extends Feature {
 			return -1;
 
 		return hours;
+	}
+
+	private void setBlock(Material material, String type) {
+		Chunk chunk = closeDungeons.getBlock().getChunk();
+		boolean loaded = chunk.isLoaded();
+		if (!loaded)
+			chunk.load();
+
+		switch (type) {
+			case "OPEN":
+				openDungeons.getBlock().setType(material);
+				break;
+			case "CLOSE":
+				closeDungeons.getBlock().setType(material);
+				break;
+		}
+
+		if (!loaded)
+			chunk.unload();
 	}
 }

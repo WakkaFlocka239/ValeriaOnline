@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 
 import java.util.Set;
 
+@Permission("group.dm")
 public class OpCommand extends CustomCommand {
 
 	public OpCommand(CommandEvent event) {
@@ -19,7 +20,6 @@ public class OpCommand extends CustomCommand {
 	}
 
 	@Path("<player>")
-	@Permission("group.admin")
 	public void op(Player player) {
 		String oper = player().getName();
 		String opee = player.getName();
@@ -42,7 +42,6 @@ public class OpCommand extends CustomCommand {
 	}
 
 	@Path("list")
-	@Permission("group.admin")
 	public void list() {
 		Set<OfflinePlayer> ops = Bukkit.getOperators();
 		if (ops.isEmpty())

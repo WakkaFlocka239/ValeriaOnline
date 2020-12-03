@@ -1,6 +1,6 @@
 package me.wakka.valeriaonline.features.listeners;
 
-import com.mewin.worldguardregionapi.events.RegionEnteredEvent;
+import com.mewin.worldguardregionapi.events.RegionEnteringEvent;
 import com.mewin.worldguardregionapi.events.RegionLeavingEvent;
 import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.flags.StringFlag;
@@ -35,8 +35,12 @@ import static me.wakka.valeriaonline.utils.WorldGuardFlagUtils.isFlagSetFor;
 public class CustomFlagListener implements Listener {
 
 	@EventHandler
-	public void sendGreetingTitle(RegionEnteredEvent event) {
+	public void sendGreetingTitle(RegionEnteringEvent event) {
 		Player player = event.getPlayer();
+
+		WorldGuardUtils WGUtils = new WorldGuardUtils(event.getPlayer());
+		if (WGUtils.getRegionsAt(player).contains(event.getRegion()))
+			return;
 
 		String greeting_title = getStringValueFor(player, (StringFlag) GREETING_TITLE.get());
 		String greeting_subtitle = getStringValueFor(player, (StringFlag) GREETING_SUBTITLE.get());
@@ -57,10 +61,12 @@ public class CustomFlagListener implements Listener {
 	public void sendFarewellTitle(RegionLeavingEvent event) {
 		Player player = event.getPlayer();
 
+		WorldGuardUtils WGUtils = new WorldGuardUtils(event.getPlayer());
+		if (WGUtils.getRegionsAt(player).contains(event.getRegion()))
+			return;
+
 		String farewell_title = getStringValueFor(player, (StringFlag) FAREWELL_TITLE.get());
 		String farewell_subtitle = getStringValueFor(player, (StringFlag) FAREWELL_SUBTITLE.get());
-
-		Utils.wakka();
 
 		if (farewell_title == null && farewell_subtitle == null)
 			return;
@@ -83,7 +89,7 @@ public class CustomFlagListener implements Listener {
 		if (WGUtils.getRegionsAt(eventLoc).size() == 0)
 			return;
 
-		if (isFlagSetFor(event.getLocation(), (StateFlag) DENY_HOSTILE_SPAWN.get())) {
+		if (isFlagSetFor(eventLoc, (StateFlag) DENY_HOSTILE_SPAWN.get())) {
 			if (event.getEntity() instanceof Monster) {
 				event.setCancelled(true);
 			}

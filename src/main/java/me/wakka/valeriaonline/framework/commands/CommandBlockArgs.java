@@ -35,7 +35,7 @@ public class CommandBlockArgs {
 		S // Executing entity
 	}
 
-	public static Collection<? extends Object> getSelectorTargets(CommandSender sender, SelectorType selectorType, Location origin, double minRadius, double maxRadius, boolean exact) {
+	public static Collection<?> getSelectorTargets(CommandSender sender, SelectorType selectorType, Location origin, double minRadius, double maxRadius, boolean exact) {
 		boolean useRadius = true;
 
 		if (maxRadius == -1) {
@@ -49,7 +49,7 @@ public class CommandBlockArgs {
 
 	}
 
-	private static Collection<? extends Object> getSelectorTargetsFinal(CommandSender sender, SelectorType selectorType, Location origin, double minRadius, double maxRadius, boolean useRadius) {
+	private static Collection<?> getSelectorTargetsFinal(CommandSender sender, SelectorType selectorType, Location origin, double minRadius, double maxRadius, boolean useRadius) {
 		// Nearest Player
 		if (selectorType.equals(SelectorType.P)) {
 			List<Player> nearbyPlayers;

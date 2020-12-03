@@ -2,7 +2,6 @@ package me.wakka.valeriaonline;
 
 import com.earth2me.essentials.Essentials;
 import com.gmail.nossr50.mcMMO;
-import github.scarsz.discordsrv.DiscordSRV;
 import io.lumine.xikage.mythicmobs.MythicMobs;
 import it.sauronsoftware.cron4j.Scheduler;
 import lombok.Getter;
@@ -132,10 +131,10 @@ public class ValeriaOnline extends JavaPlugin {
 			log("Could not register listener " + listener.toString() + "!");
 	}
 
-	@Getter
-	private static final DiscordSRV discordSRV = DiscordSRV.getPlugin();
-	@Getter
-	private static SignMenuFactory signMenuFactory;
+//	@Getter
+//	private static DiscordSRV discordSRV = null;
+@Getter
+private static SignMenuFactory signMenuFactory;
 	@Getter
 	private static Essentials essentials;
 	@Getter
@@ -147,7 +146,7 @@ public class ValeriaOnline extends JavaPlugin {
 	@Getter
 	private static Permission perms = null;
 	@Getter
-	private static GriefPrevention griefPrevention = GriefPrevention.instance;
+	private static final GriefPrevention griefPrevention = GriefPrevention.instance;
 
 	@Getter
 	// http://www.sauronsoftware.it/projects/cron4j/manual.php
@@ -158,6 +157,13 @@ public class ValeriaOnline extends JavaPlugin {
 	}
 
 	private void hooks() {
+//		try {
+//			discordSRV = DiscordSRV.getPlugin();
+//		} catch(Exception e) {
+//			log("Could not hook into DiscordSRV");
+//			e.printStackTrace();
+//		}
+
 		signMenuFactory = new SignMenuFactory(this);
 		essentials = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
 

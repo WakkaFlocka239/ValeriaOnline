@@ -1,5 +1,6 @@
 package me.wakka.valeriaonline.features.dungeons;
 
+import me.wakka.valeriaonline.features.menus.MenuUtils.ConfirmationMenu;
 import me.wakka.valeriaonline.framework.commands.CommandBlockArgs;
 import me.wakka.valeriaonline.framework.commands.models.CustomCommand;
 import me.wakka.valeriaonline.framework.commands.models.annotations.Aliases;
@@ -10,6 +11,7 @@ import me.wakka.valeriaonline.framework.commands.models.annotations.TabCompleteI
 import me.wakka.valeriaonline.framework.commands.models.events.CommandEvent;
 import me.wakka.valeriaonline.framework.exceptions.postconfigured.InvalidInputException;
 import me.wakka.valeriaonline.utils.StringUtils;
+import me.wakka.valeriaonline.utils.Utils;
 import me.wakka.valeriaonline.utils.WorldGuardUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -25,9 +27,27 @@ import java.util.List;
 @Aliases("dungeons")
 public class DungeonCommand extends CustomCommand {
 	WorldGuardUtils WGUtils = new WorldGuardUtils(Dungeons.world);
+	private static final int warpCost = 300;
 
 	public DungeonCommand(CommandEvent event) {
 		super(event);
+	}
+
+	@Path("warp")
+	void warp() {
+		if (!player().hasPermission("group.staff")) {
+			ConfirmationMenu.builder()
+					.title("&fTeleport to dungeons")
+					.confirmLore("&cCosts: &6" + warpCost + " Crowns")
+					.onConfirm(e -> {
+						if (Utils.withdraw(player(), warpCost))
+							player().teleport(Dungeons.lobby);
+						else
+							error("You don't have enough Crowns.");
+					})
+					.open(player());
+		} else
+			player().teleport(Dungeons.lobby);
 	}
 
 	@Path("leave")
@@ -121,16 +141,21 @@ public class DungeonCommand extends CustomCommand {
 		Location dest = args.getDestination();
 		for (Object target : args.getTargets()) {
 			Entity entity = (Entity) target;
+			if (!(entity instanceof Player)) {
+				continue;
+			}
+
+			Player player = (Player) entity;
 
 			if (args.getDestinationYaw() == null)
-				dest.setYaw(entity.getLocation().getYaw());
+				dest.setYaw(player.getLocation().getYaw());
 			if (args.getDestinationPitch() == null)
-				dest.setPitch(entity.getLocation().getPitch());
+				dest.setPitch(player.getLocation().getPitch());
 
-			entity.teleport(dest);
+			Dungeons.teleport(player, dest);
 			++count;
 		}
 
-		send("Teleported " + count + " entities to " + StringUtils.getShortLocationString(dest));
+		send("Teleported " + count + " players to " + StringUtils.getShortLocationString(dest));
 	}
 }

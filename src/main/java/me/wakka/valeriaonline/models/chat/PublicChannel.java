@@ -16,6 +16,9 @@ import java.util.stream.Collectors;
 
 import static me.wakka.valeriaonline.utils.StringUtils.stripColor;
 
+//import me.wakka.valeriaonline.features.discord.Discord;
+//import me.wakka.valeriaonline.features.discord.DiscordId;
+
 @Data
 @Builder
 public class PublicChannel implements Channel {
@@ -23,6 +26,8 @@ public class PublicChannel implements Channel {
 	private String nickname;
 	private ChatColor color;
 	private ChatColor messageColor;
+	//	private DiscordId.Channel discordChannel;
+//	private ChatColor discordColor;
 	@Builder.Default
 	private boolean censor = true;
 	private boolean isPrivate;
@@ -74,6 +79,11 @@ public class PublicChannel implements Channel {
 	}
 
 	public void broadcast(String message) {
+		broadcastIngame(message);
+//		broadcastDiscord(message);
+	}
+
+	public void broadcastIngame(String message) {
 		Bukkit.getConsoleSender().sendMessage(stripColor(message));
 		Bukkit.getOnlinePlayers().stream()
 				.map(player -> (Chatter) new ChatService().get(player))
@@ -81,8 +91,17 @@ public class PublicChannel implements Channel {
 				.forEach(chatter -> chatter.send(message));
 	}
 
+//	public void broadcastDiscord(String message) {
+//		if (discordChannel != null)
+//			Discord.send(message, discordChannel);
+//	}
 
 	public void broadcast(JsonBuilder builder) {
+		broadcastIngame(builder);
+//		broadcastDiscord(builder);
+	}
+
+	public void broadcastIngame(JsonBuilder builder) {
 		Bukkit.getConsoleSender().spigot().sendMessage(builder.build());
 		Bukkit.getOnlinePlayers().stream()
 				.map(player -> (Chatter) new ChatService().get(player))
@@ -90,10 +109,15 @@ public class PublicChannel implements Channel {
 				.forEach(chatter -> chatter.send(builder));
 	}
 
-	public void broadcast(Chatter chatter, JsonBuilder builder) {
+	public void broadcastIngame(Chatter chatter, JsonBuilder builder) {
 		Bukkit.getConsoleSender().spigot().sendMessage(builder.build());
 		getRecipients(chatter).forEach(_chatter -> _chatter.send(builder));
 	}
+
+//	public void broadcastDiscord(JsonBuilder builder) {
+//		if (discordChannel != null)
+//			Discord.send(builder.toString(), discordChannel);
+//	}
 
 	public String getPermission() {
 		if (permission == null)

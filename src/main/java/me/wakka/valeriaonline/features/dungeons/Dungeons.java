@@ -1,6 +1,7 @@
 package me.wakka.valeriaonline.features.dungeons;
 
 import com.destroystokyo.paper.Title;
+import com.mewin.worldguardregionapi.events.RegionEnteredEvent;
 import lombok.Getter;
 import me.wakka.valeriaonline.ValeriaOnline;
 import me.wakka.valeriaonline.framework.features.Feature;
@@ -11,6 +12,7 @@ import me.wakka.valeriaonline.utils.Time;
 import me.wakka.valeriaonline.utils.Utils;
 import me.wakka.valeriaonline.utils.WorldGuardUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -20,6 +22,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
@@ -29,6 +32,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,11 +40,14 @@ import java.util.Collections;
 import java.util.List;
 
 public class Dungeons extends Feature implements Listener {
+	public static final String PREFIX = StringUtils.getPrefix("Dungeon");
+	private static final String lobbyRg = "dungeon_lobby";
+	private static final String dwarfRg = "dwarf_dungeon";
 	@Getter
 	public static List<Dungeon> dungeons = new ArrayList<>();
 	public static final World world = Bukkit.getWorld("events");
 	public static final Location lobby = new Location(world, 128.5, 5, -33.5, 180, 0);
-	public static final String PREFIX = StringUtils.getPrefix("Dungeon");
+	public static final Location lobby_top = new Location(world, 128.5, 30, -33.5, 180, 0);
 	public static List<Player> allowedTeleport = new ArrayList<>();
 	public static Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
 	public static List<String> disabledCommands = Arrays.asList("/sethome", "/tpa", "/tpask", "/tpahere",
@@ -50,11 +57,46 @@ public class Dungeons extends Feature implements Listener {
 
 	@Override
 	public void startup() {
-
 		ValeriaOnline.registerListener(this);
 
 		Dungeon crypt = new Dungeon("dungeon_crypt", "Green");
 		dungeons = Collections.singletonList(crypt);
+	}
+
+	@EventHandler
+	public void onEnterPortal(RegionEnteredEvent event) {
+		if (event.getRegion().getId().equalsIgnoreCase(dwarfRg)) {
+			Player player = event.getPlayer();
+
+			Vector velocity = player.getVelocity();
+			player.teleport(lobby_top);
+
+			player.setVelocity(velocity.multiply(0.5));
+			player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, Time.SECOND.x(3), 5, false, false, false));
+
+		}
+	}
+
+	@EventHandler
+	public void onLeaveWorld(PlayerChangedWorldEvent event) {
+		if (event.getFrom().equals(world)) {
+			Tasks.wait(1, () -> {
+				Player player = event.getPlayer();
+				if (player.getGameMode().equals(GameMode.ADVENTURE))
+					player.setGameMode(GameMode.SURVIVAL);
+			});
+		}
+	}
+
+	@EventHandler
+	public void onEnterLobby(RegionEnteredEvent event) {
+		if (event.getRegion().getId().equalsIgnoreCase(lobbyRg)) {
+			Tasks.wait(1, () -> {
+				Player player = event.getPlayer();
+				if (player.getGameMode().equals(GameMode.SURVIVAL))
+					player.setGameMode(GameMode.ADVENTURE);
+			});
+		}
 	}
 
 	public static boolean isInDungeonOrOnTeam(Player player) {
@@ -108,8 +150,9 @@ public class Dungeons extends Feature implements Listener {
 	@EventHandler
 	public void onTeleport(PlayerTeleportEvent event) {
 		Player player = event.getPlayer();
-		if (CitizensUtils.isNPC(player))
+		if (CitizensUtils.isNPC(player)) {
 			return;
+		}
 
 		if (!isInDungeonOrOnTeam(player)) {
 			return;
@@ -155,7 +198,7 @@ public class Dungeons extends Feature implements Listener {
 	}
 
 	@EventHandler
-	public void onDeath(EntityDamageEvent event) {
+	public void onDamage(EntityDamageEvent event) {
 		if (!event.getEntityType().equals(EntityType.PLAYER))
 			return;
 

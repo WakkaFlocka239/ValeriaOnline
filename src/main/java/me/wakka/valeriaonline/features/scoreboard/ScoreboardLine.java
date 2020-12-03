@@ -95,7 +95,9 @@ public enum ScoreboardLine {
 		@Override
 		public String render(Player player) {
 			String line = "&7Claims: &b";
-			int remaining = ValeriaOnline.getGriefPrevention().dataStore.getPlayerData(player.getUniqueId()).getRemainingClaimBlocks();
+			int remaining = 0;
+			if (player.isOnline())
+				remaining = ValeriaOnline.getGriefPrevention().dataStore.getPlayerData(player.getUniqueId()).getRemainingClaimBlocks();
 
 			return line + remaining;
 
@@ -106,8 +108,11 @@ public enum ScoreboardLine {
 		@Override
 		public String render(Player player) {
 			String line = "&7Claimed By: &b";
+			Claim claim = null;
 
-			Claim claim = ValeriaOnline.getGriefPrevention().dataStore.getClaimAt(player.getLocation(), true, null);
+			if (player.isOnline())
+				claim = ValeriaOnline.getGriefPrevention().dataStore.getClaimAt(player.getLocation(), true, null);
+
 			String owner = "Unclaimed";
 			if (claim != null)
 				owner = String.valueOf(claim.getOwnerName());

@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @Aliases({"status", "sidebar", "sb", "featherboard"})
 @Permission("group.dev") // TODO
+//@Disabled
 public class ScoreboardCommand extends CustomCommand implements Listener {
 	private final ScoreboardService service = new ScoreboardService();
 	private ScoreboardUser user;

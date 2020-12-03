@@ -91,6 +91,10 @@ public class WorldGuardUtils {
 		return new CuboidRegion(worldEditWorld, toBlockVector3(min), toBlockVector3(max));
 	}
 
+	public Set<ProtectedRegion> getRegionsAt(Player player) {
+		return getRegionsAt(player.getLocation());
+	}
+
 	public Set<ProtectedRegion> getRegionsAt(Location location) {
 		return manager.getApplicableRegions(toBlockVector3(location)).getRegions();
 	}

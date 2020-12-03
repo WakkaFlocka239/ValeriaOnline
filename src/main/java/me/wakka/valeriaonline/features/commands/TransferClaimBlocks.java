@@ -33,6 +33,10 @@ public class TransferClaimBlocks extends CustomCommand {
 
 		GriefPrevention griefPrevention = ValeriaOnline.getGriefPrevention();
 		DataStore dataStore = griefPrevention.dataStore;
+		if (dataStore == null) {
+			error("datastore is null, report this to WakkaFlocka");
+			return;
+		}
 
 		PlayerData fromPlayerData = dataStore.getPlayerData(fromPlayer.getUniqueId());
 		int from_Remaining = fromPlayerData.getRemainingClaimBlocks();

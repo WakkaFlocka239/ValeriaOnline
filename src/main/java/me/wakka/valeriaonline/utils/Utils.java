@@ -912,22 +912,27 @@ public class Utils {
 		}
 	}
 
-	public static void withdraw(Player from, double amount) {
-		withdraw(from, amount, "");
+	public static boolean withdraw(Player from, double amount) {
+		return withdraw(from, amount, "");
 	}
 
-	public static void withdraw(Player from, double amount, String prefix) {
-		withdraw(getPlayer(from.getUniqueId()), amount, prefix);
+	public static boolean withdraw(Player from, double amount, String prefix) {
+		return withdraw(getPlayer(from.getUniqueId()), amount, prefix);
 	}
 
-	public static void withdraw(OfflinePlayer from, double amount) {
-		withdraw(from, amount, "");
+	public static boolean withdraw(OfflinePlayer from, double amount) {
+		return withdraw(from, amount, "");
 	}
 
-	public static void withdraw(OfflinePlayer from, double amount, String prefix) {
+	public static boolean withdraw(OfflinePlayer from, double amount, String prefix) {
+		if (!ValeriaOnline.getEcon().has(from, amount))
+			return false;
+
 		ValeriaOnline.getEcon().withdrawPlayer(from, amount);
 		if (from.isOnline() && from.getPlayer() != null)
 			send(from.getPlayer(), prefix + "&c" + amount + " Crowns have been taken from your account");
+
+		return true;
 	}
 
 	public static void deposit(OfflinePlayer to, double amount, String prefix) {

@@ -2,7 +2,6 @@ package me.wakka.valeriaonline.features.chat;
 
 import lombok.Getter;
 import lombok.Setter;
-import me.wakka.valeriaonline.ValeriaOnline;
 import me.wakka.valeriaonline.features.chat.events.PrivateChatEvent;
 import me.wakka.valeriaonline.features.chat.events.PublicChatEvent;
 import me.wakka.valeriaonline.framework.exceptions.postconfigured.InvalidInputException;
@@ -41,6 +40,10 @@ public class ChatManager {
 
 		return channel.orElseThrow(() -> new InvalidInputException("Channel " + id + " not found"));
 	}
+
+//	public static Optional<PublicChannel> getChannelByDiscordId(String id) {
+//		return channels.stream().filter(_channel -> _channel.getDiscordChannel() != null && _channel.getDiscordChannel().getId().equalsIgnoreCase(id)).findFirst();
+//	}
 
 	public static void addChannel(PublicChannel channel) {
 		channels.add(channel);
@@ -87,10 +90,10 @@ public class ChatManager {
 
 
 		event.getRecipients().forEach(recipient -> recipient.send(json));
-		try {
-			ValeriaOnline.getDiscordSRV().getMainTextChannel().sendMessage(discordJson).submit();
-		} catch (Exception ignored) {
-		}
+//		try {
+//			ValeriaOnline.getDiscordSRV().getMainTextChannel().sendMessage(discordJson).submit();
+//		} catch (Exception ignored) {
+//		}
 
 		Bukkit.getConsoleSender().sendMessage(stripColor(json.toString()));
 	}

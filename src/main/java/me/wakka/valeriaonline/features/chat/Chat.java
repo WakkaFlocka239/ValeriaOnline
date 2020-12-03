@@ -8,6 +8,7 @@ import me.wakka.valeriaonline.models.chat.ChatService;
 import me.wakka.valeriaonline.models.chat.Chatter;
 import me.wakka.valeriaonline.models.chat.PublicChannel;
 import me.wakka.valeriaonline.utils.ColorType;
+import me.wakka.valeriaonline.utils.ConfigUtils;
 import me.wakka.valeriaonline.utils.JsonBuilder;
 import me.wakka.valeriaonline.utils.StringUtils;
 import me.wakka.valeriaonline.utils.Time;
@@ -90,7 +91,7 @@ public class Chat extends Feature {
 	}
 
 	public static int getLocalRadius() {
-		return ValeriaOnline.getInstance().getConfig().getInt("localRadius", 500);
+		return ConfigUtils.getSettings().getInt("localRadius", 500);
 	}
 
 	// Broadcasts
@@ -127,4 +128,67 @@ public class Chat extends Feature {
 		channel.broadcast(message);
 	}
 
+	public static void broadcastIngame(String message) {
+		broadcastIngame(message, ChatManager.getMainChannel());
+	}
+
+	public static void broadcastIngame(String message, StaticChannel channel) {
+		broadcastIngame(message, ChatManager.getChannel(channel.name()));
+	}
+
+	public static void broadcastIngame(String message, String channel) {
+		broadcastIngame(message, ChatManager.getChannel(channel));
+	}
+
+	public static void broadcastIngame(String message, PublicChannel channel) {
+		channel.broadcastIngame(message);
+	}
+
+	public static void broadcastIngame(JsonBuilder message) {
+		broadcastIngame(message, ChatManager.getMainChannel());
+	}
+
+	public static void broadcastIngame(JsonBuilder message, StaticChannel channel) {
+		broadcastIngame(message, ChatManager.getChannel(channel.name()));
+	}
+
+	public static void broadcastIngame(JsonBuilder message, String channel) {
+		broadcastIngame(message, ChatManager.getChannel(channel));
+	}
+
+	public static void broadcastIngame(JsonBuilder message, PublicChannel channel) {
+		channel.broadcastIngame(message);
+	}
+
+//	public static void broadcastDiscord(String message) {
+//		broadcastDiscord(message, ChatManager.getMainChannel());
+//	}
+//
+//	public static void broadcastDiscord(String message, StaticChannel channel) {
+//		broadcastDiscord(message, ChatManager.getChannel(channel.name()));
+//	}
+//
+//	public static void broadcastDiscord(String message, String channel) {
+//		broadcastDiscord(message, ChatManager.getChannel(channel));
+//	}
+//
+//	public static void broadcastDiscord(String message, PublicChannel channel) {
+//		channel.broadcastDiscord(message);
+//	}
+//
+//	public static void broadcastDiscord(JsonBuilder message) {
+//		broadcastDiscord(message, ChatManager.getMainChannel());
+//	}
+//
+//	public static void broadcastDiscord(JsonBuilder message, StaticChannel channel) {
+//		broadcastDiscord(message, ChatManager.getChannel(channel.name()));
+//	}
+//
+//	public static void broadcastDiscord(JsonBuilder message, String channel) {
+//		broadcastDiscord(message, ChatManager.getChannel(channel));
+//	}
+//
+//	public static void broadcastDiscord(JsonBuilder message, PublicChannel channel) {
+//		channel.broadcastDiscord(message);
+//	}
 }
